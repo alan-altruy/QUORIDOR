@@ -1,0 +1,4 @@
+[0512/174549.855:ERROR:file_io_win.cc(179)] CreateFile C:\Program Files (x86)\temp\settings.dat: Accès refusé. (0x5)
+[0512/174549.917:ERROR:registration_protocol_win.cc(131)] TransactNamedPipe: Le canal de communication a été fermé. (0x6D)
+[0512/174549.918:ERROR:file_io_win.cc(179)] CreateFile C:\Program Files (x86)\temp\settings.dat: Accès refusé. (0x5)
+[0625/110722.519:ERROR:crash_report_database_win.cc(469)] failed to stat report
