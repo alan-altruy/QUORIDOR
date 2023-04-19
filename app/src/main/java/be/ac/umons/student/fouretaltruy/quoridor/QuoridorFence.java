@@ -2,18 +2,15 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 
 public class QuoridorFence
 {
-    public final int length=2;
-    private int pos_x, pos_y;
+    public final int length=3;
+    private int pos_x, pos_y, direction;
     public final String type="fence";
     
-    public QuoridorFence(int _pos_x, int _pos_y, char _direction)
+    public QuoridorFence(int _pos_x, int _pos_y, int _direction)
     {
         pos_x=_pos_x;
         pos_y=_pos_y;
-        //direction=_direction;
+        direction=_direction;
     }
-    public void PutAFence()
-    {
 
-    }
 }

@@ -2,12 +2,13 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 
 public class QuoridorCell
 {
-    public boolean player_in, fence_in;
+    private boolean player_in, fence_in, wall_in;
     public int pos_x, pos_y;
-    public QuoridorCell(int _pos_x, int _pos_y, boolean _player_in, boolean _fence_in)
+    public QuoridorCell(int _pos_x, int _pos_y, boolean _player_in, boolean _fence_in, boolean _wall_in)
     {
         player_in=_player_in;
         fence_in=_fence_in;
+        wall_in=_wall_in;
         pos_x=_pos_x;
         pos_y=_pos_y;
     }
@@ -30,5 +31,9 @@ public class QuoridorCell
 	public boolean GetFence_in()
     {
 		return fence_in;
-	}
+    }
+    public boolean GetWall_in()
+    {
+        return wall_in;
+    }
 }

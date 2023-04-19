@@ -3,15 +3,14 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 import java.util.Scanner;
 public class QuoridorGame
 {
-    private int nbPlayers;
+    private int nbPlayers, nbFences=0;
     private QuoridorTray tray;
     private QuoridorDisplay display;
     private QuoridorPlayers[] players;
     private QuoridorFence[] fences;
-    private int nbFences;
     public QuoridorGame()
     {
-		fences= new QuoridorFence[10];
+		fences= new QuoridorFence[20];
         tray = new QuoridorTray();
         display = new QuoridorDisplay();
         nbFences=0;
@@ -24,32 +23,70 @@ public class QuoridorGame
     {
         Scanner scan;
         String name;
-        int pos_x=0;
-        int pos_y=4;
-        for (int num=1; num<=nbPlayers; num++)
+        int pos_x=1;
+        int pos_y=9;
+        players=new QuoridorPlayers[nbPlayers];
+        for (int num=0; num<nbPlayers; num++)
         {
-            players=new QuoridorPlayers[nbPlayers];
-            System.out.println("Nom du joueur "+num+": ");
+            System.out.println("Nom du joueur "+(num+1)+": ");
             scan= new Scanner(System.in);
             name=scan.nextLine();
-            if (num==2)
+            if (num==1)
             {
-                pos_x=8;
+                pos_x=17;
             }
-            players[num-1]= new QuoridorPlayers(num, name, pos_x, pos_y);
+            players[num]= new QuoridorPlayers(num, name, pos_x, pos_y);
             tray.ChangePlayer_inCell(pos_x,pos_y, true);
         }
     }
-    public void NewFence()
+    public void PlayerAction(int num)
     {
-		nbFences++;
-    }
-    public void RefreshPosPlayers()
-    {
-        for (int a=0; a<=nbPlayers; a++)
+        Scanner scan;
+        System.out.println("Au tour de "+players[num].GetName()+"\n\nQue voulez-vous faire?\n1. Positionner une barrière\n2. Bouger le pion\nChoix: ");
+        scan =new Scanner(System.in);
+        int choix= scan.nextInt();
+        switch (choix)
         {
-
+            case 1:
+                NewFence(num);
+                break;
         }
+    }
+    public void NewFence(int num)
+    {
+        Scanner scan;
+        System.out.println("Position x: ");
+        scan= new Scanner (System.in);
+        int pos_x= scan.nextInt();
+        System.out.println("Position y: ");
+        scan= new Scanner (System.in);
+        int pos_y= scan.nextInt();
+        System.out.println("Direction (v=1 , h=2): ");
+        scan= new Scanner (System.in);
+        int dir= scan.nextInt();
+        if(VerifFence(pos_x,pos_y,dir))
+        {
+            fences[nbFences]= new QuoridorFence(pos_x, pos_y, dir);
+            nbFences++;
+            tray.AddFence(pos_x, pos_y, dir);
+        }
+        else
+        {
+            PlayerAction(num);
+        }
+    }
+    public boolean VerifFence(int pos_x, int pos_y, int dir)
+    {
+        boolean verif=true;
+        if (pos_x<1 || pos_x>17 || pos_x<1 || pos_x>17)
+        {
+            verif=false;
+        }
+        else if (pos_x%2==1 && (dir==2 || pos_y%2==1))
+        {
+            verif=false;
+        }
+        return verif;
     }
     public void showDisplay()
     {

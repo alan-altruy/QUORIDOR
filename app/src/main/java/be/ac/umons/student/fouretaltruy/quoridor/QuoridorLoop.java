@@ -7,12 +7,14 @@ public class QuoridorLoop
 	{
 		/**/
 		QuoridorGame game = new QuoridorGame();;
-		int loop=1;
+		int loop=0;
 		int nbPlayers=game.getNbPlayers();
-		while (loop<nbPlayers+1)
+		while (loop<nbPlayers)
 		{
 			game.showDisplay();
-			loop+=2;
+			game.PlayerAction(loop);
+			game.showDisplay();
+			loop++;
 		}
 	}
 }

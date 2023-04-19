@@ -20,4 +20,8 @@ public class QuoridorPlayers
         new_x = pos_x + _x;
         new_y = pos_y + _y;
     }
+    public String GetName()
+    {
+        return name;
+    }
 }
