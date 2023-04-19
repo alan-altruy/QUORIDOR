@@ -1,6 +1,10 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.players;
 
 import java.io.Serializable;
+
+import be.ac.umons.student.fouretaltruy.quoridor.game.QuoridorTray;
 
 /**
  * Classe regroupant les déplacements possible qu'un joueur de Quoridor peut effectuer

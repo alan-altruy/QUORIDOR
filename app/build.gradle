@@ -28,5 +28,5 @@ dependencies {
 
 application {
     // Classe principale à exécuter
-    mainClass = 'be.ac.umons.student.fouretaltruy.quoridor.QuoridorLoop'
+    mainClass = 'be.ac.umons.student.fouretaltruy.quoridor.main.QuoridorLoop'
 }

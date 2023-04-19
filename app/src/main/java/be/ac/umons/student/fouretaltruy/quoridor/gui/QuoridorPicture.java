@@ -1,4 +1,6 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.gui;
 
 import javax.swing.*;
 import java.awt.*;

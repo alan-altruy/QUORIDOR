@@ -1,4 +1,6 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.game;
 
 import java.io.Serializable;
 
@@ -69,6 +71,7 @@ public class QuoridorFence implements Serializable
          */
     public boolean canSetFence()
     {
+
         boolean verif1=((pos_x%2==1 && (dir==1 || pos_y%2==1)) || pos_x<0 || pos_y<0 || pos_y>19 || pos_x>19);
         boolean verif2=((pos_x%2==0 && (dir==0 || pos_y%2==0)) || pos_x<0 || pos_y<0 || pos_x>19 || pos_y>19);
         if  (verif1 || verif2 || !tray.verifAlreadyFenceAndWall(pos_x, pos_y, dir))
@@ -141,9 +144,5 @@ public class QuoridorFence implements Serializable
 				tray.setTypeOfCell(pos_x, pos_y+_pos_y, 0);
 			}
 		}
-    }
-    public int[] get()
-    {
-        return new int[]{pos_x,pos_y,dir};
     }
 }

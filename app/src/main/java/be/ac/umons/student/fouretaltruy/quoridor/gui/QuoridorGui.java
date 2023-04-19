@@ -1,6 +1,9 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET // 
+
+package be.ac.umons.student.fouretaltruy.quoridor.gui;
 
 import javax.swing.*;
+import be.ac.umons.student.fouretaltruy.quoridor.game.QuoridorGame;
 
 /**
  * L'interface graphique du Quoridor qui hérite de JFrame

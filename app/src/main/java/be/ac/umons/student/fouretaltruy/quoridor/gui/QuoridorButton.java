@@ -1,6 +1,10 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.gui;
 
 import javax.swing.*;
+import be.ac.umons.student.fouretaltruy.quoridor.game.*;
+import be.ac.umons.student.fouretaltruy.quoridor.players.QuoridorMovePlayer;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -51,8 +55,8 @@ public class QuoridorButton extends JButton
          */
     private double height;
     /**
-         * Initialise un bouton de Quoridor
-         * <ul><li>Enregistre les informations nécéssaires (position, taille, panneau, type)</li>
+         * Initialise un bouton de Quoridor.
+         * <ul><li>Enregistre les informations nécéssaires (position, taille, panneau, type).</li>
          * <li>Positionne le bouton sur le plateau</li></ul>
          * @param _panel : Panneau sur lequel le bouton sera positionné
          * @param _typeObj : Type de l'objet
@@ -125,16 +129,17 @@ public class QuoridorButton extends JButton
                 QuoridorGame game = panel.getGame();
                 if (typeObj<20)
                 {
-                    //panel.getGame().playSound(2);
+                    panel.getGame().playSound(2);
                     panel.setAction(typeObj);
                 }
                 else if (typeObj==100)
                 {
+                    panel.getGame().playSound(3);
                     new QuoridorFence(game, ligne, cols, dir).newFence();
                 }
                 else
                 {
-                    //panel.getGame().playSound(panel.getGame().getPlayerWhoIsPlaying());
+                    panel.getGame().playSound(panel.getGame().getPlayerWhoIsPlaying());
                     new QuoridorMovePlayer(game.getPlayer(game.getPlayerWhoIsPlaying()), game.getTray()).move(typeObj-20);
                     game.setWait(false);
                 }

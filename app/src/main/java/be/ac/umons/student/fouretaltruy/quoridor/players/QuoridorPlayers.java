@@ -1,6 +1,10 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.players;
 
 import java.io.Serializable;
+
+import be.ac.umons.student.fouretaltruy.quoridor.game.QuoridorTray;
 
 /**
  * Classe permettant d'instancier un joueur pour le jeu Quoridor qui est implémentée de Serializable
@@ -72,25 +76,35 @@ public class QuoridorPlayers implements Serializable
          * Permet de faire bouger le joueur grace à une nouvelle position x, une nouvelle position y
          * @param _pos_x : La nouvelle position x du joueur
          * @param _pos_y : La nouvelle position y du joueur
+         * @return True si le jeu permet de positionner le joueur
+         * <li>False sinon</li>
+         * @throws ArrayIndexOutOfBoundsException Position en dehors du plateau
          */
-    public void setPos(int _pos_x, int _pos_y)
+    public boolean setPos(int _pos_x, int _pos_y) throws ArrayIndexOutOfBoundsException
     {
+        if (_pos_x>18 || _pos_x<1 || _pos_y>18 || _pos_y<1)
+            throw new ArrayIndexOutOfBoundsException("Position en dehors du plateau");
         remove();
         pos_x=_pos_x;
         pos_y=_pos_y;
         set();
+        return true;
     }
     /**
          * Permet de faire bouger le joueur en lui additionnant des composantes x et y
          * @param _pos_x : La composante x
          * @param _pos_y : La composante y
+         * @throws ArrayIndexOutOfBoundsException Position en dehors du plateau
          */
-    public void newPos (int _x, int _y)
+    public boolean newPos (int _pos_x, int _pos_y) throws ArrayIndexOutOfBoundsException
     {
+        if (_pos_x+pos_x>18 || _pos_x+pos_x<1 || _pos_y+pos_y>18 || _pos_y+pos_y<1)
+            throw new ArrayIndexOutOfBoundsException("Position en dehors du plateau");
         remove();
-        pos_x += _x;
-        pos_y += _y;
+        pos_x +=_pos_x;
+        pos_y += _pos_y;
         set();
+        return true;
     }
     /**
          * Permet d'ajouter le joueur au plateau

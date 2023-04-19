@@ -1,4 +1,8 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.main;
+
+import be.ac.umons.student.fouretaltruy.quoridor.game.QuoridorGame;
 
 /**
  * Classe principale du jeu Quoridor permettant son execution

@@ -1,4 +1,6 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.game;
 
 import java.io.Serializable;
 
@@ -52,7 +54,7 @@ public class QuoridorTray implements Serializable
 	}
 	/**
          * Permet de verifier si un mur ou une barrière se situe déjà dans les cellules où une barrière soit se postionner
-         * @param pos_x : La position x désiréd pour positionner la barrière
+         * @param pos_x : La position x désirée pour positionner la barrière
          * @param pos_y : La position y désirée pour positionner la barrière
          * @param dir : La direction désirée pour positionner la barrière
 		 * @return True si une barrière ou un mur se trouve déjà à cet emplacement
@@ -119,7 +121,7 @@ public class QuoridorTray implements Serializable
 		cells[pos_x][pos_y]=type;
 	}
 	/**
-         * Permet de verifier si les joueurs peuvent acceder aux cellules gagantes
+         * Permet de verifier si les joueurs peuvent accéder aux cellules gagnantes
 		 * @return True si les joueurs peuvent passer malgré les barrières positionnées
 		 * <li>False sinon</li>
          */

@@ -1,6 +1,10 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.gui;
 
 import javax.swing.*;
+import be.ac.umons.student.fouretaltruy.quoridor.game.*;
+import be.ac.umons.student.fouretaltruy.quoridor.players.*;
 import java.awt.*;
 
 /**
@@ -61,7 +65,7 @@ public class QuoridorPanel extends JPanel
     /**
          * Chemins des images
          */
-    private String[] Theme1={a+"pionrouge"+b,a+"pionnoir"+b,a+"tray"+b,a+"fenceV"+b,a+"fenceH"+b,a+"valid"+b,a+"title"+b, a+"titlevalid"+b};
+    private String[] Theme1={a+"pionsteve"+b,a+"pioncreeper"+b,a+"tray"+b,a+"fenceV"+b,a+"fenceH"+b,a+"valid"+b,a+"title"+b, a+"titlevalid"+b};
     /**
          * Jeu affiché sur le panneau
          */
@@ -116,6 +120,11 @@ public class QuoridorPanel extends JPanel
     public void mainMenu()
     {
         double height,width, pos_x,pos_y;
+        // Creation de l'easter egg permettant d'ajouter deux intelligences artificielles
+        height=heightScreen/5; width= height*6;
+        pos_x= widthScreen/2-width/2; pos_y= heightScreen/9;
+        but = new QuoridorButton(this, 13, pos_x, pos_y,width,height);
+        but.setClearButton();
         // Creation du bouton solo
         width=widthScreen/2;height=heightScreen/10;
         pos_x=width-(widthScreen/4); pos_y=(heightScreen/2)-height/2;
@@ -199,6 +208,8 @@ public class QuoridorPanel extends JPanel
         if (numOfPlayer==0)
         {
             pic = new QuoridorPicture(this, a+"steve"+b, ((widthScreen-widthTray)/4)-((widthScreen-widthTray)/8*0.75), heightScreen/8,((widthScreen-widthTray)/4*0.75), ((widthScreen-widthTray)/8*0.75));
+            but = new QuoridorButton(this, 14, ((widthScreen-widthTray)/4)-((widthScreen-widthTray)/8*0.75), heightScreen/8,((widthScreen-widthTray)/4*0.75), ((widthScreen-widthTray)/8*0.75));
+            but.setClearButton();
             pic.set();
             pic = new QuoridorPicture(this, a+"creeperno"+b, widthScreen-pos_xTray/2-((widthScreen-widthTray)/8*0.75), heightScreen/8,((widthScreen-widthTray)/4*0.75), ((widthScreen-widthTray)/8*0.75));
             pic.set();
@@ -206,6 +217,8 @@ public class QuoridorPanel extends JPanel
         else if (numOfPlayer==1)
         {
             pic = new QuoridorPicture(this, a+"creeper"+b, widthScreen-pos_xTray/2-((widthScreen-widthTray)/8*0.75), heightScreen/8,((widthScreen-widthTray)/4*0.75), ((widthScreen-widthTray)/8*0.75));
+            but = new QuoridorButton(this, 14, widthScreen-pos_xTray/2-((widthScreen-widthTray)/8*0.75), heightScreen/8,((widthScreen-widthTray)/4*0.75), ((widthScreen-widthTray)/8*0.75));
+            but.setClearButton();
             pic.set();
             pic = new QuoridorPicture(this, a+"steveno"+b, ((widthScreen-widthTray)/4)-((widthScreen-widthTray)/8*0.75), heightScreen/8,((widthScreen-widthTray)/4*0.75), ((widthScreen-widthTray)/8*0.75));
             pic.set();
@@ -322,12 +335,35 @@ public class QuoridorPanel extends JPanel
         }
         else if (typeOfButton==11)
         {
-            game.init2AI(true);
+            game.initAI(false);
         }
         else if (typeOfButton==12)
         {
             game.initAI(true);
         }
+        else if (typeOfButton==13)
+        {
+            game.init2AI(false, true);
+        }
+        else if (typeOfButton==14)
+        {
+            hint();
+        }
+    }
+    /**
+         * Permet à un humain de s'aider d'une intelligence artificielle
+         */
+    public void hint()
+    {
+        int num= game.getPlayerWhoIsPlaying();
+        QuoridorPlayers player = game.getPlayer(num);
+        QuoridorAI hintAi= new QuoridorAI(game, num, player.getName()+"hint", player.getPos_x(), player.getPos_y(),true);
+        hintAi.remove();
+        if (hintAi.action())
+        {
+            player.setPos(hintAi.getPos_x(), hintAi.getPos_y());
+        }
+        game.setWait(false);
     }
     /**
          * Permet d'initialiser les boutons où le joueur peut se déplacer

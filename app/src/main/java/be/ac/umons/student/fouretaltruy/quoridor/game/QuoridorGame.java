@@ -1,6 +1,11 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.game;
 
 import java.io.*;
+
+import be.ac.umons.student.fouretaltruy.quoridor.gui.*;
+import be.ac.umons.student.fouretaltruy.quoridor.players.*;
 
 /**
  * Le jeu du Quoridor qui est implémenté de Serializable
@@ -56,6 +61,7 @@ public class QuoridorGame implements Serializable
     }
     /**
          * Permet de sauvegarder le jeu dans un fichier save.ser
+         * @throws Exception gère les exceptions
          */
     public void save()
     {
@@ -101,7 +107,7 @@ public class QuoridorGame implements Serializable
          * @return True si on peut charger une partie
          * <li>False si on ne peut pas charger une partie</li>
          */
-    public boolean canLoadSave()
+    public boolean canLoadSave() 
     {
         try {
             ObjectInputStream objectIn = new ObjectInputStream( new FileInputStream("src/main/resources/save.ser"));
@@ -155,14 +161,14 @@ public class QuoridorGame implements Serializable
          * @param hardIA : difficulté des intelligences artificielles
          * <ul><li>False : Normal</li><li>True : Difficile</li></ul>
          */
-    public void init2AI(boolean hardIA)
+    public void init2AI(boolean hardIA, boolean hardIA2)
     {
         nbPlayers=0;
         tray = new QuoridorTray(this);
         players=new QuoridorPlayers[2];
         ai[0] = new QuoridorAI(this, 0, "steve", 1, 9, hardIA);
         players[0]= (QuoridorPlayers) ai[0];
-        ai[1] = new QuoridorAI(this, 1, "creeper", 17, 9, hardIA);
+        ai[1] = new QuoridorAI(this, 1, "creeper", 17, 9, hardIA2);
         players[1]= (QuoridorPlayers) ai[1];
         wait=false;
     }
@@ -188,11 +194,11 @@ public class QuoridorGame implements Serializable
          */
     public void playerAction(int numOfPlayer)
     {
-        if (numOfPlayer==-1)
+        /*if (numOfPlayer==-1)
         {
             numOfPlayer=0;
             players[0]=players[0]= new QuoridorPlayers(tray, 0, "steve", 1, 9);
-        }
+        }*/
         playerWhoIsPlaying=numOfPlayer;
         gui.gui2Players();
         if (players[numOfPlayer].isAnAi())
@@ -288,6 +294,14 @@ public class QuoridorGame implements Serializable
     public int getPlayerWhoIsPlaying()
     {
         return playerWhoIsPlaying;
+    }
+    /**
+         * Permet de modifier le numéro du joueur qui est en train de jouer
+         * @param _num Le numéro du joueur
+         */
+    public void setPlayerWhoIsPlaying(int _num)
+    {
+        playerWhoIsPlaying= _num;
     }
     /**
          * Permet de changer l'état de newGame

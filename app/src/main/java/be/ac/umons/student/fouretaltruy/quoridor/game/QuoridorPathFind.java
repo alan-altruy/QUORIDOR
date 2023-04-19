@@ -1,6 +1,9 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.game;
 
 import java.util.*;
+import be.ac.umons.student.fouretaltruy.quoridor.players.*;
 import java.io.Serializable;
 
 /**
@@ -93,7 +96,6 @@ public class QuoridorPathFind implements Serializable
                 {
                     player.remove(0);
                 }
-                //alreadyFind.show();
             }
             if (a==0)
             {

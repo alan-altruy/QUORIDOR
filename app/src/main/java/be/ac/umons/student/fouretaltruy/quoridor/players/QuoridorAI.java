@@ -1,4 +1,8 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+// ALTRUY ALAN - JASON FOURET //
+
+package be.ac.umons.student.fouretaltruy.quoridor.players;
+
+import be.ac.umons.student.fouretaltruy.quoridor.game.*;
 
 /**
  * L'intelligence artificielle du Quoridor qui hérite de QuoridorPlayers
@@ -47,36 +51,42 @@ public class QuoridorAI extends QuoridorPlayers
     /**
          * L'action de l'intelligence artificielle
          */
-    public void action()
+    public boolean action()
     {
         if (hard)
         {
-            actionHard();
+            return actionHard();
         }
         else
         {
-            actionEasy();
+            return actionEasy();
         }
     }
     /**
-         * L'action de l'intelligence artificielle en difficulté normale
-         * @return True si l'action s'est bien passée
-         * <li>False sinon</li>
-         */
-    public boolean actionEasy()
-    {
-        return false;
-    }
-    /**
          * L'action de l'intelligence artificielle en difficulté difficile
-         * @return True si l'action s'est bien passée
-         * <li>False sinon</li>
          */
     public boolean actionHard()
     {
         int[] move= new QuoridorPathFind(game).moveSmallPath(getNum());
         QuoridorFence fence= canSetAIFence();
-        if (fence!=null && move[0]!=1+16*numOfOtherPlayer)
+        if (fence!=null && move[2]>1)
+        {
+            fence.newFence();
+            return false;
+        }
+        setPos(move[0], move[1]);
+        return true;
+    }
+    /**
+         * L'action de l'intelligence artificielle en difficulté facile
+         */
+    public boolean actionEasy()
+    {
+        int[] move= new QuoridorPathFind(game).moveSmallPath(getNum());
+        int[] moveOther= new QuoridorPathFind(game).moveSmallPath(numOfOtherPlayer);
+        QuoridorFence fence= canSetAIFence();
+        int rand= (int)(Math.random() * ((5 - 0) + 1));
+        if ((rand==2 || moveOther[2]<2) && fence!=null)
         {
             fence.newFence();
             return true;
@@ -92,8 +102,11 @@ public class QuoridorAI extends QuoridorPlayers
     public QuoridorFence canSetAIFence()
     {
         QuoridorFence fence, finalFence=null;
-        int nbOfMoves= (new QuoridorPathFind(game).moveSmallPath(numOfOtherPlayer)[2])-(new QuoridorPathFind(game).moveSmallPath(getNum())[2]);
-        int verif=nbOfMoves;
+        boolean veryGood=false;
+        int[] movePlayer= new QuoridorPathFind(game).moveSmallPath(getNum());
+        int[] moveOther= new QuoridorPathFind(game).moveSmallPath(numOfOtherPlayer);
+        int nbOfMoves= moveOther[2]-movePlayer[2];
+        int verif= nbOfMoves, memo;
         for (int x=1; x<19; x++)
         {
             for (int y=1; y<19; y++)
@@ -101,29 +114,23 @@ public class QuoridorAI extends QuoridorPlayers
                 for (int dir=0; dir<2; dir++)
                 {
                     fence= new QuoridorFence(game, x, y, dir);
-                    if (verifFence(fence)>verif)
+                    memo= verifFence(fence, movePlayer[2], moveOther[2]);
+                    if (memo>verif && memo!=100)
                     {
-                        if (verifFence(fence)!=100)
+                        verif= memo;
+                        finalFence= new QuoridorFence (game, x, y, dir);
+                        if (memo-5>verif)
                         {
-                            verif = verifFence(fence);
-                            finalFence = new QuoridorFence(game, x, y, dir);
+                            veryGood=true;
                         }
                     }
                 }
             }
         }
-        int[] movePlayer= new QuoridorPathFind(game).moveSmallPath(getNum());
-        int[] moveOther= new QuoridorPathFind(game).moveSmallPath(numOfOtherPlayer);
         int fencePlayer=getUsedFences(), fenceOther=game.getPlayer(numOfOtherPlayer).getUsedFences();
-        if (verif-nbOfMoves>3 && fencePlayer<=fenceOther)
-        {
-            return finalFence;
-        }
-        if ((movePlayer[2]>moveOther[2] && fencePlayer<fenceOther) || (moveOther[2]<=movePlayer[2] && moveOther[2]<3))
-        {
-            return finalFence;
-        }
-        if (fencePlayer+2<fenceOther)
+        boolean verif1=verif-nbOfMoves>3 && fencePlayer<=fenceOther;
+        boolean verif2=(movePlayer[2]>moveOther[2] && fencePlayer<fenceOther) || (moveOther[2]<=movePlayer[2] && moveOther[2]<3);
+        if (verif1 || verif2 || veryGood || !hard)
         {
             return finalFence;
         }
@@ -132,23 +139,24 @@ public class QuoridorAI extends QuoridorPlayers
     /**
          * Permet de savoir s'il est utile de poser une barrière
          * @param fence : La barrière
+         * @param movePlayerBefore : Le nombre de déplacement de l'IA pour gagner
+         * @param moveOtherBefore: Le nombre de déplacement de l'Adversaire pour gagner
          * @return L'écart entre le nombre de déplacement de l'adversaire et de l'IA
          */
-    public int verifFence(QuoridorFence fence)
+    public int verifFence(QuoridorFence fence, int movePlayerBefore, int moveOtherBefore)
     {
+        int diffMove=100;
         if (fence.canSetFence())
         {
-            int[] moveOtherPlayerBefore= new QuoridorPathFind(game).moveSmallPath(numOfOtherPlayer);
-            int[] movePlayerBefore= new QuoridorPathFind(game).moveSmallPath(getNum());
             fence.set();
-            int[] moveOtherPlayerAfter= new QuoridorPathFind(game).moveSmallPath(numOfOtherPlayer);
-            int[] movePlayerAfter= new QuoridorPathFind(game).moveSmallPath(getNum());
+            int moveOtherAfter= new QuoridorPathFind(game).moveSmallPath(numOfOtherPlayer)[2];
+            int movePlayerAfter= new QuoridorPathFind(game).moveSmallPath(getNum())[2];
             fence.remove();
-            if (moveOtherPlayerBefore[2]-movePlayerBefore[2]<moveOtherPlayerAfter[2]-movePlayerAfter[2])
+            if (moveOtherBefore-movePlayerBefore<moveOtherAfter-movePlayerAfter)
             {
-                return moveOtherPlayerAfter[2]-movePlayerAfter[2];
+                diffMove= moveOtherAfter-movePlayerAfter;
             }
         }
-        return 100;
+        return diffMove;
     }
 }
