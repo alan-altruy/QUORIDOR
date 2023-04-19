@@ -1,32 +1,51 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
 
-import javax.lang.model.util.ElementScanner6;
-
-// ALTRUY ALAN - JASON FOURET // Creation du plateau de jeu
+// ALTRUY ALAN - JASON FOURET //
 public class QuoridorTray
 {
-	private final String[]chars= {"●","|","─","■"};
+	private final String[]chars = {"●","|","─","■"};
 	private QuoridorCell[][] cells;
+	/**
+         * Permet d'initialiser le plateau du jeu.
+         * 
+         */
 	public QuoridorTray()
 	{
+		
 		cells= new QuoridorCell[19][19];
-		cells= new QuoridorCell[19][19];
+		InitCells_Walls_Nothing();
+	}
+	/**
+         * Permet d'initialiser les cellules du plateau élémentaires (cellules vides et murs extérieurs).
+         * 
+         */
+	public void InitCells_Walls_Nothing()
+	{
 		for (int x=0; x<19;x++)
 		{
 			for (int y=0; y<19;y++)
 			{
 				if (x==0 || x==18 || y==0 || y==18)
 				{
-					cells[x][y]= new QuoridorCell(x, y, 4);
+					cells[x][y]= new QuoridorCell(4);
 				}
 				else
 				{
-					cells[x][y]= new QuoridorCell(x,y,0);
+					cells[x][y]= new QuoridorCell(0);
 				}
 			}
 		}
-
 	}
+	/**
+         * Permet d'ajouter une barrière au plateau.
+         * 
+         * @param pos_x
+         *            La position x de l'endroit désiré pour positionner la barrière.
+         * @param pos_y
+         *            La position y de l'endroit désiré pour positionner la barrière.
+         * @param dir
+         *            La direction de la barrière désirée (0= vertical , 1= horizontal).
+         */
 	public void AddFence(int pos_x, int pos_y, int dir)
 	{
 		if (dir==0)
@@ -44,27 +63,56 @@ public class QuoridorTray
 			}
 		}
 	}
+	/**
+         * Permet de changer le type d'une cellule d'instance QuoridorCell
+         * 
+         * @param x
+         *            La position x de la cellule.
+         * @param y
+         *            La position y de la cellule.
+         * @param type
+         *            La nouveau type que l'on veut attribuer à la cellule
+         */
 	public void ChangeType_inCell(int x, int y, int type)
 	{
 		cells[x][y].ChangeType(type);
 	}
+	/**
+         * Permet de retourner une verifiation permettant de dire si un mur ou une barrière
+		 * se situe déjà dans les cellules où il souhaite se placer.
+         * 
+         * @param pos_x
+         *            La position x de l'endroit désiré pour positionner la barrière.
+         * @param pos_y
+         *            La position y de l'endroit désiré pour positionner la barrière.
+         * @param dir
+         *            La direction de la barrière désirée (0= vertical , 1= horizontal).
+		 * 
+		 * @return
+		 * 			  La méthode va retourner true si une barrière ou un mur se trouve déjà à cet emplacement
+		 *            et retournera false dans le cas contraire.
+         */
 	public boolean VerifAlreadyFenceAndWall(int pos_x, int pos_y, int dir)
 	{
 		for (int curs=0; curs<=2; curs++)
 		{
 			int verif0=cells[pos_x+curs][pos_y].GetType();
 			int verif1=cells[pos_x][pos_y+curs].GetType();
-			if ((dir==0) && verif0==2 || verif0==3 || verif0==4)
+			if (dir==0 && (verif0==2 || verif0==3 || verif0==4))
 			{
 				return true;
 			}
-			else if ((dir==0) && verif1==2 || verif1==3 || verif1==4)
+			else if (dir==1 && (verif1==2 || verif1==3 || verif1==4))
 			{
 				return true;
 			}
 		}
 		return false;
 	}
+	/**
+         * Permet d'afficher le plateau
+         * 
+         */
 	public void show()
 	{
 		String TrayBoard="";

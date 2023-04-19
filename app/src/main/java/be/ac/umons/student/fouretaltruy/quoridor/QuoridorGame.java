@@ -1,22 +1,33 @@
-package be.ac.umons.student.fouretaltruy.quoridor;
-
+package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
 import java.util.Scanner;
 public class QuoridorGame
 {
-    private int nbPlayers, nbFences=0;
+    private int nbPlayers, nbFences;
     private QuoridorTray tray;
     private QuoridorDisplay display;
     private QuoridorPlayers[] players;
+    /**
+         * Permet d'initialiser le jeu:
+         * 
+         *   - Créer un plateau de jeu (tray)
+         *   - Créer un afficheur/interface graphique (Display)
+         * 
+         */
     public QuoridorGame()
     {
         tray = new QuoridorTray();
-        display = new QuoridorDisplay();
+        display = new QuoridorDisplay(tray);
         nbFences=0;
         System.out.println("Nb de joueurs: ");
         Scanner scanNbPlayers = new Scanner(System.in);
         nbPlayers=scanNbPlayers.nextInt();
         Init2Players();
     }
+    /**
+         * Permet d'initialiser plusieurs instances players de QuoridorPlayers
+         * et modifier le type de la cellule qui contient à préent un joueur
+         * 
+         */
     public void Init2Players()
     {
         Scanner scan;
@@ -24,7 +35,7 @@ public class QuoridorGame
         int pos_x=1;
         int pos_y=9;
         players=new QuoridorPlayers[nbPlayers];
-        for (int num=0; num<nbPlayers; num++)
+        for (int num=0; num<nbPlayers; num++) // Chaque itération permet d'initialiser un joueur
         {
             System.out.println("Nom du joueur "+(num+1)+": ");
             scan= new Scanner(System.in);
@@ -37,6 +48,13 @@ public class QuoridorGame
             tray.ChangeType_inCell(pos_x,pos_y, 1);
         }
     }
+    /**
+         * Permet à un joueur de faire une action dans le jeu
+         * (soit ajouter une barrière, soit bouger son pion)
+         * 
+         * @param num
+         *            Le numero associé au joueur.
+         */
     public void PlayerAction(int num)
     {
         Scanner scan;
@@ -50,6 +68,12 @@ public class QuoridorGame
                 break;
         }
     }
+    /**
+         * Permet d'ajouter une barrière mais avant tout de vérifier si c'est possible d'en ajouter une.
+         * 
+         * @param num
+         *            Le numero associé au joueur.
+         */
     public void NewFence(int num)
     {
         Scanner scan;

@@ -1,6 +1,6 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
 
-// ALTRUY ALAN - JASON FOURET //  Execution du programme ainsi que la boucle.
+// ALTRUY ALAN - JASON FOURET //  Execution du programme principal, fichier exec, racine.
 public class QuoridorLoop
 {
 	public static void main(String[] args)

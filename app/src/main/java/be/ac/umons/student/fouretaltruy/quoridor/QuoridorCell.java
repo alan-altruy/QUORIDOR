@@ -1,26 +1,40 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
 
+// ALTRUY ALAN - JASON FOURET //
 public class QuoridorCell
 {
-    private int pos_x, pos_y, type;
-    public QuoridorCell(int _pos_x, int _pos_y, int _type)
+    private int type;
+    /**
+         * Permet d'initialiser une cellule du plateau
+         * 
+         * @param _type
+         *            Le type d'objet se trouvant dans la cellule:
+         *              si <type>=0 --> rien ne se trouve dans cette cellule
+         *              si <type>=1 --> un joueur(<player>) se trouve dans cette cellule
+         *              si <type>=2 --> une barrière verticale(fence) se trouve dans cette cellule
+         *              si <type>=3 --> une barrière horizontale(fence) se trouve dans cette cellule
+         *              si <type>=4 --> un mur(wall) se trouve dans cette cellule
+         */
+    public QuoridorCell(int _type)
     {
-        /* 
-        <type> est une variable qui permet de savoir quel objet se trouve dans la cellule,
-           si <type>=0 --> rien ne se trouve dans cette cellule
-           si <type>=1 --> un joueur(<player>) se trouve dans cette cellule
-           si <type>=2 --> une barrière verticale(fence) se trouve dans cette cellule
-           si <type>=3 --> une barrière horizontale(fence) se trouve dans cette cellule
-           si <type>=4 --> un mur(wall) se trouve dans cette cellule
-        */
         type=_type;
-        pos_x=_pos_x;
-        pos_y=_pos_y;
     }
+    /**
+         * Permet de modifier letype d'une cellule
+         * 
+         * @param _type
+         *            Le nouveau  type d'objet qui se trouvera dans la cellule:
+         */
     public void ChangeType(int _type)
     {
         type= _type;
     }
+    /**
+         * Permet de retourner le type de l'objet se trouvant dans cette cellule
+         * 
+         * @return
+         *            Le nouveau  type d'objet qui se trouvera dans la cellule:
+         */
     public int GetType()
     {
         return type;
