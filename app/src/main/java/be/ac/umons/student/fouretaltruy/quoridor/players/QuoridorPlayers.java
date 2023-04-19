@@ -2,185 +2,185 @@
 
 package be.ac.umons.student.fouretaltruy.quoridor.players;
 
-import java.io.Serializable;
-
 import be.ac.umons.student.fouretaltruy.quoridor.game.QuoridorTray;
+
+import java.io.Serializable;
 
 /**
  * Classe permettant d'instancier un joueur pour le jeu Quoridor qui est implémentée de Serializable
  */
-public class QuoridorPlayers implements Serializable
-{
+public class QuoridorPlayers implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-         * Nom du joueur
-         */
-    private String name;
+     * Nom du joueur
+     */
+    private final String name;
     /**
-         * Nombre de barrières utilisées par le joueur
-         */
+     * Nombre de barrières utilisées par le joueur
+     */
     private int nbUsedFences;
     /**
-         * Numéro du joueur
-         */
-     private int num;
+     * Numéro du joueur
+     */
+    private final int num;
     /**
-         * Position x du joueur
-         */
+     * Position x du joueur
+     */
     private int pos_x;
     /**
-         * Position y du joueur
-         */
+     * Position y du joueur
+     */
     private int pos_y;
     /**
-         * Plateau sur lequel se trouve le joueur
-         */
-        private boolean ai=false;
-    private QuoridorTray tray;
+     * Plateau sur lequel se trouve le joueur
+     */
+    private boolean ai = false;
+    private final QuoridorTray tray;
+
     /**
-         * Initialise un joueur
-         * @param _tray : Le plateau sur lequel le joueur se trouve
-         * @param _num : Le numero du joueur
-         * @param _name : Le nom du joueur.
-         * @param _x : La position x du joueur
-         * @param _y : La position y du joueur
-         */
-    public QuoridorPlayers(QuoridorTray _tray, int _num, String _name, int _x, int _y)
-    {
-        tray=_tray;
-        name=_name;
-        num=_num;
-        nbUsedFences=0;
-        pos_x=_x;
-        pos_y=_y;
+     * Initialise un joueur
+     *
+     * @param _tray : Le plateau sur lequel le joueur se trouve
+     * @param _num  : Le numero du joueur
+     * @param _name : Le nom du joueur.
+     * @param _x    : La position x du joueur
+     * @param _y    : La position y du joueur
+     */
+    public QuoridorPlayers(QuoridorTray _tray, int _num, String _name, int _x, int _y) {
+        tray = _tray;
+        name = _name;
+        num = _num;
+        nbUsedFences = 0;
+        pos_x = _x;
+        pos_y = _y;
         set();
     }
+
     /**
-         * Permet de savoir si le joueur a gagné
-         * @return True si le joueur est gagnant
-         * <li>False sinon</li>
-         */
-    public boolean areYouTheWinner()
-    {
-        if (num==0 && pos_x==17)
-        {
+     * Permet de savoir si le joueur a gagné
+     *
+     * @return True si le joueur est gagnant
+     * <li>False sinon</li>
+     */
+    public boolean areYouTheWinner() {
+        if (num == 0 && pos_x == 17) {
             return true;
-        }
-        else if (num==1 && pos_x==1)
-        {
-            return true;
-        }
-        return false;
+        } else return num == 1 && pos_x == 1;
     }
+
     /**
-         * Permet de faire bouger le joueur grace à une nouvelle position x, une nouvelle position y
-         * @param _pos_x : La nouvelle position x du joueur
-         * @param _pos_y : La nouvelle position y du joueur
-         * @return True si le jeu permet de positionner le joueur
-         * <li>False sinon</li>
-         * @throws ArrayIndexOutOfBoundsException Position en dehors du plateau
-         */
-    public boolean setPos(int _pos_x, int _pos_y) throws ArrayIndexOutOfBoundsException
-    {
-        if (_pos_x>18 || _pos_x<1 || _pos_y>18 || _pos_y<1)
+     * Permet de faire bouger le joueur grace à une nouvelle position x, une nouvelle position y
+     *
+     * @param _pos_x : La nouvelle position x du joueur
+     * @param _pos_y : La nouvelle position y du joueur
+     * <li>False sinon</li>
+     * @throws ArrayIndexOutOfBoundsException Position en dehors du plateau
+     */
+    public void setPos(int _pos_x, int _pos_y) throws ArrayIndexOutOfBoundsException {
+        if (_pos_x > 18 || _pos_x < 1 || _pos_y > 18 || _pos_y < 1)
             throw new ArrayIndexOutOfBoundsException("Position en dehors du plateau");
         remove();
-        pos_x=_pos_x;
-        pos_y=_pos_y;
+        pos_x = _pos_x;
+        pos_y = _pos_y;
         set();
-        return true;
     }
+
     /**
-         * Permet de faire bouger le joueur en lui additionnant des composantes x et y
-         * @param _pos_x : La composante x
-         * @param _pos_y : La composante y
-         * @throws ArrayIndexOutOfBoundsException Position en dehors du plateau
-         */
-    public boolean newPos (int _pos_x, int _pos_y) throws ArrayIndexOutOfBoundsException
-    {
-        if (_pos_x+pos_x>18 || _pos_x+pos_x<1 || _pos_y+pos_y>18 || _pos_y+pos_y<1)
+     * Permet de faire bouger le joueur en lui additionnant des composantes x et y
+     *
+     * @param _pos_x : La composante x
+     * @param _pos_y : La composante y
+     * @throws ArrayIndexOutOfBoundsException Position en dehors du plateau
+     */
+    public void newPos(int _pos_x, int _pos_y) throws ArrayIndexOutOfBoundsException {
+        if (_pos_x + pos_x > 18 || _pos_x + pos_x < 1 || _pos_y + pos_y > 18 || _pos_y + pos_y < 1)
             throw new ArrayIndexOutOfBoundsException("Position en dehors du plateau");
         remove();
-        pos_x +=_pos_x;
+        pos_x += _pos_x;
         pos_y += _pos_y;
         set();
-        return true;
     }
+
     /**
-         * Permet d'ajouter le joueur au plateau
-         */
-    public void set()
-    {
-        tray.setTypeOfCell(pos_x, pos_y, num+1);
+     * Permet d'ajouter le joueur au plateau
+     */
+    public void set() {
+        tray.setTypeOfCell(pos_x, pos_y, num + 1);
     }
+
     /**
-         * Permet de retirer le joueur du plateau
-         */
-    public void remove()
-    {
+     * Permet de retirer le joueur du plateau
+     */
+    public void remove() {
         tray.setTypeOfCell(pos_x, pos_y, 0);
     }
+
     /**
-         * Permet de retourner le nom du joueur
-         * @return Nom du joueur
-         */
-    public String getName()
-    {
+     * Permet de retourner le nom du joueur
+     *
+     * @return Nom du joueur
+     */
+    public String getName() {
         return name;
     }
+
     /**
-         * Permet de retourner le numéro du joueur
-         * @return Numéro du joueur
-         */
-    public int getNum()
-    {
+     * Permet de retourner le numéro du joueur
+     *
+     * @return Numéro du joueur
+     */
+    public int getNum() {
         return num;
     }
+
     /**
-         * Permet de retourner le nombre de barrières utilisées par le joueur.
-         * @return Nombre de barrières utilisées par le joueur
-         */
-    public int getUsedFences()
-    {
+     * Permet de retourner le nombre de barrières utilisées par le joueur.
+     *
+     * @return Nombre de barrières utilisées par le joueur
+     */
+    public int getUsedFences() {
         return nbUsedFences;
     }
+
     /**
-         * Permet d'incrémenter le nombre de barrières utilisées par le joueur
-         */
-    public void setUsedFences()
-    {
+     * Permet d'incrémenter le nombre de barrières utilisées par le joueur
+     */
+    public void setUsedFences() {
         nbUsedFences++;
     }
+
     /**
-         * Permet de retourner la position x du joueur
-         * @return Position x du joueur
-         */
-    public int getPos_x()
-    {
+     * Permet de retourner la position x du joueur
+     *
+     * @return Position x du joueur
+     */
+    public int getPos_x() {
         return pos_x;
     }
+
     /**
-         * Permet de retourner la position y du joueur
-         * @return Position y du joueur
-         */
-    public int getPos_y()
-    {
+     * Permet de retourner la position y du joueur
+     *
+     * @return Position y du joueur
+     */
+    public int getPos_y() {
         return pos_y;
     }
+
     /**
-         * Permet de savoir si le joueur est une intelligence artificielle
-         * @return True s'il est une AI
-         * <li>False sinon</li>
-         */
-     public boolean isAnAi()
-    {
+     * Permet de savoir si le joueur est une intelligence artificielle
+     *
+     * @return True s'il est une AI
+     * <li>False sinon</li>
+     */
+    public boolean isAnAi() {
         return ai;
     }
+
     /**
-         * Permet de définir une intelligence artificielle
-         */
-     public void setAi(boolean _ai)
-    {
-        ai= _ai;
+     * Permet de définir une intelligence artificielle
+     */
+    public void setAi(boolean _ai) {
+        ai = _ai;
     }
 }
