@@ -28,15 +28,20 @@ public class QuoridorTray
 		String TrayBoard="";
 		for (int ligne=0; ligne<10;ligne++)
 		{
+			TrayBoard+=" | ";
 			for (int cols1=0; cols1<10; cols1++)
 			{
-				if (cells[ligne][cols1].GetFence_in())
+				if ((ligne==0 || ligne==9) && cols1>0 && cols1<10)
+				{
+					TrayBoard+="---";
+				}
+				else if (cells[ligne][cols1].GetFence_in())
 				{
 					TrayBoard+= " | ";
 				}
 				else {TrayBoard+= "  ";}
 			}
-			TrayBoard+="\n";
+			TrayBoard+=" | \n | ";
 			for (int cols=0; cols<9; cols++)
 			{
 				if (cells[ligne][cols].GetPlayer_in())
@@ -48,7 +53,7 @@ public class QuoridorTray
 					TrayBoard+= "  ";
 				}
 			}
-			TrayBoard+="\n";
+			TrayBoard+=" | \n";
 		}
 		System.out.println(TrayBoard);
 	}
