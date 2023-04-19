@@ -4,7 +4,7 @@
     <img src="./app/src/main/resources/readme/umons-fs.png" width="120" alt="UMONS Logo">
 </p>
 
-# Quoridor Project
+#Quoridor Project
 
 ### Authors
 
