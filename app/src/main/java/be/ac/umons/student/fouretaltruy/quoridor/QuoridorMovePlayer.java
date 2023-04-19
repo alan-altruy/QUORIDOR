@@ -23,13 +23,13 @@ public class QuoridorMovePlayer
             x=-2;
             break;
         case 1:
-            x=2; y=2;
+            x=-2; y=2;
             break;
         case 2:
             y=2;
             break;
         case 3:
-            x=-2; y=2;
+            x=2; y=2;
             break;
         case 4:
             x=2;

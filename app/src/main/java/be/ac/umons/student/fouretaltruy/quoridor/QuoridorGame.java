@@ -4,6 +4,7 @@ public class QuoridorGame
 {
     private int nbPlayers=0, nbFences=0;
     private int boucle;
+    private int playerWhoIsPlaying;
     public QuoridorTray tray;
     private QuoridorPlayers[] players;
     private QuoridorGui gui;
@@ -74,20 +75,9 @@ public class QuoridorGame
          */
     public void PlayerAction(int num)
     {
-        Scanner scan;
-        System.out.println("Au tour de "+players[num].GetName()+"\n\nQue voulez-vous faire?\n1. Positionner une barrière\n2. Bouger le pion\nChoix: ");
-        scan =new Scanner(System.in);
-        int choix= scan.nextInt();
-        switch (choix)
-        {
-            case 1:
-                NewFence(num);
-                wait=false;
-                break;
-            case 2:
-                gui.Gui2Players(num);
-                break;
-        }
+        playerWhoIsPlaying=num;
+        System.out.println("ok");
+        gui.Gui2Players(num);
         while(wait)
         {
             System.out.println("Waiting Action");
@@ -100,26 +90,13 @@ public class QuoridorGame
          * @param num
          *            Le numero associé au joueur.
          */
-    public void NewFence(int num)
+    public void NewFence(int pos_x,int pos_y,int dir)
     {
-        Scanner scan;
-        System.out.println("Position x: ");
-        scan= new Scanner (System.in);
-        int pos_x= scan.nextInt()-1;
-        System.out.println("Position y: ");
-        scan= new Scanner (System.in);
-        int pos_y= scan.nextInt()-1;
-        System.out.println("Direction (v=0 , h=1): ");
-        scan= new Scanner (System.in);
-        int dir= scan.nextInt();
         if(VerifFence(pos_x,pos_y,dir))
         {
             nbFences++;
             tray.AddFence(pos_x, pos_y, dir);
-        }
-        else
-        {
-            PlayerAction(num);
+            wait=false;
         }
     }
     public boolean VerifFence(int pos_x, int pos_y, int dir)
