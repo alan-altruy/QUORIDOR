@@ -1,14 +1,28 @@
 package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
-import java.io.*;
+
+import java.io.Serializable;
+
+/**
+ * Plateau du jeu Quoridor qui est implémentée de Serializable
+ */
 public class QuoridorTray implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+	/**
+         * Jeu associé au plateau
+         */
 	private QuoridorGame game;
+	/**
+         * Caractères utilisés pour afficher le plateau sur un terminal
+         */
 	private final String[]chars = {"●","●","|","─","■"};
+	/**
+         * Cellules du plateau
+         */
 	private int[][] cells;
 	/**
-         * Permet d'initialiser le plateau du jeu.
-         * 
+         * Initialise le plateau du jeu
+		 * @param _game : Jeu associé au plateau
          */
 	public QuoridorTray(QuoridorGame _game)
 	{
@@ -17,13 +31,8 @@ public class QuoridorTray implements Serializable
 		initCellsAndWalls();
 	}
 	/**
-         * Permet d'initialiser les cellules du plateau élémentaires (cellules vides et murs extérieurs).
-         * 
+         * Permet d'initialiser les cellules du plateau élémentaires (cellules vides et murs extérieurs)
          */
-	public boolean canPass()
-	{
-		return new QuoridorPathFind(game).verif();
-	}
 	public void initCellsAndWalls()
 	{
 		for (int x=0; x<19;x++)
@@ -42,19 +51,12 @@ public class QuoridorTray implements Serializable
 		}
 	}
 	/**
-         * Permet de retourner une verifiation permettant de dire si un mur ou une barrière
-		 * se situe déjà dans les cellules où il souhaite se placer.
-         * 
-         * @param pos_x
-         *            La position x de l'endroit désiré pour positionner la barrière.
-         * @param pos_y
-         *            La position y de l'endroit désiré pour positionner la barrière.
-         * @param dir
-         *            La direction de la barrière désirée (0= vertical , 1= horizontal).
-		 * 
-		 * @return
-		 * 			  La méthode va retourner true si une barrière ou un mur se trouve déjà à cet emplacement
-		 *            et retournera false dans le cas contraire.
+         * Permet de verifier si un mur ou une barrière se situe déjà dans les cellules où une barrière soit se postionner
+         * @param pos_x : La position x désiréd pour positionner la barrière
+         * @param pos_y : La position y désirée pour positionner la barrière
+         * @param dir : La direction désirée pour positionner la barrière
+		 * @return True si une barrière ou un mur se trouve déjà à cet emplacement
+		 * <li>False sinon</li>
          */
 	public boolean verifAlreadyFenceAndWall(int pos_x, int pos_y, int dir)
 	{
@@ -73,17 +75,8 @@ public class QuoridorTray implements Serializable
 		}
 		return false;
 	}
-	public void setTypeOfCell(int pos_x, int pos_y, int type)
-	{
-		cells[pos_x][pos_y]=type;
-	}
-	public int getTypeOfCell(int pos_x, int pos_y)
-	{
-		return cells[pos_x][pos_y];
-	}
-	/*	*
-         * Permet d'afficher le plateau
-         * 
+	/**
+         * Permet d'afficher le plateau avec interface rudimentale (terminal)
          */
 	public void show()
 	{
@@ -110,5 +103,34 @@ public class QuoridorTray implements Serializable
 			TrayBoard+="\n";
 		}
 		System.out.println(TrayBoard);
+	}
+	/**
+         * Permet de modifier le type d'une cellule du plateau
+		 * @param pos_x : Position x de la cellule
+		 * @param pos_y : Position y de la cellule
+		 * @param type : Nouveau type de la cellule
+         */
+	public void setTypeOfCell(int pos_x, int pos_y, int type)
+	{
+		cells[pos_x][pos_y]=type;
+	}
+	/**
+         * Permet de verifier si les joueurs peuvent acceder aux cellules gagantes
+		 * @return True si les joueurs peuvent passer malgré les barrières positionnées
+		 * <li>False sinon</li>
+         */
+	public boolean canPass()
+	{
+		return new QuoridorPathFind(game).verif();
+	}
+	/**
+         * Permet de retourner le type d'une cellule
+		 * @param pos_x : Position x de la cellule
+		 * @param pos_y : Position y de la cellule
+		 * @return Type de la cellule
+         */
+	public int getTypeOfCell(int pos_x, int pos_y)
+	{
+		return cells[pos_x][pos_y];
 	}
 }

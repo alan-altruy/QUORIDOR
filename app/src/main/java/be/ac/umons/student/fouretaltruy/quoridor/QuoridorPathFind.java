@@ -1,16 +1,36 @@
-package be.ac.umons.student.fouretaltruy.quoridor;
+package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
 
 import java.util.*;
-import java.io.*;
+import java.io.Serializable;
 
+/**
+ * La classe permettant à la fois de connaitre le chemin le plus court pour atteindre
+ * une cellule gagante et de savoir si une barrière bloqueraitle chemin d'un des joueurs.
+ * Cette classe est implémentée de Serializable
+ */
 public class QuoridorPathFind implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    private QuoridorTray tray, alreadyFind;
+    /**
+         * Plateau du jeu
+         */
+    private QuoridorTray tray;
+    /**
+         * Jeu executé
+         */
     private QuoridorGame game;
+    /**
+         * Les joueurs jouant au jeu
+         */
     private QuoridorPlayers[] players;
-    private QuoridorMovePlayer movePlayer;
+    /**
+         * Ligne du plateau permettant de gagner 
+         */
     private int win=17;
+    /**
+         * Initialise le pathFind du jeu
+         * @param _game : Jeu executé
+         */
     public QuoridorPathFind(QuoridorGame _game)
     {
         game=_game;
@@ -18,20 +38,26 @@ public class QuoridorPathFind implements Serializable
         tray=game.getTray();
         win=17;
     }
+    /**
+         * Permet de vérifier si une barrière peut être posée sans obstruer le passage des joueurs
+         * @return True si le jeu permet aux deux joueurs de gagner
+         * <li>False sinon</li>
+         */
     public boolean verif()
     {
         ArrayList<QuoridorPlayers> player;
+        QuoridorTray alreadyFind;
         boolean verification=false;
         int nbVerifPlayer;
         for (int a=0; a<2; a++)
         {
             if (a==0)
             {
-                players[1].rem();
+                players[1].remove();
             }
             else if (a==1)
             {
-                players[0].rem();
+                players[0].remove();
             }
             alreadyFind= new QuoridorTray(game);
             verification=false;
@@ -43,8 +69,7 @@ public class QuoridorPathFind implements Serializable
                 nbVerifPlayer=player.size();
                 for (int num=0; num<nbVerifPlayer; num++)
                 {
-                    movePlayer = new QuoridorMovePlayer(player.get(num), tray);
-                    boolean[][][] choix = movePlayer.setPosAvailable();
+                    boolean[][][] choix = new QuoridorMovePlayer(player.get(num), tray).setPosAvailable();
                     for (int x=0; x<19;x++)
                     {
                         for (int y=0; y<19; y++)
@@ -86,11 +111,15 @@ public class QuoridorPathFind implements Serializable
         }
         return verification;
     }
-    public void verif2()
+    /**
+         * Permet de deplacer une intelligence artificielle par le plus court chemin
+         */
+    public void moveSmallPath()
     {
         HashMap<QuoridorPlayers, QuoridorPlayers> paths = new HashMap<QuoridorPlayers, QuoridorPlayers>();
         ArrayList<QuoridorPlayers> player;
         QuoridorPlayers playerWin=null;
+        QuoridorTray alreadyFind;
         int nbVerifPlayer;
         alreadyFind= new QuoridorTray(game);
         player = new ArrayList<QuoridorPlayers>();
@@ -101,8 +130,7 @@ public class QuoridorPathFind implements Serializable
             nbVerifPlayer=player.size();
             for (int num=0; num<nbVerifPlayer; num++)
             {
-                movePlayer = new QuoridorMovePlayer(player.get(num), tray);
-                boolean[][][] choix = movePlayer.setPosAvailable();
+                boolean[][][] choix = new QuoridorMovePlayer(player.get(num), tray).setPosAvailable();
                 for (int x=0; x<19; x++)
                 {
                     for (int y=0; y<19; y++)
@@ -129,13 +157,11 @@ public class QuoridorPathFind implements Serializable
             }
         }
         QuoridorPlayers movingPlayer= playerWin, nextPos=null;
-        QuoridorTray waw = new QuoridorTray(game);
         boolean verif=true;
         while (verif)
         {
             nextPos=movingPlayer;
             movingPlayer=paths.get(movingPlayer);
-            new QuoridorPlayers(waw, 1, "", movingPlayer.getPos_x(), movingPlayer.getPos_y());
             if (movingPlayer.getPos_x()==players[1].getPos_x() && movingPlayer.getPos_y()==players[1].getPos_y())
             {
                 verif=false;

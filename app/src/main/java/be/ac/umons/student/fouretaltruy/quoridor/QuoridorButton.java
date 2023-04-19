@@ -1,27 +1,80 @@
-package be.ac.umons.student.fouretaltruy.quoridor;
+package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Un bouton du jeu Quoridor qui hérite de JButton
+ */
 public class QuoridorButton extends JButton
 {
     private static final long serialVersionUID = 1L;
+    /**
+         * Image du bouton
+         */
     private QuoridorPicture pic,pic2;
+    /**
+         * Le panneau affiché à l'écran
+         */
     private QuoridorPanel panel;
-    private int cols, ligne, dir, numObj;
-    private double pos_x,pos_y,width,height;
-    public QuoridorButton(QuoridorPanel _panel, int num, double _pos_x, double _pos_y, double _width, double _height)
+    /**
+         * La ligne sur laquelle le bouton de la barrière se situe
+         */
+    private int ligne;
+    /**
+         * La colonne sur laquelle le bouton de la barrière se situe
+         */
+    private int cols;
+    /**
+         * La direction du bouton de la barrière
+         */
+    private int dir;
+    /**
+         * La ligne sur laquelle le bouton de la barrière se siture
+         */
+    private int typeObj;
+    /**
+         * La position x du bouton
+         */
+    private double pos_x;
+    /**
+         * La position y du bouton
+         */
+    private double pos_y;
+    /**
+         * La largeur du bouton
+         */
+    private double width;
+    /**
+         * La hauteur du bouton
+         */
+    private double height;
+    /**
+         * Initialise un bouton de Quoridor
+         * <ul><li>Enregistre les informations nécéssaires (position, taille, panneau, type)</li>
+         * <li>Positionne le bouton sur le plateau</li></ul>
+         * @param _panel : Panneau sur lequel le bouton sera positionné
+         * @param _typeObj : Type de l'objet
+         * @param _pos_x : Position x du bouton
+         * @param _pos_y : Position y du bouton
+         * @param _width : Largeur du bouton
+         * @param _height : Hauteur du bouton
+         */
+    public QuoridorButton(QuoridorPanel _panel, int _typeObj, double _pos_x, double _pos_y, double _width, double _height)
     {
         pos_x=_pos_x;
         pos_y=_pos_y;
         width=_width;
         height=_height;
         panel=_panel;
-        numObj=num;
+        typeObj=_typeObj;
         setBounds((int)pos_x, (int)pos_y, (int)width, (int)height);
     }
-    public void setPlayerButton()
+    /**
+         * Initialise un bouton transparent
+         */
+    public void setClearButton()
     {
         setOpaque(false);
         setBackground(new Color(0,true));
@@ -30,68 +83,86 @@ public class QuoridorButton extends JButton
         set();
         actionButton();
     }
-    public void setFenceButton(int _pos_x, int _pos_y, int _dir, QuoridorPicture _pic)
+    /**
+         * Initialise un bouton adapté pour une barrière
+         * @param _ligne : Ligne sur laquelle se trouvera la barrière
+         * @param _cols : Colonne sur laquelle se trouvera la barrière
+         * @param _dir : Direction de la barrière
+         * @param _pic : Image de la barrière
+         */
+    public void setFenceButton(int _ligne, int _cols, int _dir, QuoridorPicture _pic)
     {
         pic=_pic;
-        cols=_pos_x;
-        ligne=_pos_y;
+        ligne=_ligne;
+        cols=_cols;
         dir=_dir;
         actionButton();
-        setPlayerButton();
+        setClearButton();
     }
+    /**
+         * Initialise un bouton principal
+         * @param _pic : Image liée au bouton
+         * @param _pic2 : Image lors du passage de la souris sur le bouton
+         */
     public void setMainButton(QuoridorPicture _pic2, QuoridorPicture _pic)
     {
         pic=_pic;
         pic2=_pic2;
         pic2.set();
-        setPlayerButton();
+        setClearButton();
     }
+    /**
+         * Permet de gérer les actions liées à un bouton
+         * <ul><li>Ajoute un ActionListener</li>
+         * <li>Ajoute un MouseListener</li></ul>
+         */
     public void actionButton()
     {
-        addMouseListener(new MouseListener()
-        {
-            public void mouseClicked(MouseEvent e)
+        addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent e)  
             {
-                if (numObj<20)
+                QuoridorGame game = panel.getGame();
+                if (typeObj<20)
                 {
                     //panel.getGame().playSound(2);
-                    panel.setAction(numObj);
+                    panel.setAction(typeObj);
                     remove();
                 }
-                else if (numObj==100)
+                else if (typeObj==100)
                 {
-                    if (panel.getGame().getFence().newFence(cols,ligne,dir))
+                    if (new QuoridorFence(game).newFence(ligne, cols, dir))
                     {
-                        //panel.getGame().playSound(3);
-                        panel.getGame().setWait(false);
                         remove();
-                    } 
+                    }
                 }
                 else
                 {
                     //panel.getGame().playSound(panel.getGame().getPlayerWhoIsPlaying());
-                    panel.setMovePlayer(numObj-20);
+                    new QuoridorMovePlayer(game.getPlayer(game.getPlayerWhoIsPlaying()), game.getTray()).move(typeObj-20);
+                    game.setWait(false);
                     remove();
                 }
-                
-            }
+            }});
+        addMouseListener(new MouseListener()
+        {
+            public void mouseClicked(MouseEvent e){}
             public void mousePressed(MouseEvent e){}
             public void mouseReleased(MouseEvent e){}
             public void mouseEntered(MouseEvent e)
             {
-                if ((numObj>=0 && numObj<=2) || (numObj>=7 & numObj<=12))
+                if ((typeObj>=0 && typeObj<=2) || (typeObj>=7 & typeObj<=12))
                 {
                     pic.set(); 
                     pic2.remove();
                     panel.refreshBg();
                 }
-                else if (numObj==100 || numObj==6)
+                else if (typeObj==100 || typeObj==6)
                 {
-                    boolean verif1=panel.getGame().getFence().canSetFence(cols,ligne, dir);
+                    boolean verif1=new QuoridorFence(panel.getGame()).canSetFence(ligne,cols, dir);
                     boolean verif2=panel.getGame().getUsedFencesPlayer(panel.getGame().getPlayerWhoIsPlaying())<10;
-                    if (numObj==6 ||(numObj==100 && verif1 && verif2))
+                    if (typeObj==6 ||(typeObj==100 && verif1 && verif2))
                     {
-                        if (numObj==6)
+                        if (typeObj==6)
                         {
                             pic2.remove();
                         }
@@ -102,16 +173,16 @@ public class QuoridorButton extends JButton
             }
             public void mouseExited(MouseEvent e)
             {
-                if ((numObj>=0 && numObj<=2) || (numObj>=7 & numObj<=12))
+                if ((typeObj>=0 && typeObj<=2) || (typeObj>=7 & typeObj<=12))
                 {
                     pic.remove();
                     pic2.set();
                     panel.refreshBg();
                 }
-                else if (numObj==100 || numObj==6)
+                else if (typeObj==100 || typeObj==6)
                 {
                     pic.remove();
-                    if (numObj==6)
+                    if (typeObj==6)
                     {
                         pic2.set();
                     }
@@ -120,13 +191,19 @@ public class QuoridorButton extends JButton
             }
         });
     }
+    /**
+         * Ajoute le bouton au panneau
+         */
     public void set()
     {
-        if (!(panel.getGame().getNbPlayers()==1 && panel.getGame().getPlayerWhoIsPlaying()==1) || numObj==8)
+        if (!(panel.getGame().getNbPlayers()==1 && panel.getGame().getPlayerWhoIsPlaying()==1) || typeObj==8)
         {
             panel.add(this);
         }
     }
+    /**
+         * Retire le bouton du panneau
+         */
     public void remove()
     {
         panel.remove(this);

@@ -1,13 +1,26 @@
-package be.ac.umons.student.fouretaltruy.quoridor;
+package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
 
 import java.io.*;
 import javax.sound.sampled.*;
 
+/**
+ * Classe permettant de jouer des sons pour le jeu Quoridor qui hérite de Threads et qui
+ * est implémentée de Serializable
+ */
 public class QuoridorSound extends Thread implements Serializable
 {
     private static final long serialVersionUID = 1L;
+    /**
+         * Liste des sons diponibles
+         */
     private String[] nameObj= {"steve","creeper", "button", "fence"};
+    /**
+         * Liste des sons disponibles
+         */
     private Clip[] sound= new Clip[4];
+    /**
+         * Initialise les sons du Quoridor
+         */
     public QuoridorSound()
     {
         AudioInputStream audio;
@@ -25,8 +38,12 @@ public class QuoridorSound extends Thread implements Serializable
             }
         }
     }
-    public void play (int num)
+    /**
+         * Permet de lancer un son
+         * @param numOfSong : Numéro attribué au son
+         */
+    public void play (int numOfSong)
     {
-        sound[num].loop(0);
+        sound[numOfSong].loop(0);
     }
 }
