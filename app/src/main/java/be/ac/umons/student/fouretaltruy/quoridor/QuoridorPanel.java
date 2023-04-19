@@ -46,26 +46,28 @@ public class QuoridorPanel
         but2Player.setButton();
         windows.setContentPane(panel);
     }
-    public void Winner(int num)
-    {
-        but = new QuoridorButton(this, "LE GAGANT EST LE JOUEUR "+num, police, 5, (int)(dimXScreen/2)-400, (int)(dimYScreen/2)-30, 800, 60);
-        but.setButton();
-        windows.setContentPane(panel);
-    }
     public void TwoPlayers(int num)
     {
         PlayerWhoIsPlaying=num;
+        but = new QuoridorButton(this, "Au tour de\njoueur "+(num+1), police, 5, (int)((dimXScreen-dimXTray)/4)-100, (int)(dimYScreen/4)-50, 200, 100);
+        but.setButton();
         but = new QuoridorButton(this, "FENCE", police, 5, (int)((dimXScreen-dimXTray)/4)-100, (int)(dimYScreen/2)-25, 200, 50);
         but.setButton();
         pic=new QuoridorPicture(this, Theme1[2], poseInitX,poseInitY, dimXTray, dimYTray);
         posObjects(num);
         windows.setContentPane(panel);
     }
+    public void Winner(int num)
+    {
+        but = new QuoridorButton(this, "LE GAGANT EST LE JOUEUR "+(num+1), police, 5, (int)(dimXScreen/2)-400, (int)(dimYScreen/2)-30, 800, 60);
+        but.setButton();
+        windows.setContentPane(panel);
+    }
     public void setAction(int choice)
     {
         if (choice==2)
         {
-            gui.setNbPlayers(2);
+            game.setNbPlayers(2);
         }
         else if (choice==3 || choice==4)
         {

@@ -6,10 +6,18 @@ public class QuoridorLoop
 	public static void main(String[] args)
 	{
 		/**/
-		QuoridorGame game = new QuoridorGame();;
+		QuoridorGame game;
 		boolean loop=true;
 		int winner;
-		int nbPlayers=game.getNbPlayers();
+		int nbPlayers;
+		game = new QuoridorGame();
+		while(game.wait)
+		{
+			System.out.println("Waiting Action");
+		}
+		nbPlayers=game.getNbPlayers();
+		game.wait=true;
+		game.InitPlayers();
 		while (loop)
 		{
 			for (int nb=0; nb<nbPlayers; nb++)
@@ -23,7 +31,6 @@ public class QuoridorLoop
 					loop=false;
 				}
 			}
-			
 		}
 	}
 }

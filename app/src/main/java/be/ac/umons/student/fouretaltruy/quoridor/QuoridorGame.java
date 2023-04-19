@@ -2,32 +2,55 @@ package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET 
 import java.util.Scanner;
 public class QuoridorGame
 {
-    private int nbPlayers=0, nbFences=0;
-    private int boucle;
+	/**
+		*  Le nombre de joueurs dans le jeu
+		* 
+		*/
+    private int nbPlayers=0;
+    /**
+		*  Le numéro du joueur qui est en train de jouer
+		* 
+		*/
     private int playerWhoIsPlaying;
-    public QuoridorTray tray;
+    /**
+		*  Permet de savoir si le joueur a fait une action
+		* 
+		*/ 
+    public boolean wait=true;
+    /**
+		*  Ajouter le plateau (QuoridorTray au jeu)
+		* 
+		*/
+    public QuoridorTray tray = new QuoridorTray();
+    /**
+		*  Ajouter l'interface (QuoridorGui) au jeu
+		* 
+		*/
+    private QuoridorGui gui = new QuoridorGui(this);
+    /**
+		*  Contient les joueurs du jeu
+		* 
+		*/
     private QuoridorPlayers[] players;
-    private QuoridorGui gui;
-    private boolean wait=true;
     /**
          * Permet d'initialiser le jeu:
          * 
-         *   - Créer un plateau de jeu (tray)
-         *   - Créer un afficheur/interface graphique (Display)
+         *   - Créer un afficheur/interface graphique (QuoridorGui)
          * 
          */
     public QuoridorGame()
     {
-        tray = new QuoridorTray();
-        gui = new QuoridorGui(this);
-        nbFences=0;
-        gui.StartScreen();
-        while (nbPlayers<=0)
-        {
-            System.out.println("Waiting Actionfezgzgezezg");
-        }
-        Init2Players();
+        gui.StartScreen(); //Affiche l'écran de départ
     }
+    public void InitPlayers()
+	{
+		switch (nbPlayers)
+		{
+			case 2:
+				Init2Players();
+				break;
+		}
+	}
     /**
          * Permet d'initialiser plusieurs instances players de QuoridorPlayers
          * et modifier le type de la cellule qui contient à préent un joueur
@@ -35,7 +58,6 @@ public class QuoridorGame
          */
     public void Init2Players()
     {
-        Scanner scan;
         String name;
         int pos_x=1;
         int pos_y=9;
@@ -51,10 +73,7 @@ public class QuoridorGame
             tray.ChangeType_inCell(pos_x,pos_y, num+1);
         }
     }
-    public String GetNameOfPlayer(int num)
-    {
-        return players[num].GetName();
-    }
+
     public int GameHasWinner()
     {
         for (int nb=0; nb<nbPlayers; nb++)
@@ -96,7 +115,6 @@ public class QuoridorGame
         {
             if (players[playerWhoIsPlaying].GetUsedFences()<10)
             {
-                nbFences++;
                 players[playerWhoIsPlaying].setUsedFences();
                 tray.AddFence(pos_x, pos_y, dir);
                 wait=false;
@@ -117,10 +135,6 @@ public class QuoridorGame
     {
         gui.Gui2Players(num);
     }
-    public int getNbPlayers()
-    {
-		return nbPlayers;
-    }
     public void showWinner(int num)
     {
         gui.GuiWinner(num);
@@ -130,17 +144,22 @@ public class QuoridorGame
         }
         wait=true;
     }
-    public int getNbFences()
+    public String GetNameOfPlayer(int num)
     {
-		return nbFences;
+        return players[num].GetName();
     }
-    public void setNbPlayers(int newNb)
+    public int getNbPlayers()
     {
-        nbPlayers=newNb;
+		return nbPlayers;
     }
     public QuoridorPlayers getPlayers (int numPlayer)
     {
         return players[numPlayer];
+    }
+    public void setNbPlayers(int newNb)
+    {
+        nbPlayers=newNb;
+        wait=false;
     }
     public void setWait(boolean _wait)
     {

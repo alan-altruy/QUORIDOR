@@ -20,7 +20,7 @@ public class QuoridorCell
         type=_type;
     }
     /**
-         * Permet de modifier letype d'une cellule
+         * Permet de modifier le type d'une cellule
          * 
          * @param _type
          *            Le nouveau  type d'objet qui se trouvera dans la cellule:

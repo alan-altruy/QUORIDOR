@@ -1,4 +1,4 @@
-package be.ac.umons.student.fouretaltruy.quoridor;
+package be.ac.umons.student.fouretaltruy.quoridor;// Initialement prévu pour afficher Quoridor dans le Terminal
 
 public class QuoridorDisplay
 {
