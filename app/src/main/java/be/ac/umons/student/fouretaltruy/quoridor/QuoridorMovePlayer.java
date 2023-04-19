@@ -1,7 +1,9 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
 
-public class QuoridorMovePlayer
+import java.io.*;
+public class QuoridorMovePlayer implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private QuoridorPlayers player;
     private QuoridorTray tray;
     private int pos_x, pos_y;

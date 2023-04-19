@@ -10,7 +10,7 @@ public class QuoridorGui implements Serializable
     private static final long serialVersionUID = 1L;
     public QuoridorGame game;
     public JFrame windows;
-    private QuoridorPanel MainPanel, Panel2Players, PanelWinner, PanelMenu;
+    private QuoridorPanel MainPanel, Panel2Players, PanelWinner, PanelMenu, test;
     public QuoridorGui(QuoridorGame _game)
     {
         game=_game;
@@ -26,6 +26,12 @@ public class QuoridorGui implements Serializable
     {
         MainPanel= new QuoridorPanel(this);
         MainPanel.MainMenu();
+        showGui();
+    }
+    public void NewFrame()
+    {
+        test= new QuoridorPanel(this); 
+        test.TwoPlayers(0);
         showGui();
     }
     public void Gui2Players(int num)

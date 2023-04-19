@@ -175,7 +175,7 @@ public class QuoridorPanel implements Serializable
         }
         else if (choice==2)
         {
-            game.setNbPlayers(2);
+            game.Init2Players();
         }
         else if (choice==3 || choice==4)
         {

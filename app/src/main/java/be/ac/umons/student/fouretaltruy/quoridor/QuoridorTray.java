@@ -76,6 +76,68 @@ public class QuoridorTray implements Serializable
 			}
 		}
 	}
+	public void AddSpFence(int pos_x, int pos_y, int dir)
+	{
+		if (dir==0)
+		{
+			for (int _pos_x=0; _pos_x<=2; _pos_x++)
+			{
+				if (_pos_x==0)
+				{
+					cells[pos_x+_pos_x][pos_y].ChangeType(20);
+				}
+				else
+				{
+					cells[pos_x+_pos_x][pos_y].ChangeType(20);
+				}
+			}
+		}
+		else if (dir==1)
+		{
+			for (int _pos_y=0; _pos_y<=2; _pos_y++)
+			{
+				if (_pos_y==0)
+				{
+					cells[pos_x][pos_y+_pos_y].ChangeType(20);
+				}
+				else
+				{
+					cells[pos_x][pos_y+_pos_y].ChangeType(20);
+				}
+			}
+		}
+	}
+	public void RemFence(int pos_x, int pos_y, int dir)
+	{
+		if (dir==0)
+		{
+			for (int _pos_x=0; _pos_x<=2; _pos_x++)
+			{
+				if (_pos_x==0)
+				{
+					cells[pos_x+_pos_x][pos_y].ChangeType(0);
+				}
+				else
+				{
+					cells[pos_x+_pos_x][pos_y].ChangeType(0);
+				}
+			}
+		}
+		else if (dir==1)
+		{
+			for (int _pos_y=0; _pos_y<=2; _pos_y++)
+			{
+				if (_pos_y==0)
+				{
+					cells[pos_x][pos_y+_pos_y].ChangeType(0);
+				}
+				else
+				{
+					cells[pos_x][pos_y+_pos_y].ChangeType(0);
+				}
+			}
+		}
+	}
 	/**
          * Permet de changer le type d'une cellule d'instance QuoridorCell
          * 
@@ -125,6 +187,10 @@ public class QuoridorTray implements Serializable
 	public int GetTypeIn_Cell(int pos_x, int pos_y)
 	{
 		return cells[pos_x][pos_y].GetType();
+	}
+	public QuoridorTray getTray()
+	{
+		return this;
 	}
 	/*	*
          * Permet d'afficher le plateau

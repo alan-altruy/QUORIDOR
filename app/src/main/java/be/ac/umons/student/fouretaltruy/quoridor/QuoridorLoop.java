@@ -18,16 +18,12 @@ public class QuoridorLoop
 			while(game.wait)
 			{
 				System.out.println("Waiting Action");
-				if (game.closeGame)
-				{
-					loop=false;
-					loopPlayer=false;
-				}
 			}
 			game.wait=true;
-			if (!game.loaded)
+			if (game.closeGame)
 			{
-				game.InitPlayers();
+				loop=false;
+				loopPlayer=false;
 			}
 			while (loopPlayer)
 			{
@@ -43,6 +39,9 @@ public class QuoridorLoop
 						if (game.loaded && game.playerWhoIsPlaying==1)
 						{
 							nb=1;
+						}
+						if (game.loaded)
+						{
 							game.loaded=false;
 						}
 						game.PlayerAction(nb);

@@ -51,6 +51,11 @@ public class QuoridorPlayers implements Serializable
         pos_x += _x;
         pos_y += _y;
     }
+    public void NewPoss (int _x, int _y)
+    {
+        pos_x = _x;
+        pos_y = _y;
+    }
     /**
          * Permet de retourner le nom du joueur.
          * 
@@ -86,5 +91,9 @@ public class QuoridorPlayers implements Serializable
     public int GetPos_y()
     {
         return pos_y;
+    }
+    public QuoridorPlayers getPlayer()
+    {
+        return this;
     }
 }

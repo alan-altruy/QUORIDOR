@@ -7,7 +7,7 @@ public class QuoridorGame implements Serializable
 		*  Le nombre de joueurs dans le jeu
 		* 
         */
-    private int nbPlayers=0;
+    private int nbPlayers=2;
     /**
 		*  Le numéro du joueur qui est en train de jouer
 		* 
@@ -25,7 +25,7 @@ public class QuoridorGame implements Serializable
     public boolean closeGame=false;
     public boolean newGame=false;
     public boolean loaded=false;
-    public QuoridorTray tray = new QuoridorTray();
+    public QuoridorTray tray;
 
     /**
 		*  Ajouter l'interface (QuoridorGui) au jeu
@@ -36,7 +36,7 @@ public class QuoridorGame implements Serializable
 		*  Contient les joueurs du jeu
 		* 
 		*/
-    private QuoridorPlayers[] players;
+    public QuoridorPlayers[] players;
     /**
          * Permet d'initialiser le jeu:
          * 
@@ -45,16 +45,8 @@ public class QuoridorGame implements Serializable
          */
     public void showStartScreen()
     {
+        tray = new QuoridorTray();
         gui.StartScreen();
-    }
-    public void InitPlayers()
-	{
-		switch (nbPlayers)
-		{
-			case 2:
-				Init2Players();
-				break;
-		}
     }
     public void loadSave()
     {
@@ -106,6 +98,7 @@ public class QuoridorGame implements Serializable
             players[num]= new QuoridorPlayers(num, name, pos_x, pos_y);
             tray.ChangeType_inCell(pos_x,pos_y, num+1);
         }
+        wait=false;
     }
     public int GameHasWinner()
     {
@@ -128,8 +121,11 @@ public class QuoridorGame implements Serializable
     public void PlayerAction(int num)
     {
         playerWhoIsPlaying=num;
-        System.out.println("ok");
         gui.Gui2Players(num);
+    }
+    public void NewTest()
+    {
+        gui.NewFrame();
     }
     /**
          * Permet d'ajouter une barrière mais avant tout de vérifier si c'est possible d'en ajouter une.
@@ -139,21 +135,30 @@ public class QuoridorGame implements Serializable
          */
     public void NewFence(int pos_x,int pos_y,int dir)
     {
-        if(VerifFence(pos_x,pos_y,dir))
+        tray.AddFence(pos_x, pos_y, dir);
+        QuoridorPathFind pathFind = new QuoridorPathFind(this, pos_x, pos_y, dir);
+        boolean verif1=pathFind.verif();
+        boolean verif2=VerifFence(pos_x,pos_y,dir);
+        if(verif1 && verif2)
         {
             if (players[playerWhoIsPlaying].GetUsedFences()<10)
             {
                 players[playerWhoIsPlaying].setUsedFences();
-                tray.AddFence(pos_x, pos_y, dir);
+                
                 wait=false;
             }
+        }
+        else
+        {
+            tray.RemFence(pos_x, pos_y, dir);
         }
     }
     public boolean VerifFence(int pos_x, int pos_y, int dir)
     {
         boolean verif1=(pos_x%2==1 && (dir==1 || pos_y%2==1));
         boolean verif2=(pos_x%2==0 && (dir==0 || pos_y%2==0));
-        if  (verif1 || verif2 || tray.VerifAlreadyFenceAndWall(pos_x, pos_y, dir))
+        boolean verif3=tray.VerifAlreadyFenceAndWall(pos_x, pos_y, dir);
+        if  (verif1 || verif2 || verif3)
         {
             return false;
         }

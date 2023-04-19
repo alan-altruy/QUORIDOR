@@ -53,10 +53,6 @@ public class QuoridorButton implements Serializable
         actionButton();
         setPlayerButton();
     }
-    public void setButton()
-    {
-        Qpanel.panel.add(button);
-    }
     public void actionClick ()
     {
         button.addActionListener( new ActionListener() {
@@ -74,6 +70,7 @@ public class QuoridorButton implements Serializable
                 {
                     Qpanel.movePlayer(numObj-20);
                 }
+                removeButton();
             }});
     }
     public void actionButton()
@@ -121,5 +118,13 @@ public class QuoridorButton implements Serializable
                 }
                 
             }});
+    }
+    public void setButton()
+    {
+        Qpanel.panel.add(button);
+    }
+    public void removeButton()
+    {
+        Qpanel.panel.remove(button);
     }
 }
