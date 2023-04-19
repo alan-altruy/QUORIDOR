@@ -9,7 +9,7 @@ public class QuoridorGui
 {
     private QuoridorGame game;
     public JFrame windows;
-    private QuoridorPanel MainPanel, Panel2Players;
+    private QuoridorPanel MainPanel, Panel2Players, PanelWinner;
     public QuoridorGui(QuoridorGame _game)
     {
         game=_game;
@@ -32,6 +32,13 @@ public class QuoridorGui
         Panel2Players= new QuoridorPanel(this, game);  
         Panel2Players.TwoPlayers(num);
         showGui();
+    }
+    public void GuiWinner(int num)
+    {
+        PanelWinner= new QuoridorPanel(this, game);
+        PanelWinner.Winner(num);
+        showGui();
+        game.setWait(false);
     }
     public void showGui()
     {

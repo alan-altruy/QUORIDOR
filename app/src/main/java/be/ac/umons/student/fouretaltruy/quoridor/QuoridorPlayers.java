@@ -75,6 +75,10 @@ public class QuoridorPlayers
     {
         return NbUsedFences;
     }
+    public void setUsedFences()
+    {
+        NbUsedFences++;
+    }
     public int GetPos_x()
     {
         return pos_x;

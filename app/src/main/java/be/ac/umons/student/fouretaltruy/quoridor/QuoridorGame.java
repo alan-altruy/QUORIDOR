@@ -94,9 +94,13 @@ public class QuoridorGame
     {
         if(VerifFence(pos_x,pos_y,dir))
         {
-            nbFences++;
-            tray.AddFence(pos_x, pos_y, dir);
-            wait=false;
+            if (players[playerWhoIsPlaying].GetUsedFences()<10)
+            {
+                nbFences++;
+                players[playerWhoIsPlaying].setUsedFences();
+                tray.AddFence(pos_x, pos_y, dir);
+                wait=false;
+            }
         }
     }
     public boolean VerifFence(int pos_x, int pos_y, int dir)
@@ -116,6 +120,15 @@ public class QuoridorGame
     public int getNbPlayers()
     {
 		return nbPlayers;
+    }
+    public void showWinner(int num)
+    {
+        gui.GuiWinner(num);
+        while(wait)
+        {
+            System.out.println("End Of Game");
+        }
+        wait=true;
     }
     public int getNbFences()
     {

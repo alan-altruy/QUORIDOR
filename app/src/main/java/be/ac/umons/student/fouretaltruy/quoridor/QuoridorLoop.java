@@ -18,9 +18,9 @@ public class QuoridorLoop
 				winner=game.GameHasWinner();
 				if (winner!=3)
 				{
-					System.out.println("Le gagnant est "+game.GetNameOfPlayer(winner));
-					loop=false;
+					game.showWinner(winner);
 					nb=4;
+					loop=false;
 				}
 			}
 			
