@@ -7,10 +7,8 @@ public class QuoridorGame
     private QuoridorTray tray;
     private QuoridorDisplay display;
     private QuoridorPlayers[] players;
-    private QuoridorFence[] fences;
     public QuoridorGame()
     {
-		fences= new QuoridorFence[20];
         tray = new QuoridorTray();
         display = new QuoridorDisplay();
         nbFences=0;
@@ -36,7 +34,7 @@ public class QuoridorGame
                 pos_x=17;
             }
             players[num]= new QuoridorPlayers(num, name, pos_x, pos_y);
-            tray.ChangePlayer_inCell(pos_x,pos_y, true);
+            tray.ChangeType_inCell(pos_x,pos_y, 1);
         }
     }
     public void PlayerAction(int num)
@@ -61,12 +59,11 @@ public class QuoridorGame
         System.out.println("Position y: ");
         scan= new Scanner (System.in);
         int pos_y= scan.nextInt();
-        System.out.println("Direction (v=1 , h=2): ");
+        System.out.println("Direction (v=0 , h=1): ");
         scan= new Scanner (System.in);
         int dir= scan.nextInt();
         if(VerifFence(pos_x,pos_y,dir))
         {
-            fences[nbFences]= new QuoridorFence(pos_x, pos_y, dir);
             nbFences++;
             tray.AddFence(pos_x, pos_y, dir);
         }
@@ -78,11 +75,11 @@ public class QuoridorGame
     public boolean VerifFence(int pos_x, int pos_y, int dir)
     {
         boolean verif=true;
-        if (pos_x<1 || pos_x>17 || pos_x<1 || pos_x>17)
+        if (pos_x<1 || pos_x>17 || pos_y<1 || pos_y>17)
         {
             verif=false;
         }
-        else if (pos_x%2==1 && (dir==2 || pos_y%2==1))
+        else if ((pos_x%2==1 && (dir==1 || pos_y%2==1)) || tray.VerifAlreadyFenceAndWall(pos_x, pos_y, dir))
         {
             verif=false;
         }
@@ -95,5 +92,9 @@ public class QuoridorGame
     public int getNbPlayers()
     {
 		return nbPlayers;
+    }
+    public int getNbFences()
+    {
+		return nbFences;
 	}
 }

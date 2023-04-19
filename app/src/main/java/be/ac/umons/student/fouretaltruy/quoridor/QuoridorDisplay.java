@@ -1,5 +1,4 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
-
 public class QuoridorDisplay
 {
     private QuoridorTray tray;

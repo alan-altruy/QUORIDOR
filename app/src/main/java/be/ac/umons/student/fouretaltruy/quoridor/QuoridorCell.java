@@ -2,38 +2,27 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 
 public class QuoridorCell
 {
-    private boolean player_in, fence_in, wall_in;
-    public int pos_x, pos_y;
-    public QuoridorCell(int _pos_x, int _pos_y, boolean _player_in, boolean _fence_in, boolean _wall_in)
+    private int pos_x, pos_y, type;
+    public QuoridorCell(int _pos_x, int _pos_y, int _type)
     {
-        player_in=_player_in;
-        fence_in=_fence_in;
-        wall_in=_wall_in;
+        /* 
+        <type> est une variable qui permet de savoir quel objet se trouve dans la cellule,
+           si <type>=0 --> rien ne se trouve dans cette cellule
+           si <type>=1 --> un joueur(<player>) se trouve dans cette cellule
+           si <type>=2 --> une barrière verticale(fence) se trouve dans cette cellule
+           si <type>=3 --> une barrière horizontale(fence) se trouve dans cette cellule
+           si <type>=4 --> un mur(wall) se trouve dans cette cellule
+        */
+        type=_type;
         pos_x=_pos_x;
         pos_y=_pos_y;
     }
-    public void ChangePlayer_in(boolean _type)
+    public void ChangeType(int _type)
     {
-        player_in= _type;
+        type= _type;
     }
-    public void ChangeFence_in(boolean _type)
+    public int GetType()
     {
-        fence_in= _type;
-    }
-    /*public boolean CanMove(int player_x, int player_y)
-    {
-
-    }*/
-    public boolean GetPlayer_in()
-    {
-		return player_in;
-	}
-	public boolean GetFence_in()
-    {
-		return fence_in;
-    }
-    public boolean GetWall_in()
-    {
-        return wall_in;
+        return type;
     }
 }

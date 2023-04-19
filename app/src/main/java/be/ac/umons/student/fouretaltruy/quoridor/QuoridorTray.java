@@ -5,10 +5,11 @@ import javax.lang.model.util.ElementScanner6;
 // ALTRUY ALAN - JASON FOURET // Creation du plateau de jeu
 public class QuoridorTray
 {
+	private final String[]chars= {"●","|","─","■"};
 	private QuoridorCell[][] cells;
-	private QuoridorWall[][] walls;
 	public QuoridorTray()
 	{
+		cells= new QuoridorCell[19][19];
 		cells= new QuoridorCell[19][19];
 		for (int x=0; x<19;x++)
 		{
@@ -16,11 +17,11 @@ public class QuoridorTray
 			{
 				if (x==0 || x==18 || y==0 || y==18)
 				{
-					cells[x][y]= new QuoridorCell(x, y, false, false, true);
+					cells[x][y]= new QuoridorCell(x, y, 4);
 				}
 				else
 				{
-					cells[x][y]= new QuoridorCell(x,y,false, false, false);
+					cells[x][y]= new QuoridorCell(x,y,0);
 				}
 			}
 		}
@@ -28,26 +29,41 @@ public class QuoridorTray
 	}
 	public void AddFence(int pos_x, int pos_y, int dir)
 	{
-		if (dir==1)
+		if (dir==0)
 		{
-			cells[pos_x][pos_y].ChangeFence_in(true);
-			cells[pos_x+1][pos_y].ChangeFence_in(true);
-			cells[pos_x+2][pos_y].ChangeFence_in(true);
+			for (int _pos_x=pos_x; _pos_x<=pos_x+2; _pos_x++)
+			{
+				cells[_pos_x][pos_y].ChangeType(2);
+			}
 		}
-		else if (dir==2)
+		else if (dir==1)
 		{
-			cells[pos_x][pos_y].ChangeFence_in(true);
-			cells[pos_x][pos_y+1].ChangeFence_in(true);
-			cells[pos_x][pos_y+2].ChangeFence_in(true);
+			for (int _pos_y=pos_y; _pos_y<=pos_y+2; _pos_y++)
+			{
+				cells[pos_x][_pos_y].ChangeType(3);
+			}
 		}
 	}
-	public void ChangePlayer_inCell(int x, int y, boolean type)
+	public void ChangeType_inCell(int x, int y, int type)
 	{
-		cells[x][y].ChangePlayer_in(type);
+		cells[x][y].ChangeType(type);
 	}
-	public void ChangeFence_inCell(int x, int y, boolean type)
+	public boolean VerifAlreadyFenceAndWall(int pos_x, int pos_y, int dir)
 	{
-		cells[x][y].ChangeFence_in(type);
+		for (int curs=0; curs<=2; curs++)
+		{
+			int verif0=cells[pos_x+curs][pos_y].GetType();
+			int verif1=cells[pos_x][pos_y+curs].GetType();
+			if ((dir==0) && verif0==2 || verif0==3 || verif0==4)
+			{
+				return true;
+			}
+			else if ((dir==0) && verif1==2 || verif1==3 || verif1==4)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	public void show()
 	{
@@ -56,17 +72,10 @@ public class QuoridorTray
 		{
 			for (int cols=0; cols<19; cols++)
 			{
-				if (cells[ligne][cols].GetFence_in())
+				int typeOfCell=cells[ligne][cols].GetType();
+				if (typeOfCell!=0)
 				{
-					TrayBoard+= "|";
-				}
-				else if (cells[ligne][cols].GetWall_in())
-				{
-					TrayBoard+= "■";
-				}
-				else if (cells[ligne][cols].GetPlayer_in())
-				{
-					TrayBoard+= "●";
+					TrayBoard+= chars[typeOfCell-1];
 				}
 				else if (cols%2==0 || ligne%2==0)
 				{

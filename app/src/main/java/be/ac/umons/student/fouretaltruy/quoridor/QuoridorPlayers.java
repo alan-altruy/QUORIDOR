@@ -3,12 +3,11 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 public class QuoridorPlayers
 {
     private String name;
+    private int NbUsedFences=0;
     public final String type="player";
     private int NumOfPlayer, pos_x, pos_y;
-    private QuoridorFence[] fences;
     public QuoridorPlayers(int _num, String _name, int _x, int _y)
     {
-        fences= new QuoridorFence[10];
         name=_name;
         pos_x=_x;
         pos_y=_y;
@@ -23,5 +22,9 @@ public class QuoridorPlayers
     public String GetName()
     {
         return name;
+    }
+    public int GetUsedFences()
+    {
+        return NbUsedFences;
     }
 }
