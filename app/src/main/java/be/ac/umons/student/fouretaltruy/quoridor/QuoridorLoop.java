@@ -14,8 +14,6 @@ public class QuoridorLoop
 		{
 			for (int nb=0; nb<nbPlayers; nb++)
 			{
-				game.showUI();
-				System.out.println("here");
 				game.PlayerAction(nb);
 				winner=game.GameHasWinner();
 				if (winner!=3)

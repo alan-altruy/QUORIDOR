@@ -7,6 +7,7 @@ public class QuoridorGame
     public QuoridorTray tray;
     private QuoridorPlayers[] players;
     private QuoridorGui gui;
+    private boolean wait=true;
     /**
          * Permet d'initialiser le jeu:
          * 
@@ -19,13 +20,11 @@ public class QuoridorGame
         tray = new QuoridorTray();
         gui = new QuoridorGui(this);
         nbFences=0;
-        gui.MainMenu(this);
+        gui.StartScreen();
         while (nbPlayers<=0)
         {
-            nbPlayers=gui.getNbPlayers();
-            System.out.println("");
+            System.out.println("Waiting Actionfezgzgezezg");
         }
-        System.out.println(nbPlayers);
         Init2Players();
     }
     /**
@@ -42,9 +41,7 @@ public class QuoridorGame
         players=new QuoridorPlayers[nbPlayers];
         for (int num=0; num<nbPlayers; num++) // Chaque itération permet d'initialiser un joueur
         {
-            System.out.println("Nom du joueur "+(num+1)+": ");
-            scan= new Scanner(System.in);
-            name=scan.nextLine();
+            name="player"+(num+1);
             if (num==1)
             {
                 pos_x=17;
@@ -85,11 +82,17 @@ public class QuoridorGame
         {
             case 1:
                 NewFence(num);
+                wait=false;
                 break;
             case 2:
-                MovePlayer(num);
+                gui.Gui2Players(num);
                 break;
         }
+        while(wait)
+        {
+            System.out.println("Waiting Action");
+        }
+        wait=true;
     }
     /**
          * Permet d'ajouter une barrière mais avant tout de vérifier si c'est possible d'en ajouter une.
@@ -131,12 +134,7 @@ public class QuoridorGame
     }
     public void MovePlayer(int num)
     {
-        Scanner scan;
-        System.out.println("Ou voulez-vous aller?: ");
-        QuoridorMovePlayer move = new QuoridorMovePlayer(players[num], tray);
-        scan= new Scanner (System.in);
-        int choix1= scan.nextInt();
-        move.MoveIt(choix1);
+        gui.Gui2Players(num);
     }
     public int getNbPlayers()
     {
@@ -146,8 +144,16 @@ public class QuoridorGame
     {
 		return nbFences;
     }
-    public void showUI()
+    public void setNbPlayers(int newNb)
     {
-        gui.Gui2Players();
+        nbPlayers=newNb;
+    }
+    public QuoridorPlayers getPlayers (int numPlayer)
+    {
+        return players[numPlayer];
+    }
+    public void setWait(boolean _wait)
+    {
+        wait=_wait;
     }
 }

@@ -17,7 +17,7 @@ public class QuoridorVerifFence
          */
     public QuoridorVerifFence(int _pos_x, int _pos_y, int _dir)
     {
-        tray=new QuoridorTray();
+        tray = new QuoridorTray();
         pos_x=_pos_x;
         pos_y=_pos_y;
     }

@@ -13,8 +13,6 @@ public class QuoridorMovePlayer
         tray=_tray;
         pos_x=player.GetPos_x();
         pos_y=player.GetPos_y();
-        WhereCanMove();
-        YourChoice();
     }
     public void MoveIt(int choix)
     {
@@ -78,7 +76,7 @@ public class QuoridorMovePlayer
             if (tray.GetTypeIn_Cell(pos_x-1, pos_y)==0)
             {
              //Y a-t-il un joueur
-                if (tray.GetTypeIn_Cell(pos_x-2, pos_y)==1)
+                if (tray.GetTypeIn_Cell(pos_x-2, pos_y)!=0)
                 {
                     // Si oui, regarder si barrière au dessus de l'autre joueur
                     if (tray.GetTypeIn_Cell(pos_x-3, pos_y)!=0)
@@ -106,7 +104,7 @@ public class QuoridorMovePlayer
             if (tray.GetTypeIn_Cell(pos_x, pos_y+1)==0)
             {
              //Y a-t-il un joueur
-                if (tray.GetTypeIn_Cell(pos_x, pos_y+2)==1)
+                if (tray.GetTypeIn_Cell(pos_x, pos_y+2)!=0)
                 {
                     // Si oui, regarder si barrière à droite de l'autre joueur
                     if (tray.GetTypeIn_Cell(pos_x, pos_y+3)!=0)
@@ -134,7 +132,7 @@ public class QuoridorMovePlayer
             if (tray.GetTypeIn_Cell(pos_x+1, pos_y)==0)
             {
              //Y a-t-il un joueur
-                if (tray.GetTypeIn_Cell(pos_x+2, pos_y)==1)
+                if (tray.GetTypeIn_Cell(pos_x+2, pos_y)!=0)
                 {
                     // Si oui, regarder si barrière au dessus de l'autre joueur
                     if (tray.GetTypeIn_Cell(pos_x+3, pos_y)!=0)
@@ -162,7 +160,7 @@ public class QuoridorMovePlayer
             if (tray.GetTypeIn_Cell(pos_x, pos_y-1)==0)
             {
              //Y a-t-il un joueur
-                if (tray.GetTypeIn_Cell(pos_x, pos_y-2)==1)
+                if (tray.GetTypeIn_Cell(pos_x, pos_y-2)!=0)
                 {
                     // Si oui, regarder si barrière au dessus de l'autre joueur
                     if (tray.GetTypeIn_Cell(pos_x, pos_y-3)!=0)
@@ -186,5 +184,73 @@ public class QuoridorMovePlayer
                     choix[6]=true;
                 }
             }
+        }
+        public boolean[] getChoix()
+        {
+            return choix;
+        }
+        public boolean[][][] setPosAvailable()
+        {
+            boolean[][][] posAvailable= new boolean[19][19][12];
+            WhereCanMove();
+            for (int x=0; x<19; x++)
+            {
+                for (int y=0; y<19; y++)
+                {
+                    for (int z=0; z<12; z++)
+                    {
+                        posAvailable[x][y][z]=false;
+                    }
+                }
+            }
+            if (choix[0])
+            {
+                posAvailable[pos_x-2][pos_y][0]=true;
+            }
+            if (choix[1])
+            {
+                posAvailable[pos_x-2][pos_y+2][1]=true;
+            }
+            if (choix[2])
+            {
+                posAvailable[pos_x][pos_y+2][2]=true;
+            }
+            if (choix[3])
+            {
+                posAvailable[pos_x+2][pos_y+2][3]=true;
+            }
+            if (choix[4])
+            {
+                posAvailable[pos_x+2][pos_y][4]=true;
+            }
+            if (choix[5])
+            {
+                posAvailable[pos_x+2][pos_y-2][5]=true;
+            }
+            if (choix[6])
+            {
+                posAvailable[pos_x][pos_y-2][6]=true;
+            }
+            if (choix[7])
+            {
+                posAvailable[pos_x-2][pos_y-2][7]=true;
+            }
+            if (choix[8])
+            {
+                posAvailable[pos_x-4][pos_y][8]=true;
+            }
+            if (choix[9])
+            {
+                posAvailable[pos_x][pos_y+4][9]=true;
+            }
+            if (choix[10])
+            {
+                posAvailable[pos_x+4][pos_y][10]=true;
+            }
+            if (choix[11])
+            {
+                posAvailable[pos_x][pos_y-4][11]=true;
+            }
+            return posAvailable;
         }
     }
