@@ -59,8 +59,6 @@ public class QuoridorMovePlayer implements Serializable
             break;
         }
         player.newPos(x,y);
-        tray.setTypeOfCell(pos_x, pos_y, 0);
-        tray.setTypeOfCell(pos_x+x, pos_y+y, player.getNum()+1);
     }
     public void yourChoice()
     {
@@ -170,11 +168,11 @@ public class QuoridorMovePlayer implements Serializable
                 {
                     if (tray.getTypeOfCell(pos_x-1, pos_y-2)==0)
                     {
-                        choix[5]=true;
+                        choix[7]=true;
                     }
                     if (tray.getTypeOfCell(pos_x+1, pos_y-2)==0)
                     {
-                        choix[7]=true;
+                        choix[5]=true;
                     }
                 }
                 else

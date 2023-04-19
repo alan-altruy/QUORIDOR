@@ -73,6 +73,38 @@ public class QuoridorPanel extends JPanel
         //Affiche les éléments à l'écran
         refreshBg();
     }
+    public void chooseDifficultIA()
+    {
+        double height,width, pos_x,pos_y;
+        // Creation du bouton solo
+        height=dimYScreen/10;
+        width=height*13/3;
+        pos_x=(dimXScreen/2)-(dimXScreen/4); pos_y=(dimYScreen/3)-height/2;
+        but = new QuoridorButton(this, 11, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"easy"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"easyvalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        pos_x+=dimXScreen/2-width;
+        but = new QuoridorButton(this, 11, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"hard"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"hardvalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        // Creation du bouton multiplayer
+        width=dimXScreen/2;
+        pos_x=width-(dimXScreen/4);
+        pos_y+=height*2;
+        but = new QuoridorButton(this, 8, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"home"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"homevalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        // Creation du bouton Quiiter le jeu
+        
+        // Ajout du backgound Menu Principal
+        bg=new QuoridorPicture(this, a+"background"+b, 0,0, dimXScreen, dimYScreen);
+        bg.set();
+        //Affiche les éléments à l'écran
+        refreshBg();
+    }
     public void twoPlayers(int num)
     {
         if (num==0)
@@ -155,7 +187,10 @@ public class QuoridorPanel extends JPanel
         {
             System.exit(0);
         }
-        else if (choice==1){}
+        else if (choice==1)
+        {
+            gui.difficultMenu();
+        }
         else if (choice==2)
         {
             game.init2Players();
@@ -184,6 +219,14 @@ public class QuoridorPanel extends JPanel
         {
             game.loadSave();
             gui.gui2Players();
+        }
+        else if (choice==11)
+        {
+            game.initAI(false);
+        }
+        else if (choice==12)
+        {
+            game.initAI(true);
         }
     }
     public void canMove(int choice)
@@ -234,7 +277,9 @@ public class QuoridorPanel extends JPanel
         {
             for (int cols=0; cols<19; cols++)
             {
-                if (cols>0 && cols<18 && ligne>0 && ligne<18)
+                // Tous les emplacements de barrières dispo
+                boolean aiVerif= game.getNbPlayers()==2 || (game.getNbPlayers()==1 && numPlayer==0);
+                if (cols>0 && cols<18 && ligne>0 && ligne<18 && aiVerif)
                 {
                     pos_x=poseInitX+(dimXTray/37*4)*((cols)/2);
                     pos_y=poseInitY+(dimYTray/37*4)*((ligne)/2);
@@ -252,14 +297,18 @@ public class QuoridorPanel extends JPanel
                     }
                 }
                 typeOfCell=game.getTray().getTypeOfCell(ligne, cols);
-                if (typeOfCell==1 || typeOfCell==2)
+                // Ou le joueur peut-il se deplacer
+                if (typeOfCell==1 || typeOfCell==2 || typeOfCell==6)
                 {
                     pos_x=poseInitX+(dimXTray/37*4)*((cols-1)/2)+(dimXTray/37);
                     pos_y=poseInitY+(dimYTray/37*4)*((ligne-1)/2)+(dimXTray/37);
                     if (numPlayer==1 && typeOfCell==2)
                     {
-                        but= new QuoridorButton(this, numPlayer+3, pos_x, pos_y, dimPion, dimPion);
-                        but.setPlayerButton();
+                        if (game.getNbPlayers()==2)
+                        {
+                            but= new QuoridorButton(this, numPlayer+3, pos_x, pos_y, dimPion, dimPion);
+                            but.setPlayerButton();
+                        }
                     }
                     else if (numPlayer==0 && typeOfCell==1)
                     {

@@ -11,6 +11,7 @@ public class QuoridorLoop
 		while (loopGame)
 		{
 			game.setNewGame(false);
+			game.setNbPlayers(0);
 			loopPlayer=true;
 			game.showStartScreen();
 			if (!waitAction())
@@ -34,12 +35,15 @@ public class QuoridorLoop
 					winner=game.hasWinner();
 					if (winner!=3)
 					{
+						game.getGui().showGui();
+						try {
+							Thread.sleep(500);
+						} catch (Exception e) {}
 						game.showWinner(winner);
 						if (!waitAction())
 						{
 							return 0;
 						}
-						nb=4;
 					}
 				}
 			}
@@ -59,7 +63,7 @@ public class QuoridorLoop
 			}
 			else
 			{
-				game.getGui().showGui2();
+				game.getGui().showGui();
 			}
 		}
 		game.setWait(true);

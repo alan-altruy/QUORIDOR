@@ -3,14 +3,16 @@ import java.io.*;
 public class QuoridorTray implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private final String[]chars = {"●","|","─","■"};
-	public int[][] cells;
+	private QuoridorGame game;
+	private final String[]chars = {"●","●","|","─","■"};
+	private int[][] cells;
 	/**
          * Permet d'initialiser le plateau du jeu.
          * 
          */
-	public QuoridorTray()
+	public QuoridorTray(QuoridorGame _game)
 	{
+		game=_game;
 		cells= new int[19][19];
 		initCellsAndWalls();
 	}
@@ -18,6 +20,10 @@ public class QuoridorTray implements Serializable
          * Permet d'initialiser les cellules du plateau élémentaires (cellules vides et murs extérieurs).
          * 
          */
+	public boolean canPass()
+	{
+		return new QuoridorPathFind(game).verif();
+	}
 	public void initCellsAndWalls()
 	{
 		for (int x=0; x<19;x++)

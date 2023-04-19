@@ -7,7 +7,7 @@ public class QuoridorGame implements Serializable
 		*  Le nombre de joueurs dans le jeu
 		* 
         */
-    private int nbPlayers=2;
+    private int nbPlayers;
     /**
 		*  Le numéro du joueur qui est en train de jouer
 		* 
@@ -36,7 +36,9 @@ public class QuoridorGame implements Serializable
 		* 
         */
     private QuoridorPlayers[] players;
+    private QuoridorAI ai;
     private QuoridorFence fence;
+    //private QuoridorSound sound= new QuoridorSound();
     /**
          * Permet d'initialiser le jeu:
          * 
@@ -45,7 +47,7 @@ public class QuoridorGame implements Serializable
          */
     public void showStartScreen()
     {
-        tray = new QuoridorTray();
+        tray = new QuoridorTray(this);
         fence = new QuoridorFence(this);
         gui.startScreen();
     }
@@ -74,11 +76,17 @@ public class QuoridorGame implements Serializable
             players=gamesave.getAllPlayers();
             tray=gamesave.getTray();
             fence= new QuoridorFence(this);
+            nbPlayers=gamesave.getNbPlayers();
+            if (nbPlayers==1)
+            {
+                ai=gamesave.getAi();
+            }
             playerWhoIsPlaying=gamesave.getPlayerWhoIsPlaying();
             objectIn.close();
             loaded=true;
             wait=false;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
             System.out.println(" /!\\ Save Error /!\\");
         }
@@ -105,7 +113,8 @@ public class QuoridorGame implements Serializable
         String name;
         int pos_x=1;
         int pos_y=9;
-        players=new QuoridorPlayers[nbPlayers];
+        nbPlayers=2;
+        players=new QuoridorPlayers[2];
         for (int num=0; num<nbPlayers; num++) // Chaque itération permet d'initialiser un joueur
         {
             name="steve";
@@ -114,14 +123,25 @@ public class QuoridorGame implements Serializable
                 pos_x=17;
                 name="creeper";
             }
-            players[num]= new QuoridorPlayers(num, name, pos_x, pos_y);
-            tray.setTypeOfCell(pos_x,pos_y, num+1);
+            players[num]= new QuoridorPlayers(tray, num, name, pos_x, pos_y);
         }
+        wait=false;
+    }
+    public void initAI(boolean hardIA)
+    {
+        int pos_x=1;
+        int pos_y=9;
+        nbPlayers=1;
+        players=new QuoridorPlayers[2];
+        players[0]= new QuoridorPlayers(tray, 0, "steve", pos_x, pos_y);
+        pos_x=17;
+        ai = new QuoridorAI(this, 1, "creeper", pos_x, pos_y, hardIA);
+        players[1]= (QuoridorPlayers) ai;
         wait=false;
     }
     public int hasWinner()
     {
-        for (int nb=0; nb<nbPlayers; nb++)
+        for (int nb=0; nb<2; nb++)
         {
             if (players[nb].areYouTheWinner())
             {
@@ -141,6 +161,12 @@ public class QuoridorGame implements Serializable
     {
         playerWhoIsPlaying=num;
         gui.gui2Players();
+        if (nbPlayers==1 && num==1)
+        {
+            ai.action();
+            wait=false;
+        }
+        gui.gui2Players();
     }
     public void showWinner(int num)
     {
@@ -153,6 +179,10 @@ public class QuoridorGame implements Serializable
     public int getNbPlayers()
     {
 		return nbPlayers;
+    }
+    public void setNbPlayers(int num)
+    {
+		nbPlayers = num;
     }
     public int getUsedFencesPlayer(int num)
     {
@@ -210,8 +240,12 @@ public class QuoridorGame implements Serializable
     {
         return gui;
     }
-    public void setSound(String name)
+    public void playSound(int num)
     {
-        new QuoridorSound(name);
+        //sound.play(num);
+    }
+    public QuoridorAI getAi()
+    {
+        return ai;
     }
 }

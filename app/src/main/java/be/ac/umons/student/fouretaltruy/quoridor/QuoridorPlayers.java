@@ -6,6 +6,7 @@ public class QuoridorPlayers implements Serializable
     private String name;
     private int nbUsedFences;
     private int num, pos_x, pos_y;
+    private QuoridorTray tray;
     /**
          * Permet d'initialiser un joueur.
          * 
@@ -18,13 +19,15 @@ public class QuoridorPlayers implements Serializable
          * @param _y
          *            La position y associée au joueur sur le plateau (nombre impair >0 & <=17).
          */
-    public QuoridorPlayers(int _num, String _name, int _x, int _y)
+    public QuoridorPlayers(QuoridorTray _tray, int _num, String _name, int _x, int _y)
     {
+        tray=_tray;
         name=_name;
-        pos_x=_x;
-        pos_y=_y;
         num=_num;
         nbUsedFences=0;
+        pos_x=_x;
+        pos_y=_y;
+        set();
     }
     public boolean areYouTheWinner()
     {
@@ -48,8 +51,18 @@ public class QuoridorPlayers implements Serializable
          */
     public void newPos (int _x, int _y)
     {
+        rem();
         pos_x += _x;
         pos_y += _y;
+        set();
+    }
+    public void rem()
+    {
+        tray.setTypeOfCell(pos_x, pos_y, 0);
+    }
+    public void set()
+    {
+        tray.setTypeOfCell(pos_x, pos_y, num+1);
     }
     /**
          * Permet de retourner le nom du joueur.
@@ -87,12 +100,11 @@ public class QuoridorPlayers implements Serializable
     {
         return pos_y;
     }
-    public void setPos_x(int x)
+    public void setPos(int x, int y)
     {
+        rem();
         pos_x=x;
-    }
-    public void setPos_y(int y)
-    {
         pos_y=y;
+        set();
     }
 }

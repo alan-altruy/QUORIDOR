@@ -22,6 +22,12 @@ public class QuoridorGui extends JFrame
         panel.mainMenu();
         showGui();
     }
+    public void difficultMenu()
+    {
+        panel = new QuoridorPanel(this, game);
+        panel.chooseDifficultIA();
+        showGui();
+    }
     public void gui2Players()
     {
         panel = new QuoridorPanel(this, game);  
@@ -43,10 +49,6 @@ public class QuoridorGui extends JFrame
     public void showGui()
     {
         this.setVisible(true);
-        this.setAlwaysOnTop(true);
-    }
-    public void showGui2()
-    {
         this.setAlwaysOnTop(true);
     }
     public void refresh()

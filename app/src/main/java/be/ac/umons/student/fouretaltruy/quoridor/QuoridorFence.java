@@ -16,9 +16,8 @@ public class QuoridorFence implements Serializable
         if(canSetFence(pos_x,pos_y,dir))
         {
             add(pos_x, pos_y, dir);
-			QuoridorPathFind pathFind = new QuoridorPathFind(game);
 			boolean verif1=game.getUsedFencesPlayer(game.getPlayerWhoIsPlaying())<10;
-            boolean verif2=pathFind.verif();
+            boolean verif2=tray.canPass();
             remove(pos_x, pos_y, dir);
             if (verif1 && verif2)
             {
@@ -31,10 +30,13 @@ public class QuoridorFence implements Serializable
     }
     public boolean canSetFence(int pos_x, int pos_y, int dir)
     {
-        boolean verif1=(pos_x%2==1 && (dir==1 || pos_y%2==1));
-        boolean verif2=(pos_x%2==0 && (dir==0 || pos_y%2==0));
-        boolean verif3=tray.verifAlreadyFenceAndWall(pos_x, pos_y, dir);
-        if  (verif1 || verif2 || verif3)
+        boolean verif1=(pos_x%2==1 && (dir==1 || pos_y%2==1) || pos_x<1 || pos_y<1 || pos_y>16 || pos_x>17);
+        boolean verif2=(pos_x%2==0 && (dir==0 || pos_y%2==0) || pos_x<1 || pos_y<1 || pos_x>16 || pos_y>17);
+        if  (verif1 || verif2)
+        {
+            return false;
+        }
+        else if (tray.verifAlreadyFenceAndWall(pos_x, pos_y, dir))
         {
             return false;
         }

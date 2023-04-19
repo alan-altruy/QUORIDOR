@@ -20,7 +20,6 @@ public class QuoridorButton extends JButton
         panel=_panel;
         numObj=num;
         setBounds((int)pos_x, (int)pos_y, (int)width, (int)height);
-        //actionClick();
     }
     public void setPlayerButton()
     {
@@ -28,8 +27,8 @@ public class QuoridorButton extends JButton
         setBackground(new Color(0,true));
         setBorderPainted(false);
         setContentAreaFilled(false);
-        actionButton();
         set();
+        actionButton();
     }
     public void setFenceButton(int _pos_x, int _pos_y, int _dir, QuoridorPicture _pic)
     {
@@ -55,24 +54,24 @@ public class QuoridorButton extends JButton
             {
                 if (numObj<20)
                 {
-                    remove();
-                    panel.getGame().setSound("button");
+                    //panel.getGame().playSound(2);
                     panel.setAction(numObj);
+                    remove();
                 }
                 else if (numObj==100)
                 {
                     if (panel.getGame().getFence().newFence(cols,ligne,dir))
                     {
-                        panel.getGame().setSound("fence");
-                        remove();
+                        //panel.getGame().playSound(3);
                         panel.getGame().setWait(false);
+                        remove();
                     } 
                 }
                 else
                 {
-                    remove();
-                    panel.getGame().setSound(panel.getGame().getNameOfPlayer(panel.getGame().getPlayerWhoIsPlaying()));
+                    //panel.getGame().playSound(panel.getGame().getPlayerWhoIsPlaying());
                     panel.setMovePlayer(numObj-20);
+                    remove();
                 }
                 
             }
@@ -80,7 +79,7 @@ public class QuoridorButton extends JButton
             public void mouseReleased(MouseEvent e){}
             public void mouseEntered(MouseEvent e)
             {
-                if ((numObj>=0 && numObj<=2) || (numObj>=7 & numObj<=10))
+                if ((numObj>=0 && numObj<=2) || (numObj>=7 & numObj<=12))
                 {
                     pic.set(); 
                     pic2.remove();
@@ -103,7 +102,7 @@ public class QuoridorButton extends JButton
             }
             public void mouseExited(MouseEvent e)
             {
-                if ((numObj>=0 && numObj<=2) || (numObj>=7 & numObj<=10))
+                if ((numObj>=0 && numObj<=2) || (numObj>=7 & numObj<=12))
                 {
                     pic.remove();
                     pic2.set();
@@ -113,18 +112,20 @@ public class QuoridorButton extends JButton
                 {
                     pic.remove();
                     if (numObj==6)
-                        {
-                            pic2.set();
-                        }
+                    {
+                        pic2.set();
+                    }
                     panel.refresh();
                 }
-                
             }
         });
     }
     public void set()
     {
-        panel.add(this);
+        if (!(panel.getGame().getNbPlayers()==1 && panel.getGame().getPlayerWhoIsPlaying()==1) || numObj==8)
+        {
+            panel.add(this);
+        }
     }
     public void remove()
     {
