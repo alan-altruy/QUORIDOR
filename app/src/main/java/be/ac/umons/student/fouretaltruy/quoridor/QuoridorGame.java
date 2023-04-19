@@ -11,7 +11,7 @@ public class QuoridorGame
 		*  Le numéro du joueur qui est en train de jouer
 		* 
 		*/
-    private int playerWhoIsPlaying;
+    public int playerWhoIsPlaying;
     /**
 		*  Permet de savoir si le joueur a fait une action
 		* 
@@ -155,6 +155,14 @@ public class QuoridorGame
     public QuoridorPlayers getPlayers (int numPlayer)
     {
         return players[numPlayer];
+    }
+    public boolean NbFencesPlayerMax(int num)
+    {
+        if (players[num].GetUsedFences()>=10)
+        {
+            return true;
+        }
+        return false;
     }
     public void setNbPlayers(int newNb)
     {

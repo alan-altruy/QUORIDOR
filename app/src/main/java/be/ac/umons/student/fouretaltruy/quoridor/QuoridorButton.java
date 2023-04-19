@@ -8,15 +8,14 @@ import java.awt.Font;
 public class QuoridorButton implements ActionListener
 {
     private JButton button;
-    private int numObj;
     private QuoridorPanel Qpanel;
-    public int pos_x, pos_y, dir;
-    public QuoridorButton(QuoridorPanel _panel, String name, Font police, int num, int pos_x, int pos_y, int width, int height)
+    public int pos_x, pos_y, dir, numObj;
+    public QuoridorButton(QuoridorPanel _panel, String name, Font police, int num, double pos_x, double pos_y, double width, double height)
     {
         Qpanel=_panel;
         numObj=num;
         button=new JButton(name);
-        button.setBounds(pos_x, pos_y, width, height);
+        button.setBounds((int)pos_x, (int)pos_y, (int)width, (int)height);
         button.setFont(police);
         button.addActionListener(this);
     }
@@ -25,6 +24,7 @@ public class QuoridorButton implements ActionListener
         button.setOpaque(false);
         button.setBackground(new Color(0,true));
         button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
         setButton();
     }
     public void setFenceButton(int _pos_x, int _pos_y, int _dir)

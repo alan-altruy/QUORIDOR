@@ -3,7 +3,7 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 // ALTRUY ALAN - JASON FOURET //
 public class QuoridorVerifFence
 {
-    private int pos_x, pos_y;
+    private int pos_x, pos_y, dir;
     private QuoridorTray tray;
     /**
          * Permet de verifier s'il est possible d'initialiser une barrière à l'emplacement choisi
@@ -17,6 +17,7 @@ public class QuoridorVerifFence
          */
     public QuoridorVerifFence(int _pos_x, int _pos_y, int _dir)
     {
+        tray = new QuoridorTray();
         pos_x=_pos_x;
         pos_y=_pos_y;
     }
