@@ -121,28 +121,24 @@ public class QuoridorButton extends JButton
         addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent e)  
             {
+                if (panel.getGame().getWait()){
                 QuoridorGame game = panel.getGame();
                 if (typeObj<20)
                 {
                     //panel.getGame().playSound(2);
                     panel.setAction(typeObj);
-                    remove();
                 }
                 else if (typeObj==100)
                 {
-                    if (new QuoridorFence(game).newFence(ligne, cols, dir))
-                    {
-                        remove();
-                    }
+                    new QuoridorFence(game, ligne, cols, dir).newFence();
                 }
                 else
                 {
                     //panel.getGame().playSound(panel.getGame().getPlayerWhoIsPlaying());
                     new QuoridorMovePlayer(game.getPlayer(game.getPlayerWhoIsPlaying()), game.getTray()).move(typeObj-20);
                     game.setWait(false);
-                    remove();
                 }
-            }});
+            }}});
         addMouseListener(new MouseListener()
         {
             public void mouseClicked(MouseEvent e){}
@@ -154,11 +150,10 @@ public class QuoridorButton extends JButton
                 {
                     pic.set(); 
                     pic2.remove();
-                    panel.refreshBg();
                 }
                 else if (typeObj==100 || typeObj==6)
                 {
-                    boolean verif1=new QuoridorFence(panel.getGame()).canSetFence(ligne,cols, dir);
+                    boolean verif1=new QuoridorFence(panel.getGame(), ligne,cols, dir).canSetFence();
                     boolean verif2=panel.getGame().getUsedFencesPlayer(panel.getGame().getPlayerWhoIsPlaying())<10;
                     if (typeObj==6 ||(typeObj==100 && verif1 && verif2))
                     {
@@ -167,9 +162,9 @@ public class QuoridorButton extends JButton
                             pic2.remove();
                         }
                         pic.set();
-                        panel.refresh();
                     }
                 }
+                panel.refresh();
             }
             public void mouseExited(MouseEvent e)
             {
@@ -177,7 +172,6 @@ public class QuoridorButton extends JButton
                 {
                     pic.remove();
                     pic2.set();
-                    panel.refreshBg();
                 }
                 else if (typeObj==100 || typeObj==6)
                 {
@@ -186,8 +180,8 @@ public class QuoridorButton extends JButton
                     {
                         pic2.set();
                     }
-                    panel.refresh();
                 }
+                panel.refresh();
             }
         });
     }

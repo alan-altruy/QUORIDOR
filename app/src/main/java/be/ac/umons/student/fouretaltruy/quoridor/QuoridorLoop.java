@@ -40,7 +40,7 @@ public class QuoridorLoop
 		while (loopGui)
 		{
 			game.setNewGame(false);
-			game.setNbPlayers(0);
+			game.setNbPlayers(-1);
 			loopGame=true;
 			game.showStartScreen();
 			waitAction();
@@ -58,10 +58,6 @@ public class QuoridorLoop
 					winner=game.hasWinner();
 					if (winner!=3)
 					{
-						game.showGui();
-						try {
-							Thread.sleep(500);
-						} catch (Exception e) {}
 						game.showWinner(winner);
 						waitAction();
 					}
@@ -86,7 +82,7 @@ public class QuoridorLoop
 			}
 			else
 			{
-				game.waitGui();
+				game.showGui();
 			}
 		}
 		game.setWait(true);

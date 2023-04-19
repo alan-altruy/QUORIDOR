@@ -43,7 +43,7 @@ public class QuoridorGame implements Serializable
     /**
 		*  L'intelligence artificielle du jeu
         */
-    private QuoridorAI ai= null;
+    private QuoridorAI[] ai= {null,null};
     //private QuoridorSound sound= new QuoridorSound();
     /**
          * Permet d'initialiser l'écran d'accueil:<p>
@@ -67,12 +67,12 @@ public class QuoridorGame implements Serializable
             objectOut.close();
             System.out.println("Game has been saved!");
             newGame=true;
-            wait=false;
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
+        wait=false;
     }
     /**
          * Permet de charger une sauvegarde
@@ -85,7 +85,7 @@ public class QuoridorGame implements Serializable
             players=gamesave.getAllPlayers();
             tray=gamesave.getTray();
             nbPlayers=gamesave.getNbPlayers();
-            ai=gamesave.getAi();
+            ai=gamesave.getAllAi();
             playerWhoIsPlaying=gamesave.getPlayerWhoIsPlaying();
             objectIn.close();
             loaded=true;
@@ -142,15 +142,28 @@ public class QuoridorGame implements Serializable
          */
     public void initAI(boolean hardIA)
     {
-        int pos_x=1;
-        int pos_y=9;
         nbPlayers=1;
         tray = new QuoridorTray(this);
         players=new QuoridorPlayers[2];
-        players[0]= new QuoridorPlayers(tray, 0, "steve", pos_x, pos_y);
-        pos_x=17;
-        ai = new QuoridorAI(this, 1, "creeper", pos_x, pos_y, hardIA);
-        players[1]= (QuoridorPlayers) ai;
+        players[0]= new QuoridorPlayers(tray, 0, "steve", 1, 9);
+        ai[1] = new QuoridorAI(this, 1, "creeper", 17, 9, hardIA);
+        players[1]= (QuoridorPlayers) ai[1];
+        wait=false;
+    }
+    /**
+         * Permet d'initialiser deux intelligences artificielles
+         * @param hardIA : difficulté des intelligences artificielles
+         * <ul><li>False : Normal</li><li>True : Difficile</li></ul>
+         */
+    public void init2AI(boolean hardIA)
+    {
+        nbPlayers=0;
+        tray = new QuoridorTray(this);
+        players=new QuoridorPlayers[2];
+        ai[0] = new QuoridorAI(this, 0, "steve", 1, 9, hardIA);
+        players[0]= (QuoridorPlayers) ai[0];
+        ai[1] = new QuoridorAI(this, 1, "creeper", 17, 9, hardIA);
+        players[1]= (QuoridorPlayers) ai[1];
         wait=false;
     }
     /**
@@ -171,19 +184,23 @@ public class QuoridorGame implements Serializable
     }
     /**
          * Permet à un joueur de faire une action (soit ajouter une barrière, soit bouger son pion)
-         * @param num
-         *      Le numero du joueur en train de jouer.
+         * @param numOfPlayer : Le numero du joueur en train de jouer.
          */
-    public void playerAction(int num)
+    public void playerAction(int numOfPlayer)
     {
-        playerWhoIsPlaying=num;
-        gui.gui2Players();
-        if (nbPlayers==1 && num==1)
+        if (numOfPlayer==-1)
         {
-            ai.action();
+            numOfPlayer=0;
+            players[0]=players[0]= new QuoridorPlayers(tray, 0, "steve", 1, 9);
+        }
+        playerWhoIsPlaying=numOfPlayer;
+        gui.gui2Players();
+        if (players[numOfPlayer].isAnAi())
+        {
+            ai[numOfPlayer].action();
+            gui.gui2Players();
             wait=false;
         }
-        gui.gui2Players();
     }
     /**
          * Demande à l'interface graphique d'afficher le joueur gagant
@@ -191,6 +208,11 @@ public class QuoridorGame implements Serializable
          */
     public void showWinner(int winner)
     {
+        players[winner].setAi(false);
+        playerAction(winner);
+        try {
+            Thread.sleep(500);
+        } catch (Exception e) {}
         gui.guiWinner(winner);
     }
     /**
@@ -309,12 +331,21 @@ public class QuoridorGame implements Serializable
         return players[numOfPlayer];
     }
     /**
-         * Permet de retourner une intelligence artificielle
-         * @return L'intelligence artificielle
+         * Permet de retourner toutes les intelligences artificielles
+         * @return Les intelligences artificielles
          */
-    public QuoridorAI getAi()
+    public QuoridorAI[] getAllAi()
     {
         return ai;
+    }
+    /**
+         * Permet de retourner une intelligence artificielle du jeu
+         * @param numOfAi : Le numéro de l'intelligence artificielle
+         * @return Le joueur
+         */
+    public QuoridorAI getAi(int numOfAi)
+    {
+        return ai[numOfAi];
     }
     /**
          * Permet de retourner tous les joueurs du jeu

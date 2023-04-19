@@ -85,11 +85,11 @@ public class QuoridorPanel extends JPanel
     /**
          * Image du plateau
          */
-    private QuoridorPicture picOfTray;
+    private QuoridorPicture picOfTray =null;
     /**
          * Image du fond de la fenêtre
          */
-    private QuoridorPicture bg;
+    private QuoridorPicture bg=null;
     /**
          * Initialise un panneau qui s'affichera sur la fenêtre
          * @param _gui : Interface graphique du jeu
@@ -154,7 +154,7 @@ public class QuoridorPanel extends JPanel
         bg=new QuoridorPicture(this, a+"mainmenu"+b, 0,0, widthScreen, heightScreen);
         bg.set();
         //Affiche les éléments à l'écran
-        refreshBg();
+        refresh();
     }
     /**
          * Permet de créer le panneau du menu de difficulté pour l'intelligence artificielle
@@ -162,20 +162,21 @@ public class QuoridorPanel extends JPanel
     public void chooseDifficultIA()
     {
         double height,width, pos_x,pos_y;
-        // Creation du bouton solo
+        // Creation du bouton Normale
         height=heightScreen/10;
         width=height*13/3;
         pos_x=(widthScreen/2)-(widthScreen/4); pos_y=(heightScreen/3)-height/2;
         but = new QuoridorButton(this, 11, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"easy"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"easyvalid"+b, pos_x, pos_y,width,height);
+        // Creation du bouton Difficile
         but.setMainButton(pic, pic2);
         pos_x+=widthScreen/2-width;
-        but = new QuoridorButton(this, 11, pos_x, pos_y,width,height);
+        but = new QuoridorButton(this, 12, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"hard"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"hardvalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
-        // Creation du bouton multiplayer
+        // Creation du bouton Menu Principal
         width=widthScreen/2;
         pos_x=width-(widthScreen/4);
         pos_y+=height*2;
@@ -183,13 +184,11 @@ public class QuoridorPanel extends JPanel
         pic = new QuoridorPicture(this, a+"home"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"homevalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
-        // Creation du bouton Quiiter le jeu
-        
-        // Ajout du backgound Menu Principal
+        // Ajout du background
         bg=new QuoridorPicture(this, a+"background"+b, 0,0, widthScreen, heightScreen);
         bg.set();
         //Affiche les éléments à l'écran
-        refreshBg();
+        refresh();
     }
     /**
          * Permet de créer l'interface du jeu
@@ -215,11 +214,11 @@ public class QuoridorPanel extends JPanel
         pic = new QuoridorPicture(this, Theme1[6], widthScreen/2-(pos_yTray*0.75*3), pos_yTray/8,pos_yTray*0.75*6, pos_yTray*0.75);
         pic2 = new QuoridorPicture(this, Theme1[7], widthScreen/2-(pos_yTray*0.75*3), pos_yTray/8,pos_yTray*0.75*6, pos_yTray*0.75);
         but.setMainButton(pic, pic2);
-        posObjects(numOfPlayer);
         picOfTray=new QuoridorPicture(this, Theme1[2], pos_xTray,pos_yTray, widthTray, heightTray);
         bg=new QuoridorPicture(this, a+"background"+b, 0,0, widthScreen, heightScreen);
         picOfTray.set();
         bg.set();
+        posObjects(numOfPlayer);
         refresh();
     }
     /**
@@ -254,7 +253,7 @@ public class QuoridorPanel extends JPanel
         bg=new QuoridorPicture(this, a+"background"+b, 0,0, widthScreen, heightScreen);
         bg.set();
         //Affiche les éléments à l'écran
-        refreshBg();
+        refresh();
     }
     /**
          * Permet de créer le panneau de l'écran de gagnant
@@ -276,7 +275,7 @@ public class QuoridorPanel extends JPanel
         but.setMainButton(pic, pic2);
         bg=new QuoridorPicture(this, a+"background"+b, 0,0, widthScreen, heightScreen);
         bg.set();
-        refreshBg();
+        refresh();
     }
     /**
          * Permet de faire l'action d'un bouton
@@ -323,7 +322,7 @@ public class QuoridorPanel extends JPanel
         }
         else if (typeOfButton==11)
         {
-            game.initAI(false);
+            game.init2AI(true);
         }
         else if (typeOfButton==12)
         {
@@ -384,8 +383,8 @@ public class QuoridorPanel extends JPanel
             for (int cols=0; cols<19; cols++)
             {
                 // Tous les emplacements de barrières dispo
-                boolean aiVerif= game.getNbPlayers()==2 || (game.getNbPlayers()==1 && numPlayer==0);
-                if (cols>0 && cols<18 && ligne>0 && ligne<18 && aiVerif)
+                boolean humanVerif= !game.getPlayer(numPlayer).isAnAi();
+                if (cols>0 && cols<18 && ligne>0 && ligne<18 && humanVerif)
                 {
                     pos_x=pos_xTray+(widthTray/37*4)*((cols)/2);
                     pos_y=pos_yTray+(heightTray/37*4)*((ligne)/2);
@@ -404,19 +403,16 @@ public class QuoridorPanel extends JPanel
                 }
                 typeOfCell=game.getTray().getTypeOfCell(ligne, cols);
                 // Ou le joueur peut-il se deplacer
-                if (typeOfCell==1 || typeOfCell==2 || typeOfCell==6)
+                if (typeOfCell==1 || typeOfCell==2)
                 {
                     pos_x=pos_xTray+(widthTray/37*4)*((cols-1)/2)+(widthTray/37);
                     pos_y=pos_yTray+(heightTray/37*4)*((ligne-1)/2)+(widthTray/37);
-                    if (numPlayer==1 && typeOfCell==2)
+                    if (numPlayer==1 && typeOfCell==2 && humanVerif)
                     {
-                        if (game.getNbPlayers()==2)
-                        {
-                            but= new QuoridorButton(this, numPlayer+3, pos_x, pos_y, widthPion, widthPion);
-                            but.setClearButton();
-                        }
+                        but= new QuoridorButton(this, numPlayer+3, pos_x, pos_y, widthPion, widthPion);
+                        but.setClearButton();
                     }
-                    else if (numPlayer==0 && typeOfCell==1)
+                    else if (numPlayer==0 && typeOfCell==1 && humanVerif)
                     {
                         but= new QuoridorButton(this, numPlayer+3, pos_x, pos_y, widthPion, widthPion);
                         but.setClearButton();
@@ -446,27 +442,18 @@ public class QuoridorPanel extends JPanel
         }
     }
     /**
-         * Permet de rafraichir un écran avec plateau
+         * Permet de rafraichir l'écran
          */
     public void refresh()
     {
-        picOfTray.remove();
+        if (picOfTray!=null)picOfTray.remove();
         bg.remove();
-        picOfTray.set();
+        if (picOfTray!=null)picOfTray.set();
         bg.set();
         gui.refresh();
     }
     /**
-         * Permet de rafraichir un écran sans plateau
-         */
-    public void refreshBg()
-    {
-        bg.remove();
-        bg.set();
-        gui.refresh();
-    }
-    /**
-         * Retourne le jeu affiché sur le plateau
+         * Retourne le jeu affiché sur le panneau
          * @return Le jeu affiché
          */
     public QuoridorGame getGame()

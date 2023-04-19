@@ -3,12 +3,24 @@ package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET 
 import java.io.Serializable;
 
 /**
- * La classe permettant l'ajout et les vérifications de barrières dans Quridor
- * et qui est implémentéé de Serializable
+ * La classe permettant l'ajout et les vérifications de barrières dans Quoridor
+ * et qui est implémentée de Serializable
  */
 public class QuoridorFence implements Serializable
 {
     private static final long serialVersionUID = 1L;
+    /**
+         * Position x de la barrière
+         */
+    private int pos_x;
+    /**
+         * Position y de la barrière
+         */
+    private int pos_y;
+    /**
+         * Direction de la barrière
+         */
+    private int dir;
     /**
          * Plateau sur lequel les barrières sont posées et/ou testées
          */
@@ -20,9 +32,15 @@ public class QuoridorFence implements Serializable
     /**
          * Initialise une instance de barrières pour Quoridor
          * @param _game : Jeu dans lequel les barrières sont vérifiées et posées
+         * @param _pos_x : Position x de la barrière
+         * @param _pos_y : Position y de la barrière
+         * @param _dir :  Direction de la barrière
          */
-    public QuoridorFence(QuoridorGame _game)
+    public QuoridorFence(QuoridorGame _game, int _pos_x, int _pos_y, int _dir)
     {
+        pos_x=_pos_x;
+        pos_y=_pos_y;
+        dir=_dir;
         game=_game;
         tray=game.getTray();
     }
@@ -30,59 +48,50 @@ public class QuoridorFence implements Serializable
          * Permet de vérifier si le jeu permet d'ajouter une barrière:
          * <ul><li>S'il le permet, la méthode l'ajoute</li>
          * <li>Sinon elle ne l'ajoute pas</li></ul>
-         * @param pos_x : Position x de la barrière
-         * @param pos_y : Position y de la barrière
-         * @param dir :  Direction de la barrière
          * @return True si la barrière a été ajoutée
          * <li>False sinon</li>
          */
-    public boolean newFence(int pos_x,int pos_y,int dir)
+    public boolean newFence()
     {
-        if(canSetFence(pos_x,pos_y,dir))
+        if(canSetFence())
         {
-            add(pos_x, pos_y, dir);
-			boolean verif1=game.getUsedFencesPlayer(game.getPlayerWhoIsPlaying())<10;
-            boolean verif2=tray.canPass();
-            remove(pos_x, pos_y, dir);
+            set();
+            game.setUsedFencesPlayer();
+            game.setWait(false);
+            return true;
+        }
+        return false;
+    }
+    /**
+         * Permet de vérifier si le jeu permet d'ajouter une barrière:
+         * @return True si le jeu permet de poser la barrière
+         * <li>False sinon</li>
+         */
+    public boolean canSetFence()
+    {
+        boolean verif1=((pos_x%2==1 && (dir==1 || pos_y%2==1)) || pos_x<0 || pos_y<0 || pos_y>19 || pos_x>19);
+        boolean verif2=((pos_x%2==0 && (dir==0 || pos_y%2==0)) || pos_x<0 || pos_y<0 || pos_x>19 || pos_y>19);
+        if  (verif1 || verif2 || !tray.verifAlreadyFenceAndWall(pos_x, pos_y, dir))
+        {
+            return false;
+        }
+        else
+        {
+            set();
+		    verif1=game.getUsedFencesPlayer(game.getPlayerWhoIsPlaying())<10;
+            verif2=tray.canPass();
+            remove();
             if (verif1 && verif2)
             {
-                game.setUsedFencesPlayer();
-                add(pos_x, pos_y, dir);
-                game.setWait(false);
                 return true;
             }
         }
         return false;
     }
     /**
-         * Permet de vérifier si le jeu permet d'ajouter une barrière:
-         * @param pos_x : Position x de la barrière
-         * @param pos_y : Position y de la barrière
-         * @param dir :  Direction de la barrière
-         * @return True si le jeu permet de poser la barrière
-         * <li>False sinon</li>
-         */
-    public boolean canSetFence(int pos_x, int pos_y, int dir)
-    {
-        boolean verif1=(pos_x%2==1 && (dir==1 || pos_y%2==1) || pos_x<1 || pos_y<1 || pos_y>16 || pos_x>17);
-        boolean verif2=(pos_x%2==0 && (dir==0 || pos_y%2==0) || pos_x<1 || pos_y<1 || pos_x>16 || pos_y>17);
-        if  (verif1 || verif2)
-        {
-            return false;
-        }
-        else if (tray.verifAlreadyFenceAndWall(pos_x, pos_y, dir))
-        {
-            return false;
-        }
-        return true;
-    }
-    /**
          * Permet d'ajouter une barrière au plateau.
-         * @param pos_x : La position x de la barrière
-         * @param pos_y : La position y de la barrière
-         * @param dir : La direction de la barrière
          */
-	public void add(int pos_x, int pos_y, int dir)
+	public void set()
 	{
 		if (dir==0)
 		{
@@ -94,7 +103,7 @@ public class QuoridorFence implements Serializable
                 }
                 else
                 {
-                    tray.setTypeOfCell(pos_x+_pos_x, pos_y, 10);
+                    tray.setTypeOfCell(pos_x+_pos_x, pos_y, 6);
                 }
 			}
 		}
@@ -108,18 +117,15 @@ public class QuoridorFence implements Serializable
                 }
                 else
                 {
-                    tray.setTypeOfCell(pos_x, pos_y+_pos_y, 10);
+                    tray.setTypeOfCell(pos_x, pos_y+_pos_y, 7);
                 }
 			}
 		}
     }
     /**
          * Permet de retirer una barrière du plateau
-         * @param pos_x : La position x de la barrière
-         * @param pos_y : La position y de la barrière
-         * @param dir : La direction de la barrière
          */
-	public void remove(int pos_x, int pos_y, int dir)
+	public void remove()
 	{
 		if (dir==0)
 		{
@@ -135,5 +141,9 @@ public class QuoridorFence implements Serializable
 				tray.setTypeOfCell(pos_x, pos_y+_pos_y, 0);
 			}
 		}
-	}
+    }
+    public int[] get()
+    {
+        return new int[]{pos_x,pos_y,dir};
+    }
 }

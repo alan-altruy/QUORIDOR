@@ -15,7 +15,7 @@ public class QuoridorTray implements Serializable
 	/**
          * Caractères utilisés pour afficher le plateau sur un terminal
          */
-	private final String[]chars = {"●","●","|","─","■"};
+	private final String[]chars = {"●","●","|","─","■","|","─"};
 	/**
          * Cellules du plateau
          */
@@ -62,18 +62,22 @@ public class QuoridorTray implements Serializable
 	{
 		for (int curs=0; curs<=2; curs++)
 		{
-			int verif0=cells[pos_x+curs][pos_y];
-			int verif1=cells[pos_x][pos_y+curs];
-			if (dir==0 && (verif0!=0))
+			if (dir==0 && pos_x+curs<19)
 			{
-				return true;
+				if (cells[pos_x+curs][pos_y]!=0)
+				{
+					return false;
+				}
 			}
-			else if (dir==1 && (verif1!=0))
+			else if (dir==1 && pos_y+curs<19)
 			{
-				return true;
+				if (cells[pos_x][pos_y+curs]!=0)
+				{
+					return false;
+				}
 			}
 		}
-		return false;
+		return true;
 	}
 	/**
          * Permet d'afficher le plateau avec interface rudimentale (terminal)

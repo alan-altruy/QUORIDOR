@@ -19,7 +19,7 @@ public class QuoridorPlayers implements Serializable
     /**
          * Numéro du joueur
          */
-    private int num;
+     private int num;
     /**
          * Position x du joueur
          */
@@ -31,6 +31,7 @@ public class QuoridorPlayers implements Serializable
     /**
          * Plateau sur lequel se trouve le joueur
          */
+        private boolean ai=false;
     private QuoridorTray tray;
     /**
          * Initialise un joueur
@@ -80,7 +81,7 @@ public class QuoridorPlayers implements Serializable
         set();
     }
     /**
-         * Permet de faire bouger le joueur grace en lui additionnant des composantes x et y
+         * Permet de faire bouger le joueur en lui additionnant des composantes x et y
          * @param _pos_x : La composante x
          * @param _pos_y : La composante y
          */
@@ -151,5 +152,21 @@ public class QuoridorPlayers implements Serializable
     public int getPos_y()
     {
         return pos_y;
+    }
+    /**
+         * Permet de savoir si le joueur est une intelligence artificielle
+         * @return True s'il est une AI
+         * <li>False sinon</li>
+         */
+     public boolean isAnAi()
+    {
+        return ai;
+    }
+    /**
+         * Permet de définir une intelligence artificielle
+         */
+     public void setAi(boolean _ai)
+    {
+        ai= _ai;
     }
 }

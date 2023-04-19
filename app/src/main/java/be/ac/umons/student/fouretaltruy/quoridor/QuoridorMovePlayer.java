@@ -117,11 +117,11 @@ public class QuoridorMovePlayer implements Serializable
                 {
                     if (tray.getTypeOfCell(pos_x+2, pos_y-1)==0)
                     {
-                        choices[3]=true;
+                        choices[5]=true;
                     }
                     if (tray.getTypeOfCell(pos_x+2, pos_y+1)==0)
                     {
-                        choices[5]=true;
+                        choices[3]=true;
                     }
                 }
                 else
@@ -247,7 +247,7 @@ public class QuoridorMovePlayer implements Serializable
     }
     /**
          * Permet de déplacer le joueur à l'emplacement souhaité
-         * @param choices : Choix de la direction du déplacement 
+         * @param choice : Choix de la direction du déplacement 
          */
     public void move(int choice)
     {

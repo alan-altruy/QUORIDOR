@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  * La classe permettant à la fois de connaitre le chemin le plus court pour atteindre
- * une cellule gagante et de savoir si une barrière bloqueraitle chemin d'un des joueurs.
+ * une cellule gagante et de savoir si une barrière bloquerait le chemin d'un des joueurs.
  * Cette classe est implémentée de Serializable
  */
 public class QuoridorPathFind implements Serializable
@@ -112,9 +112,13 @@ public class QuoridorPathFind implements Serializable
         return verification;
     }
     /**
-         * Permet de deplacer une intelligence artificielle par le plus court chemin
+         * Permet de trouver le plus court chemin qu'un joueur a à effectuer pour gagner
+         * @param numOfPlayer Numéro du joueur
+         * @return Un tableau comprenant
+         * <ul><li>La prochaine cellule (x,y) à atteindre par le chemin le plus court</li>
+         * <li>Le nombre de déplacements nécessaires pour réussir</li></ul>
          */
-    public void moveSmallPath()
+    public int[] moveSmallPath(int numOfPlayer)
     {
         HashMap<QuoridorPlayers, QuoridorPlayers> paths = new HashMap<QuoridorPlayers, QuoridorPlayers>();
         ArrayList<QuoridorPlayers> player;
@@ -123,8 +127,12 @@ public class QuoridorPathFind implements Serializable
         int nbVerifPlayer;
         alreadyFind= new QuoridorTray(game);
         player = new ArrayList<QuoridorPlayers>();
-        player.add(new QuoridorPlayers(alreadyFind, 0, "", players[1].getPos_x(), players[1].getPos_y()));
+        player.add(new QuoridorPlayers(alreadyFind, 0, "", players[numOfPlayer].getPos_x(), players[numOfPlayer].getPos_y()));
         nbVerifPlayer=player.size();
+        if (numOfPlayer==1)
+        {
+            win=1;
+        }
         while (nbVerifPlayer>0)
         {
             nbVerifPlayer=player.size();
@@ -141,9 +149,9 @@ public class QuoridorPathFind implements Serializable
                             {
                                 player.add(new QuoridorPlayers(alreadyFind, 1, "", x, y));
                                 paths.put(player.get(player.size()-1), player.get(num));
-                                if (x==1)
+                                playerWin=player.get(player.size()-1);
+                                if (x==win)
                                 {
-                                    playerWin=player.get(player.size()-1);
                                     num=nbVerifPlayer; x=19; y=19;z=12; nbVerifPlayer=0;
                                 }
                             }
@@ -158,15 +166,17 @@ public class QuoridorPathFind implements Serializable
         }
         QuoridorPlayers movingPlayer= playerWin, nextPos=null;
         boolean verif=true;
+        int nbOfMoves=0;
         while (verif)
         {
+            nbOfMoves++;
             nextPos=movingPlayer;
             movingPlayer=paths.get(movingPlayer);
-            if (movingPlayer.getPos_x()==players[1].getPos_x() && movingPlayer.getPos_y()==players[1].getPos_y())
+            if (movingPlayer.getPos_x()==players[numOfPlayer].getPos_x() && movingPlayer.getPos_y()==players[numOfPlayer].getPos_y())
             {
                 verif=false;
             }
         }
-        players[1].setPos(nextPos.getPos_x(), nextPos.getPos_y());
+        return new int[]{nextPos.getPos_x(), nextPos.getPos_y(), nbOfMoves};
     }
 }

@@ -69,7 +69,7 @@ public class QuoridorGui extends JFrame
     /**
          * Permet de créer l'interface de l'écran de gagnant
          */
-    public void guiWinner(final int num)
+    public void guiWinner(int num)
     {
         panel = new QuoridorPanel(this, game);
         panel.winner(num);
@@ -89,7 +89,7 @@ public class QuoridorGui extends JFrame
     public void refresh()
     {
         setContentPane(panel);
-        showGui();
+        setAlwaysOnTop(true);
     }
     /**
          * Permet de garder la fenêtre à jour
