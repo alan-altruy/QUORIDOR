@@ -1,4 +1,4 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+package be.ac.umons.student.fouretaltruy.quoridor;/// ALTRUY ALAN - JASON FOURET //
 import java.io.*;
 public class QuoridorGame implements Serializable
 {
@@ -26,6 +26,7 @@ public class QuoridorGame implements Serializable
     public boolean newGame=false;
     public boolean loaded=false;
     public QuoridorTray tray = new QuoridorTray();
+
     /**
 		*  Ajouter l'interface (QuoridorGui) au jeu
 		* 
@@ -66,12 +67,22 @@ public class QuoridorGame implements Serializable
             nbPlayers=gamesave.nbPlayers;
             playerWhoIsPlaying=gamesave.playerWhoIsPlaying;
             objectIn.close();
-            System.out.println("The Object  was succesfully written to a file");
+            loaded=true;
+            wait=false;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        loaded=true;
-        wait=false;
+    }
+    public boolean  canLoadSave()
+    {
+        try {
+            ObjectInputStream objectIn = new ObjectInputStream( new FileInputStream("src/main/resources/save.ser"));
+            objectIn.close();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
     /**
          * Permet d'initialiser plusieurs instances players de QuoridorPlayers
@@ -86,10 +97,11 @@ public class QuoridorGame implements Serializable
         players=new QuoridorPlayers[nbPlayers];
         for (int num=0; num<nbPlayers; num++) // Chaque itération permet d'initialiser un joueur
         {
-            name="player"+(num+1);
+            name="steve";
             if (num==1)
             {
                 pos_x=17;
+                name="creeper";
             }
             players[num]= new QuoridorPlayers(num, name, pos_x, pos_y);
             tray.ChangeType_inCell(pos_x,pos_y, num+1);
@@ -118,11 +130,6 @@ public class QuoridorGame implements Serializable
         playerWhoIsPlaying=num;
         System.out.println("ok");
         gui.Gui2Players(num);
-        while(wait)
-        {
-            System.out.println("Waiting Action");
-        }
-        wait=true;
     }
     /**
          * Permet d'ajouter une barrière mais avant tout de vérifier si c'est possible d'en ajouter une.
@@ -190,6 +197,8 @@ public class QuoridorGame implements Serializable
     {
         wait=false;
         closeGame=true;
+        gui.windows.setVisible(false);
+        gui.windows.dispose();
     }
     public void setWait(boolean _wait)
     {

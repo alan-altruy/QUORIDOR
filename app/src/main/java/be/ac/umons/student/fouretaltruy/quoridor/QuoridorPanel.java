@@ -61,10 +61,18 @@ public class QuoridorPanel implements Serializable
         but.setMainButton(pic, pic2);
         // Creation du bouton Quiiter le jeu
         pos_y+=height*2;
-        but = new QuoridorButton(this,"",police, 10, pos_x, pos_y,height*13/3,height);
-        pic = new QuoridorPicture(this, a+"load"+b, pos_x, pos_y,height*13/3,height);
-        pic2 = new QuoridorPicture(this, a+"loadvalid"+b, pos_x, pos_y,height*13/3,height);
-        but.setMainButton(pic, pic2);
+        if (game.canLoadSave())
+        {
+            but = new QuoridorButton(this,"",police, 10, pos_x, pos_y,height*13/3,height);
+            pic = new QuoridorPicture(this, a+"load"+b, pos_x, pos_y,height*13/3,height);
+            pic2 = new QuoridorPicture(this, a+"loadvalid"+b, pos_x, pos_y,height*13/3,height);
+            but.setMainButton(pic, pic2);
+        }
+        else
+        {
+            pic = new QuoridorPicture(this, a+"loadno"+b, pos_x, pos_y,height*13/3,height);
+            pic.set();
+        }
         pos_x+=width;
         width=height*13/3;
         pos_x-=width;
@@ -85,10 +93,14 @@ public class QuoridorPanel implements Serializable
         {
             pic = new QuoridorPicture(this, a+"steve"+b, ((dimXScreen-dimXTray)/4)-((dimXScreen-dimXTray)/8*0.75), dimYScreen/8,((dimXScreen-dimXTray)/4*0.75), ((dimXScreen-dimXTray)/8*0.75));
             pic.set();
+            pic = new QuoridorPicture(this, a+"creeperno"+b, dimXScreen-poseInitX/2-((dimXScreen-dimXTray)/8*0.75), dimYScreen/8,((dimXScreen-dimXTray)/4*0.75), ((dimXScreen-dimXTray)/8*0.75));
+            pic.set();
         }
         else if (num==1)
         {
             pic = new QuoridorPicture(this, a+"creeper"+b, dimXScreen-poseInitX/2-((dimXScreen-dimXTray)/8*0.75), dimYScreen/8,((dimXScreen-dimXTray)/4*0.75), ((dimXScreen-dimXTray)/8*0.75));
+            pic.set();
+            pic = new QuoridorPicture(this, a+"steveno"+b, ((dimXScreen-dimXTray)/4)-((dimXScreen-dimXTray)/8*0.75), dimYScreen/8,((dimXScreen-dimXTray)/4*0.75), ((dimXScreen-dimXTray)/8*0.75));
             pic.set();
         }
         but = new QuoridorButton(this,"",police, 6, dimXScreen/2-(poseInitY*0.75*3), poseInitY/8,poseInitY*0.75*6, poseInitY*0.75);
@@ -136,15 +148,7 @@ public class QuoridorPanel implements Serializable
     public void Winner(int num)
     {
         double height,width, pos_x,pos_y;
-        String name;
-        if (num==0)
-        {
-            name="steve";
-        }
-        else
-        {
-            name="creeper";
-        }
+        String name= game.GetNameOfPlayer(num);
         width=dimXScreen*0.75; height=width/6;
         pos_x=dimXScreen/2-width/2; pos_y=dimYScreen/3-height/2;
         pic = new QuoridorPicture(this, a+name+"win"+b, pos_x, pos_y,width,height);
@@ -164,8 +168,6 @@ public class QuoridorPanel implements Serializable
         if (choice==0)
         {
             game.close();
-            windows.setVisible(false);
-            windows.dispose();
         }
         else if (choice==1)
         {
@@ -186,18 +188,20 @@ public class QuoridorPanel implements Serializable
         }
         else if (choice==7)
         {
-            try {
+            try
+            {
                 FileOutputStream fileOut = new FileOutputStream(a+"/save.ser");
                 ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
                 objectOut.writeObject(game);
                 objectOut.close();
                 System.out.println("The Object  was succesfully written to a file");
-    
-            } catch (Exception ex) {
+                game.newGame=true;
+                game.wait=false;
+            }
+            catch (Exception ex)
+            {
                 ex.printStackTrace();
             }
-            game.newGame=true;
-            game.wait=false;
         }
         else if (choice==8)
         {
@@ -214,39 +218,28 @@ public class QuoridorPanel implements Serializable
             gui.Gui2Players(game.playerWhoIsPlaying);
         }
     }
-    public void setIcone(int url, double pos_x,double pos_y, double width, double height)
-    {
-        pic=new QuoridorPicture(this, Theme1[url], pos_x,pos_y, width, height);
-        pic.set();
-    }
     public void canMove(int choice)
     {
         double pos_x,pos_y;
-        if (choice!=5)
-        {
-            posAvailable=movePlayer.setPosAvailable();  
-        }
+        posAvailable=movePlayer.setPosAvailable();  
         for (int ligne=0; ligne<19;ligne++)
         {
             for (int cols=0; cols<19; cols++)
             {
                 for (int z=0; z<12; z++)
                 {
-                    if (choice!=5)
+                    pos_x=poseInitX+(dimXTray/37*4)*((cols-1)/2)+(dimXTray/37);
+                    pos_y=poseInitY+(dimYTray/37*4)*((ligne-1)/2)+(dimXTray/37);
+                    if (posAvailable[ligne][cols][z] && (choice==3 || choice==4))
                     {
-                        pos_x=poseInitX+(dimXTray/37*4)*((cols-1)/2)+(dimXTray/37);
-                        pos_y=poseInitY+(dimYTray/37*4)*((ligne-1)/2)+(dimXTray/37);
-                        if (posAvailable[ligne][cols][z] && (choice==3 || choice==4))
-                        {
-                            but= new QuoridorButton(this, "o", police, z+20 , pos_x, pos_y, dimPion, dimPion);
-                            pic=new QuoridorPicture(this, Theme1[5], pos_x, pos_y, dimPion, dimPion);
-                            pic.set();
-                            but.setPlayerButton();
-                        }
+                        but= new QuoridorButton(this, "", police, z+20 , pos_x, pos_y, dimPion, dimPion);
+                        pic=new QuoridorPicture(this, Theme1[5], pos_x, pos_y, dimPion, dimPion);
+                        pic.set();
+                        but.setPlayerButton();
                     }
-                    
                 }
             }
+                    
         }
         refresh();
     }
@@ -260,13 +253,10 @@ public class QuoridorPanel implements Serializable
         int typeOfCell;
         for (int x=0; x<2; x++)
         {
+            pos_x=dimXScreen-poseInitX/2-dimXFence/2;
             if (x==0)
             {
                 pos_x=((dimXScreen-dimXTray)/4)-dimXFence/2;
-            }
-            else
-            {
-                pos_x=dimXScreen-poseInitX/2-dimXFence/2;
             }
             for (int y=0; y<10-game.NbFencesPlayer(x);y++)
             {
@@ -280,22 +270,22 @@ public class QuoridorPanel implements Serializable
             for (int cols=0; cols<19; cols++)
             {
                 if (cols>0 && cols<18 && ligne>0 && ligne<18)
+                {
+                    pos_x=poseInitX+(dimXTray/37*4)*((cols)/2);
+                    pos_y=poseInitY+(dimYTray/37*4)*((ligne)/2);
+                    if (cols%2==0 && ligne%2==1 && ligne<17)
                     {
-                        pos_x=poseInitX+(dimXTray/37*4)*((cols)/2);
-                        pos_y=poseInitY+(dimYTray/37*4)*((ligne)/2);
-                        if (cols%2==0 && ligne%2==1 && ligne<17)
-                        {
-                            but= new QuoridorButton(this, "", police, 100 , pos_x, pos_y+dimPion/3, (dimPion/3), dimPion);
-                            pic=new QuoridorPicture(this, a+"fenceVvalid"+b, pos_x, pos_y+dimYFence, dimYFence, dimXFence);
-                            but.setFenceButton(ligne,cols, 0, pic);
-                        }
-                        else if (cols%2==1 && ligne%2==0 && cols<17)
-                        {
-                            but= new QuoridorButton(this, "", police, 100 , pos_x+dimPion/3, pos_y, dimPion, (dimPion/3));
-                            pic=new QuoridorPicture(this, a+"fenceHvalid"+b, pos_x+dimYFence, pos_y, dimXFence, dimYFence);
-                            but.setFenceButton(ligne,cols, 1, pic);
-                        }
+                        but= new QuoridorButton(this, "", police, 100 , pos_x, pos_y+dimPion/3, (dimPion/3), dimPion);
+                        pic=new QuoridorPicture(this, a+"fenceVvalid"+b, pos_x, pos_y+dimYFence, dimYFence, dimXFence);
+                        but.setFenceButton(ligne,cols, 0, pic);
                     }
+                    else if (cols%2==1 && ligne%2==0 && cols<17)
+                    {
+                        but= new QuoridorButton(this, "", police, 100 , pos_x+dimPion/3, pos_y, dimPion, (dimPion/3));
+                        pic=new QuoridorPicture(this, a+"fenceHvalid"+b, pos_x+dimYFence, pos_y, dimXFence, dimYFence);
+                        but.setFenceButton(ligne,cols, 1, pic);
+                    }
+                }
                 typeOfCell=cells[ligne][cols].GetType();
                 if (typeOfCell==1 || typeOfCell==2)
                 {

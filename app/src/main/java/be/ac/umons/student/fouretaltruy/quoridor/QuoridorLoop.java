@@ -8,7 +8,7 @@ public class QuoridorLoop
 		QuoridorGame game;
 		boolean loop=true, loopPlayer=true;
 		int winner;
-		int nbPlayers=0;
+		int nbPlayers=2;
 		game = new QuoridorGame();
 		while (loop)
 		{
@@ -24,14 +24,10 @@ public class QuoridorLoop
 					loopPlayer=false;
 				}
 			}
+			game.wait=true;
 			if (!game.loaded)
 			{
 				game.InitPlayers();
-			}
-			if (loop)
-			{
-				nbPlayers=2;
-				game.wait=true;
 			}
 			while (loopPlayer)
 			{
@@ -47,9 +43,14 @@ public class QuoridorLoop
 						if (game.loaded && game.playerWhoIsPlaying==1)
 						{
 							nb=1;
+							game.loaded=false;
 						}
 						game.PlayerAction(nb);
-						game.loaded=false;
+						while(game.wait)
+        				{
+            				System.out.println("Waiting Action");
+        				}
+        				game.wait=true;
 						winner=game.GameHasWinner();
 						if (winner!=3)
 						{

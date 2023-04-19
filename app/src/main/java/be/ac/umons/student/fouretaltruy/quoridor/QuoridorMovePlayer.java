@@ -5,8 +5,8 @@ public class QuoridorMovePlayer
     private QuoridorPlayers player;
     private QuoridorTray tray;
     private int pos_x, pos_y;
-    private boolean[] choix={false,false,false,false,false,false,false,false,false,false,false,false};
-    private String[] select={"Nord","Nord-Est","Est","Sud-Est","Sud","Sud-Ouest","Ouest","Nord-Ouest", "Nord-Nord","Est-Est","Sud-Sud","Ouest-Ouest"};
+    private boolean[] choix={false,false,false,false,false,false,false,false,false,false,false,false}; 
+    private String[] select={"Nord","Nord-Est","Est","Sud-Est","Sud","Sud-Ouest","Ouest","Nord-Ouest", "Nord-Nord","Est-Est","Sud-Sud","Ouest-Ouest"}; //utilisée initialement pour jouer depuis le terminal avec une interface rudimentaire
     public QuoridorMovePlayer(QuoridorPlayers _player, QuoridorTray _tray)
     {
         player=_player;
@@ -62,6 +62,7 @@ public class QuoridorMovePlayer
     }
     public void YourChoice()
     {
+        //utilisée initialement pour jouer depuis le terminal avec une interface rudimentaire
         for (int x=0; x<12; x++)
         {
             if (choix[x])
@@ -134,7 +135,7 @@ public class QuoridorMovePlayer
              //Y a-t-il un joueur
                 if (tray.GetTypeIn_Cell(pos_x+2, pos_y)!=0)
                 {
-                    // Si oui, regarder si barrière au dessus de l'autre joueur
+                    // Si oui, regarder si barrière en dessous de l'autre joueur
                     if (tray.GetTypeIn_Cell(pos_x+3, pos_y)!=0)
                     {
                         if (tray.GetTypeIn_Cell(pos_x+2, pos_y-1)==0)
@@ -162,7 +163,7 @@ public class QuoridorMovePlayer
              //Y a-t-il un joueur
                 if (tray.GetTypeIn_Cell(pos_x, pos_y-2)!=0)
                 {
-                    // Si oui, regarder si barrière au dessus de l'autre joueur
+                    // Si oui, regarder si barrière à gauche de l'autre joueur
                     if (tray.GetTypeIn_Cell(pos_x, pos_y-3)!=0)
                     {
                         if (tray.GetTypeIn_Cell(pos_x-1, pos_y-2)==0)

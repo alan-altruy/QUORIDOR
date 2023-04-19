@@ -11,7 +11,6 @@ public class QuoridorTray implements Serializable
          */
 	public QuoridorTray()
 	{
-		
 		cells= new QuoridorCell[19][19];
 		InitCells_Walls_Nothing();
 	}
