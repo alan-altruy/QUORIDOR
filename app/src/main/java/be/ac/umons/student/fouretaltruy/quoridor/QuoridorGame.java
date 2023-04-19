@@ -1,4 +1,5 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
+
 import java.util.Scanner;
 public class QuoridorGame
 {
@@ -6,22 +7,25 @@ public class QuoridorGame
     private QuoridorTray tray;
     private QuoridorDisplay display;
     private QuoridorPlayers[] players;
-    public int InitGame()
+    private QuoridorFence[] fences;
+    private int nbFences;
+    public QuoridorGame()
     {
+		fences= new QuoridorFence[10];
         tray = new QuoridorTray();
         display = new QuoridorDisplay();
+        nbFences=0;
         System.out.println("Nb de joueurs: ");
         Scanner scanNbPlayers = new Scanner(System.in);
         nbPlayers=scanNbPlayers.nextInt();
         Init2Players();
-        return nbPlayers;
     }
     public void Init2Players()
     {
         Scanner scan;
         String name;
         int pos_x=0;
-        int pos_y=8;
+        int pos_y=4;
         for (int num=1; num<=nbPlayers; num++)
         {
             players=new QuoridorPlayers[nbPlayers];
@@ -30,10 +34,15 @@ public class QuoridorGame
             name=scan.nextLine();
             if (num==2)
             {
-                pos_x=16;
+                pos_x=8;
             }
             players[num-1]= new QuoridorPlayers(num, name, pos_x, pos_y);
+            tray.ChangePlayer_inCell(pos_x,pos_y, true);
         }
+    }
+    public void NewFence()
+    {
+		nbFences++;
     }
     public void RefreshPosPlayers()
     {
@@ -46,4 +55,8 @@ public class QuoridorGame
     {
         display.showDisplay(tray);
     }
+    public int getNbPlayers()
+    {
+		return nbPlayers;
+	}
 }
