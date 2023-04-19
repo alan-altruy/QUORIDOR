@@ -1,11 +1,12 @@
 package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
-import java.util.Scanner;
-public class QuoridorGame
+import java.io.*;
+public class QuoridorGame implements Serializable
 {
+    private static final long serialVersionUID = 1L;
 	/**
 		*  Le nombre de joueurs dans le jeu
 		* 
-		*/
+        */
     private int nbPlayers=0;
     /**
 		*  Le numéro du joueur qui est en train de jouer
@@ -20,13 +21,16 @@ public class QuoridorGame
     /**
 		*  Ajouter le plateau (QuoridorTray au jeu)
 		* 
-		*/
+        */
+    public boolean closeGame=false;
+    public boolean newGame=false;
+    public boolean loaded=false;
     public QuoridorTray tray = new QuoridorTray();
     /**
 		*  Ajouter l'interface (QuoridorGui) au jeu
 		* 
 		*/
-    private QuoridorGui gui = new QuoridorGui(this);
+    public QuoridorGui gui = new QuoridorGui(this);
     /**
 		*  Contient les joueurs du jeu
 		* 
@@ -38,9 +42,9 @@ public class QuoridorGame
          *   - Créer un afficheur/interface graphique (QuoridorGui)
          * 
          */
-    public QuoridorGame()
+    public void showStartScreen()
     {
-        gui.StartScreen(); //Affiche l'écran de départ
+        gui.StartScreen();
     }
     public void InitPlayers()
 	{
@@ -50,7 +54,25 @@ public class QuoridorGame
 				Init2Players();
 				break;
 		}
-	}
+    }
+    public void loadSave()
+    {
+        try {
+            ObjectInputStream objectIn = new ObjectInputStream( new FileInputStream("src/main/resources/save.ser"));
+            QuoridorGame gamesave = (QuoridorGame)objectIn.readObject();
+            nbPlayers=gamesave.nbPlayers;
+            players=gamesave.players;
+            tray=gamesave.tray;
+            nbPlayers=gamesave.nbPlayers;
+            playerWhoIsPlaying=gamesave.playerWhoIsPlaying;
+            objectIn.close();
+            System.out.println("The Object  was succesfully written to a file");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        loaded=true;
+        wait=false;
+    }
     /**
          * Permet d'initialiser plusieurs instances players de QuoridorPlayers
          * et modifier le type de la cellule qui contient à préent un joueur
@@ -73,7 +95,6 @@ public class QuoridorGame
             tray.ChangeType_inCell(pos_x,pos_y, num+1);
         }
     }
-
     public int GameHasWinner()
     {
         for (int nb=0; nb<nbPlayers; nb++)
@@ -156,18 +177,19 @@ public class QuoridorGame
     {
         return players[numPlayer];
     }
-    public boolean NbFencesPlayerMax(int num)
+    public int NbFencesPlayer(int num)
     {
-        if (players[num].GetUsedFences()>=10)
-        {
-            return true;
-        }
-        return false;
+        return players[num].GetUsedFences();
     }
     public void setNbPlayers(int newNb)
     {
         nbPlayers=newNb;
         wait=false;
+    }
+    public void close()
+    {
+        wait=false;
+        closeGame=true;
     }
     public void setWait(boolean _wait)
     {

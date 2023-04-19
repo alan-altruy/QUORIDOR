@@ -1,8 +1,8 @@
-package be.ac.umons.student.fouretaltruy.quoridor;
-
-// ALTRUY ALAN - JASON FOURET //
-public class QuoridorPlayers
+package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+import java.io.*;
+public class QuoridorPlayers implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private String name;
     private int NbUsedFences;
     private int num, pos_x, pos_y;

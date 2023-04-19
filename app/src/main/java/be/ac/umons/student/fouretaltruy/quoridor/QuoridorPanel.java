@@ -4,29 +4,31 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.Font;
+import java.io.*;
 
-public class QuoridorPanel
+public class QuoridorPanel implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private Dimension dimScreen= Toolkit.getDefaultToolkit().getScreenSize();
     private double poseInitX, poseInitY, dimXTray, dimYTray, dimXScreen, dimYScreen, dimPion, dimXFence,dimYFence;
-    private int PlayerWhoIsPlaying;
-    private String res="";
-    private String[] Theme1={res+"pionrouge.png",res+"pionnoir.png",res+"tray.png",res+"fenceV.png",res+"fenceH.png",res+"valid.png"};
+    public int PlayerWhoIsPlaying;
+    private String a="src/main/resources/",b=".png";
+    private String[] Theme1={a+"pionrouge"+b,a+"pionnoir"+b,a+"tray"+b,a+"fenceV"+b,a+"fenceH"+b,a+"valid"+b,a+"title"+b, a+"titlevalid"+b};
     private Font police;
     public JFrame windows;
-    public JPanel panel;
-    private QuoridorGame game;
+    public JPanel panel, panelWait;
+    public QuoridorGame game;
     private QuoridorButton but;
-    private QuoridorPicture pic, picOfTray;
+    private QuoridorPicture pic,pic2, picOfTray, bg;
     private QuoridorGui gui;
     private QuoridorCell[][] cells;
     private boolean[][][]posAvailable= new boolean[19][19][12];
     private QuoridorMovePlayer movePlayer;
-    public QuoridorPanel(QuoridorGui _gui, QuoridorGame _game)
+    public QuoridorPanel(QuoridorGui _gui)
     {
         gui=_gui;
         windows=gui.windows;
-        game=_game;
+        game=gui.game;
         cells=game.tray.cells;
         panel=new JPanel();
         panel.setLayout(null);
@@ -43,38 +45,133 @@ public class QuoridorPanel
     }
     public void MainMenu()
     {
-        QuoridorButton but1Player,but2Player;
-        but1Player = new QuoridorButton(this,"1 JOUEUR",police, 1, (dimXScreen/2)-250, (dimYScreen*0.33)-100,500,200);
-        but2Player = new QuoridorButton(this,"2 JOUEURS",police, 2, (dimXScreen/2)-250, (dimYScreen*0.66)-100,500,200);
-        but1Player.setButton();
-        but2Player.setButton();
-        windows.setContentPane(panel);
+        double height,width, pos_x,pos_y;
+        // Creation du bouton solo
+        width=dimXScreen/2;height=dimYScreen/10;
+        pos_x=width-(dimXScreen/4); pos_y=(dimYScreen/2)-height/2;
+        but = new QuoridorButton(this,"",police, 1, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"solo"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"solovalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        // Creation du bouton multiplayer
+        pos_y=(dimYScreen/2)+height;
+        but = new QuoridorButton(this,"",police, 2, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"multiplayer"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"multiplayervalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        // Creation du bouton Quiiter le jeu
+        pos_y+=height*2;
+        but = new QuoridorButton(this,"",police, 10, pos_x, pos_y,height*13/3,height);
+        pic = new QuoridorPicture(this, a+"load"+b, pos_x, pos_y,height*13/3,height);
+        pic2 = new QuoridorPicture(this, a+"loadvalid"+b, pos_x, pos_y,height*13/3,height);
+        but.setMainButton(pic, pic2);
+        pos_x+=width;
+        width=height*13/3;
+        pos_x-=width;
+        but = new QuoridorButton(this,"",police, 0, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"exit"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"exitvalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        // Ajout du backgound Menu Principal
+        bg=new QuoridorPicture(this, a+"mainmenu"+b, 0,0, dimXScreen, dimYScreen);
+        bg.set();
+        //Affiche les éléments à l'écran
+        refreshBg();
     }
     public void TwoPlayers(int num)
     {
         PlayerWhoIsPlaying=num;
-        but = new QuoridorButton(this, "Au tour de joueur "+(num+1), police, 9, ((dimXScreen-dimXTray)/4)-200, (dimYScreen/4)-25, 400, 50);
-        but.setPlayerButton();
-        but = new QuoridorButton(this, "FENCE", police, 5, ((dimXScreen-dimXTray)/4)-100, (dimYScreen/2)-25, 200, 50);
-        but.setButton();
-        if (game.NbFencesPlayerMax(num))
+        if (num==0)
         {
-            but = new QuoridorButton(this, "Vous n'avez plus de barrières", police, 9, (dimXScreen/2)-300, ((dimYScreen-dimYTray)/2)-75, 600, 50);
-            but.setPlayerButton();
+            pic = new QuoridorPicture(this, a+"steve"+b, ((dimXScreen-dimXTray)/4)-((dimXScreen-dimXTray)/8*0.75), dimYScreen/8,((dimXScreen-dimXTray)/4*0.75), ((dimXScreen-dimXTray)/8*0.75));
+            pic.set();
         }
+        else if (num==1)
+        {
+            pic = new QuoridorPicture(this, a+"creeper"+b, dimXScreen-poseInitX/2-((dimXScreen-dimXTray)/8*0.75), dimYScreen/8,((dimXScreen-dimXTray)/4*0.75), ((dimXScreen-dimXTray)/8*0.75));
+            pic.set();
+        }
+        but = new QuoridorButton(this,"",police, 6, dimXScreen/2-(poseInitY*0.75*3), poseInitY/8,poseInitY*0.75*6, poseInitY*0.75);
+        pic = new QuoridorPicture(this, Theme1[6], dimXScreen/2-(poseInitY*0.75*3), poseInitY/8,poseInitY*0.75*6, poseInitY*0.75);
+        pic2 = new QuoridorPicture(this, Theme1[7], dimXScreen/2-(poseInitY*0.75*3), poseInitY/8,poseInitY*0.75*6, poseInitY*0.75);
+        but.setMainButton(pic, pic2);
         posObjects(num);
         picOfTray=new QuoridorPicture(this, Theme1[2], poseInitX,poseInitY, dimXTray, dimYTray);
+        bg=new QuoridorPicture(this, a+"background"+b, 0,0, dimXScreen, dimYScreen);
+        picOfTray.set();
+        bg.set();
         windows.setContentPane(panel);
+    }
+    public void optionsGame()
+    {
+        double height,width, pos_x,pos_y;
+        // Creation du bouton solo
+        width=dimXScreen/2;height=dimYScreen/10;
+        pos_x=width-(dimXScreen/4); pos_y=(dimYScreen/3)-height/2;
+        but = new QuoridorButton(this,"",police, 8, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"home"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"homevalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        // Creation du bouton multiplayer
+        pos_y=(dimYScreen/3)+height;
+        but = new QuoridorButton(this,"",police, 7, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"save"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"savevalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        // Creation du bouton Quiiter le jeu
+        pos_x+=width;
+        width=height*13/3;
+        pos_x-=width;
+        pos_y+=height*2;
+        but = new QuoridorButton(this,"",police, 9, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"back"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"backvalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        // Ajout du backgound Menu Principal
+        bg=new QuoridorPicture(this, a+"background"+b, 0,0, dimXScreen, dimYScreen);
+        bg.set();
+        //Affiche les éléments à l'écran
+        refreshBg();
     }
     public void Winner(int num)
     {
-        but = new QuoridorButton(this, "LE GAGANT EST LE JOUEUR "+(num+1), police, 9, (dimXScreen/2)-400, (dimYScreen/2)-30, 800, 60);
-        but.setButton();
-        windows.setContentPane(panel);
+        double height,width, pos_x,pos_y;
+        String name;
+        if (num==0)
+        {
+            name="steve";
+        }
+        else
+        {
+            name="creeper";
+        }
+        width=dimXScreen*0.75; height=width/6;
+        pos_x=dimXScreen/2-width/2; pos_y=dimYScreen/3-height/2;
+        pic = new QuoridorPicture(this, a+name+"win"+b, pos_x, pos_y,width,height);
+        pic.set();
+        height=dimYScreen/10; width=dimXScreen/2;
+        pos_x=dimXScreen/2-width/2; pos_y+=3*height;
+        but = new QuoridorButton(this,"",police, 8, pos_x, pos_y,width,height);
+        pic = new QuoridorPicture(this, a+"home"+b, pos_x, pos_y,width,height);
+        pic2 = new QuoridorPicture(this, a+"homevalid"+b, pos_x, pos_y,width,height);
+        but.setMainButton(pic, pic2);
+        bg=new QuoridorPicture(this, a+"background"+b, 0,0, dimXScreen, dimYScreen);
+        bg.set();
+        refreshBg();
     }
-    public void setAction(int choice)
+    public void setAction(int choice) 
     {
-        if (choice==2)
+        if (choice==0)
+        {
+            game.close();
+            windows.setVisible(false);
+            windows.dispose();
+        }
+        else if (choice==1)
+        {
+            
+        }
+        else if (choice==2)
         {
             game.setNbPlayers(2);
         }
@@ -83,10 +180,44 @@ public class QuoridorPanel
             movePlayer = new QuoridorMovePlayer(game.getPlayers(PlayerWhoIsPlaying), game.tray);
             canMove(choice);
         }
-        else if (choice==5)
+        else if (choice==6)
         {
-            canMove(choice);
+            gui.addMenu();
         }
+        else if (choice==7)
+        {
+            try {
+                FileOutputStream fileOut = new FileOutputStream(a+"/save.ser");
+                ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+                objectOut.writeObject(game);
+                objectOut.close();
+                System.out.println("The Object  was succesfully written to a file");
+    
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            game.newGame=true;
+            game.wait=false;
+        }
+        else if (choice==8)
+        {
+            game.newGame=true;
+            game.wait=false;
+        }
+        else if (choice==9)
+        {
+            gui.Gui2Players(game.playerWhoIsPlaying);
+        }
+        else if (choice==10)
+        {
+            game.loadSave();
+            gui.Gui2Players(game.playerWhoIsPlaying);
+        }
+    }
+    public void setIcone(int url, double pos_x,double pos_y, double width, double height)
+    {
+        pic=new QuoridorPicture(this, Theme1[url], pos_x,pos_y, width, height);
+        pic.set();
     }
     public void canMove(int choice)
     {
@@ -95,7 +226,6 @@ public class QuoridorPanel
         {
             posAvailable=movePlayer.setPosAvailable();  
         }
-        picOfTray.remove();
         for (int ligne=0; ligne<19;ligne++)
         {
             for (int cols=0; cols<19; cols++)
@@ -110,29 +240,15 @@ public class QuoridorPanel
                         {
                             but= new QuoridorButton(this, "o", police, z+20 , pos_x, pos_y, dimPion, dimPion);
                             pic=new QuoridorPicture(this, Theme1[5], pos_x, pos_y, dimPion, dimPion);
+                            pic.set();
                             but.setPlayerButton();
                         }
                     }
-                    else if (choice==5 && cols>0 && cols<18 && ligne>0 && ligne<18)
-                    {
-                        pos_x=poseInitX+(dimXTray/37*4)*((cols)/2);
-                        pos_y=poseInitY+(dimYTray/37*4)*((ligne)/2);
-                        if (cols%2==0 && ligne%2==1)
-                        {
-                            but= new QuoridorButton(this, "", police, 100 , pos_x, pos_y+dimPion/3, (dimPion/3), dimPion);
-                            but.setFenceButton(ligne,cols, 0);
-                        }
-                        else if (cols%2==1 && ligne%2==0)
-                        {
-                            but= new QuoridorButton(this, "", police, 100 , pos_x+dimPion/3, pos_y, dimPion, (dimPion/3));
-                            but.setFenceButton(ligne,cols, 1);
-                        }
-                    }
+                    
                 }
             }
         }
-        picOfTray.set();
-        windows.setContentPane(panel);
+        refresh();
     }
     public void addFenceInGame(int pos_x, int pos_y, int dir)
     {
@@ -142,11 +258,44 @@ public class QuoridorPanel
     {
         double pos_x, pos_y;
         int typeOfCell;
-        int VPos=-5, HPos=-5;
+        for (int x=0; x<2; x++)
+        {
+            if (x==0)
+            {
+                pos_x=((dimXScreen-dimXTray)/4)-dimXFence/2;
+            }
+            else
+            {
+                pos_x=dimXScreen-poseInitX/2-dimXFence/2;
+            }
+            for (int y=0; y<10-game.NbFencesPlayer(x);y++)
+            {
+                pos_y= dimYScreen/4+y*(dimYFence*3);
+                pic=new QuoridorPicture(this, a+"fenceH"+b, pos_x, pos_y, dimXFence, dimYFence);
+                pic.set();
+            }
+        }
         for (int ligne=0; ligne<19;ligne++)
         {
             for (int cols=0; cols<19; cols++)
             {
+                if (cols>0 && cols<18 && ligne>0 && ligne<18)
+                    {
+                        pos_x=poseInitX+(dimXTray/37*4)*((cols)/2);
+                        pos_y=poseInitY+(dimYTray/37*4)*((ligne)/2);
+                        if (cols%2==0 && ligne%2==1 && ligne<17)
+                        {
+                            but= new QuoridorButton(this, "", police, 100 , pos_x, pos_y+dimPion/3, (dimPion/3), dimPion);
+                            pic=new QuoridorPicture(this, a+"fenceVvalid"+b, pos_x, pos_y+dimYFence, dimYFence, dimXFence);
+                            but.setFenceButton(ligne,cols, 0, pic);
+                        }
+                        else if (cols%2==1 && ligne%2==0 && cols<17)
+                        {
+                            but= new QuoridorButton(this, "", police, 100 , pos_x+dimPion/3, pos_y, dimPion, (dimPion/3));
+                            pic=new QuoridorPicture(this, a+"fenceHvalid"+b, pos_x+dimYFence, pos_y, dimXFence, dimYFence);
+                            but.setFenceButton(ligne,cols, 1, pic);
+                        }
+                    }
                 typeOfCell=cells[ligne][cols].GetType();
                 if (typeOfCell==1 || typeOfCell==2)
                 {
@@ -163,8 +312,8 @@ public class QuoridorPanel
                         but.setPlayerButton();
                     }
                     pic=new QuoridorPicture(this, Theme1[typeOfCell-1], pos_x, pos_y, dimPion, dimPion);
+                    pic.set();
                 }
-                
                 else if (typeOfCell==3 || typeOfCell==4)
                 {
                     pos_x=poseInitX+(dimXTray/37*4)*(cols/2)+(dimXTray/37);
@@ -173,29 +322,36 @@ public class QuoridorPanel
                     {
                         if (typeOfCell==3)
                         {
-                            if (VPos+2!=ligne)
-                            {
-                                pic=new QuoridorPicture(this, Theme1[typeOfCell], pos_x-dimYFence, pos_y, dimYFence, dimXFence);
-                                VPos=ligne;
-                            }
+                            pic=new QuoridorPicture(this, Theme1[typeOfCell], pos_x-dimYFence, pos_y, dimYFence, dimXFence);
+                            pic.set();
                         }
                         else
                         {
-                            if (HPos+2!=cols)
-                            {
-                                pic=new QuoridorPicture(this, Theme1[typeOfCell], pos_x, pos_y-dimYFence, dimXFence, dimYFence);
-                                HPos=cols;
-                            }
+                            pic=new QuoridorPicture(this, Theme1[typeOfCell], pos_x, pos_y-dimYFence, dimXFence, dimYFence);
+                            pic.set();
                         }
                     }
                 }
             }
-            HPos=-5;
         }
     }
     public void movePlayer(int numObj)
     {
         movePlayer.MoveIt(numObj);
         game.setWait(false);
+    }
+    public void refresh()
+    {
+        picOfTray.remove();
+        bg.remove();
+        picOfTray.set();
+        bg.set();
+        windows.setContentPane(panel);
+    }
+    public void refreshBg()
+    {
+        bg.remove();
+        bg.set();
+        windows.setContentPane(panel);
     }
 }

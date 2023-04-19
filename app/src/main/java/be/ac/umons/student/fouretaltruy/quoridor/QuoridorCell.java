@@ -1,8 +1,8 @@
-package be.ac.umons.student.fouretaltruy.quoridor;
-
-// ALTRUY ALAN - JASON FOURET //
-public class QuoridorCell
+package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+import java.io.*;
+public class QuoridorCell implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private int type;
     /**
          * Permet d'initialiser une cellule du plateau

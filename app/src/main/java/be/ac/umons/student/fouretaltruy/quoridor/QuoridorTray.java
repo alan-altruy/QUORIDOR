@@ -1,8 +1,8 @@
-package be.ac.umons.student.fouretaltruy.quoridor;
-
-// ALTRUY ALAN - JASON FOURET //
-public class QuoridorTray
+package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //
+import java.io.*;
+public class QuoridorTray implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private final String[]chars = {"●","|","─","■"};
 	public QuoridorCell[][] cells;
 	/**
@@ -50,16 +50,30 @@ public class QuoridorTray
 	{
 		if (dir==0)
 		{
-			for (int _pos_x=pos_x; _pos_x<=pos_x+2; _pos_x++)
+			for (int _pos_x=0; _pos_x<=2; _pos_x++)
 			{
-				cells[_pos_x][pos_y].ChangeType(3);
+				if (_pos_x==0)
+				{
+					cells[pos_x+_pos_x][pos_y].ChangeType(3);
+				}
+				else
+				{
+					cells[pos_x+_pos_x][pos_y].ChangeType(10);
+				}
 			}
 		}
 		else if (dir==1)
 		{
-			for (int _pos_y=pos_y; _pos_y<=pos_y+2; _pos_y++)
+			for (int _pos_y=0; _pos_y<=2; _pos_y++)
 			{
-				cells[pos_x][_pos_y].ChangeType(4);
+				if (_pos_y==0)
+				{
+					cells[pos_x][pos_y+_pos_y].ChangeType(4);
+				}
+				else
+				{
+					cells[pos_x][pos_y+_pos_y].ChangeType(10);
+				}
 			}
 		}
 	}
@@ -98,11 +112,11 @@ public class QuoridorTray
 		{
 			int verif0=cells[pos_x+curs][pos_y].GetType();
 			int verif1=cells[pos_x][pos_y+curs].GetType();
-			if (dir==0 && (verif0==3 || verif0==4 || verif0==5))
+			if (dir==0 && (verif0!=0))
 			{
 				return true;
 			}
-			else if (dir==1 && (verif1==3 || verif1==4 || verif1==5))
+			else if (dir==1 && (verif1!=0))
 			{
 				return true;
 			}
