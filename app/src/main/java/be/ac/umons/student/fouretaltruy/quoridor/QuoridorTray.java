@@ -109,17 +109,30 @@ public class QuoridorTray
 		}
 		return false;
 	}
-	/**
+	public int GetTypeIn_Cell(int pos_x, int pos_y)
+	{
+		return cells[pos_x][pos_y].GetType();
+	}
+	/*	*
          * Permet d'afficher le plateau
          * 
          */
 	public void show()
 	{
-		String TrayBoard="";
+		String TrayBoard="\n\n\n                     1 1 1 1 1 1 1 1 1 1\n   1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9\n";
 		for (int ligne=0; ligne<19;ligne++)
 		{
+			if (ligne+1>=10)
+			{
+				TrayBoard+=(ligne+1)+" ";
+			}
+			else
+			{
+				TrayBoard+=" "+(ligne+1)+" ";
+			}
 			for (int cols=0; cols<19; cols++)
 			{
+
 				int typeOfCell=cells[ligne][cols].GetType();
 				if (typeOfCell!=0)
 				{

@@ -48,6 +48,21 @@ public class QuoridorGame
             tray.ChangeType_inCell(pos_x,pos_y, 1);
         }
     }
+    public String GetNameOfPlayer(int num)
+    {
+        return players[num].GetName();
+    }
+    public int GameHasWinner()
+    {
+        for (int nb=0; nb<nbPlayers; nb++)
+        {
+            if (players[nb].AreYouTheWinner())
+            {
+                return nb;
+            }
+        }
+        return 3;
+    }
     /**
          * Permet à un joueur de faire une action dans le jeu
          * (soit ajouter une barrière, soit bouger son pion)
@@ -66,6 +81,9 @@ public class QuoridorGame
             case 1:
                 NewFence(num);
                 break;
+            case 2:
+                MovePlayer(num);
+                break;
         }
     }
     /**
@@ -79,10 +97,10 @@ public class QuoridorGame
         Scanner scan;
         System.out.println("Position x: ");
         scan= new Scanner (System.in);
-        int pos_x= scan.nextInt();
+        int pos_x= scan.nextInt()-1;
         System.out.println("Position y: ");
         scan= new Scanner (System.in);
-        int pos_y= scan.nextInt();
+        int pos_y= scan.nextInt()-1;
         System.out.println("Direction (v=0 , h=1): ");
         scan= new Scanner (System.in);
         int dir= scan.nextInt();
@@ -98,16 +116,22 @@ public class QuoridorGame
     }
     public boolean VerifFence(int pos_x, int pos_y, int dir)
     {
-        boolean verif=true;
-        if (pos_x<1 || pos_x>17 || pos_y<1 || pos_y>17)
+        boolean verif1=(pos_x%2==1 && (dir==1 || pos_y%2==1));
+        boolean verif2=(pos_x%2==0 && (dir==0 || pos_y%2==0));
+        if  (verif1 || verif2 || tray.VerifAlreadyFenceAndWall(pos_x, pos_y, dir))
         {
-            verif=false;
+            return false;
         }
-        else if ((pos_x%2==1 && (dir==1 || pos_y%2==1)) || tray.VerifAlreadyFenceAndWall(pos_x, pos_y, dir))
-        {
-            verif=false;
-        }
-        return verif;
+        return true;
+    }
+    public void MovePlayer(int num)
+    {
+        Scanner scan;
+        System.out.println("Ou voulez-vous aller?: ");
+        QuoridorMovePlayer move = new QuoridorMovePlayer(players[num], tray);
+        scan= new Scanner (System.in);
+        int choix1= scan.nextInt();
+        move.MoveIt(choix1);
     }
     public void showDisplay()
     {

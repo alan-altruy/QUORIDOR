@@ -5,7 +5,7 @@ public class QuoridorPlayers
 {
     private String name;
     private int NbUsedFences;
-    private int NumOfPlayer, pos_x, pos_y;
+    private int num, pos_x, pos_y;
     /**
          * Permet d'initialiser un joueur.
          * 
@@ -23,8 +23,20 @@ public class QuoridorPlayers
         name=_name;
         pos_x=_x;
         pos_y=_y;
-        NumOfPlayer=_num;
+        num=_num;
         NbUsedFences=0;
+    }
+    public boolean AreYouTheWinner()
+    {
+        if (num==0 && pos_x==17)
+        {
+            return true;
+        }
+        else if (num==1 && pos_x==1)
+        {
+            return true;
+        }
+        return false;
     }
     /**
          * Permet de faire bouger le joueur grace à une nouvelle position x, une nouvelle position y.
@@ -34,11 +46,10 @@ public class QuoridorPlayers
          * @param _y
          *            La nouvelle position y associée au joueur sur le plateau (nombre pair).
          */
-    public void MovePlayer (int _x, int _y)
+    public void NewPos (int _x, int _y)
     {
-        int new_x, new_y;
-        new_x = pos_x + _x;
-        new_y = pos_y + _y;
+        pos_x += _x;
+        pos_y += _y;
     }
     /**
          * Permet de retourner le nom du joueur.
@@ -59,5 +70,13 @@ public class QuoridorPlayers
     public int GetUsedFences()
     {
         return NbUsedFences;
+    }
+    public int GetPos_x()
+    {
+        return pos_x;
+    }
+    public int GetPos_y()
+    {
+        return pos_y;
     }
 }

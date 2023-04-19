@@ -7,14 +7,25 @@ public class QuoridorLoop
 	{
 		/**/
 		QuoridorGame game = new QuoridorGame();;
-		int loop=0;
+		boolean loop=true;
+		int winner;
 		int nbPlayers=game.getNbPlayers();
-		while (loop<nbPlayers)
+		while (loop)
 		{
 			game.showDisplay();
-			game.PlayerAction(loop);
-			game.showDisplay();
-			loop++;
+			for (int nb=0; nb<nbPlayers; nb++)
+			{
+				game.PlayerAction(nb);
+				game.showDisplay();
+				winner=game.GameHasWinner();
+				if (winner!=3)
+				{
+					System.out.println("Le gagnant est "+game.GetNameOfPlayer(winner));
+					loop=false;
+					nb=4;
+				}
+			}
+			
 		}
 	}
 }
