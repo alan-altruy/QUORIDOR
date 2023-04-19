@@ -10,12 +10,12 @@ import javax.imageio.ImageIO;
 public class QuoridorPicture implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    private QuoridorPanel Qpanel;
+    private QuoridorPanel panel;
     private JLabel image;
     private ImageIcon icone;
     public QuoridorPicture(QuoridorPanel _panel, String Url, double pos_x, double pos_y, double dimX, double dimY)
     {
-        Qpanel=_panel;
+        panel=_panel;
         icone = new ImageIcon(Url);
         icone = new ImageIcon(icone.getImage().getScaledInstance((int)dimX,(int)dimY, Image.SCALE_DEFAULT));
         image = new JLabel(icone);
@@ -23,11 +23,11 @@ public class QuoridorPicture implements Serializable
     }
     public void remove()
     {
-        Qpanel.panel.remove(image);
+        panel.remove(image);
     }
     public void set()
     {
-        Qpanel.panel.add(image);
+        panel.add(image);
     }
     public JLabel getImage()
     {

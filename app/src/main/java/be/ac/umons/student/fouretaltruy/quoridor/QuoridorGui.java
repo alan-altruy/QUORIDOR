@@ -5,56 +5,53 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.imageio.ImageIO;
-public class QuoridorGui implements Serializable
+public class QuoridorGui extends JFrame implements Serializable
 {
     private static final long serialVersionUID = 1L;
     public QuoridorGame game;
-    public JFrame windows;
-    private QuoridorPanel MainPanel, Panel2Players, PanelWinner, PanelMenu, test;
+    private QuoridorPanel panel;
     public QuoridorGui(QuoridorGame _game)
     {
         game=_game;
-        windows= new JFrame();
-        windows.setTitle("Quoridor - The Game");
-        windows.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        windows.setLocationRelativeTo(null);
-        windows.setExtendedState(windows.MAXIMIZED_BOTH);
-        windows.setAlwaysOnTop(true);
-        windows.setUndecorated(true);
+        this.setTitle("Quoridor - The Game");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+        this.setExtendedState(this.MAXIMIZED_BOTH);
+        this.setAlwaysOnTop(true);
+        this.setUndecorated(true);
     }
     public void StartScreen()
     {
-        MainPanel= new QuoridorPanel(this);
-        MainPanel.MainMenu();
-        showGui();
-    }
-    public void NewFrame()
-    {
-        test= new QuoridorPanel(this); 
-        test.TwoPlayers(0);
+        panel = new QuoridorPanel(this);
+        panel.MainMenu();
         showGui();
     }
     public void Gui2Players(int num)
     {
-        Panel2Players= new QuoridorPanel(this);  
-        Panel2Players.TwoPlayers(num);
+        panel = new QuoridorPanel(this);  
+        panel.TwoPlayers(num);
         showGui();
     }
     public void addMenu()
     {
-        PanelMenu= new QuoridorPanel(this);
-        PanelMenu.optionsGame();
+        panel = new QuoridorPanel(this);
+        panel.optionsGame();
         showGui();
     }
     public void GuiWinner(int num)
     {
-        PanelWinner= new QuoridorPanel(this);
-        PanelWinner.Winner(num);
+        panel = new QuoridorPanel(this);
+        panel.Winner(num);
         showGui();
     }
     public void showGui()
     {
-        windows.setVisible(true);
+        this.setVisible(true);
+        this.setAlwaysOnTop(true);
+    }
+    public void refresh()
+    {
+        this.setContentPane((JPanel)panel);
     }
     public void setNbPlayers (int newNb)
     {

@@ -12,13 +12,13 @@ public class QuoridorTray implements Serializable
 	public QuoridorTray()
 	{
 		cells= new QuoridorCell[19][19];
-		InitCells_Walls_Nothing();
+		initCellsAndWalls();
 	}
 	/**
          * Permet d'initialiser les cellules du plateau élémentaires (cellules vides et murs extérieurs).
          * 
          */
-	public void InitCells_Walls_Nothing()
+	public void initCellsAndWalls()
 	{
 		for (int x=0; x<19;x++)
 		{
@@ -31,109 +31,6 @@ public class QuoridorTray implements Serializable
 				else
 				{
 					cells[x][y]= new QuoridorCell(0);
-				}
-			}
-		}
-	}
-	/**
-         * Permet d'ajouter une barrière au plateau.
-         * 
-         * @param pos_x
-         *            La position x de l'endroit désiré pour positionner la barrière.
-         * @param pos_y
-         *            La position y de l'endroit désiré pour positionner la barrière.
-         * @param dir
-         *            La direction de la barrière désirée (0= vertical , 1= horizontal).
-         */
-	public void AddFence(int pos_x, int pos_y, int dir)
-	{
-		if (dir==0)
-		{
-			for (int _pos_x=0; _pos_x<=2; _pos_x++)
-			{
-				if (_pos_x==0)
-				{
-					cells[pos_x+_pos_x][pos_y].ChangeType(3);
-				}
-				else
-				{
-					cells[pos_x+_pos_x][pos_y].ChangeType(10);
-				}
-			}
-		}
-		else if (dir==1)
-		{
-			for (int _pos_y=0; _pos_y<=2; _pos_y++)
-			{
-				if (_pos_y==0)
-				{
-					cells[pos_x][pos_y+_pos_y].ChangeType(4);
-				}
-				else
-				{
-					cells[pos_x][pos_y+_pos_y].ChangeType(10);
-				}
-			}
-		}
-	}
-	public void AddSpFence(int pos_x, int pos_y, int dir)
-	{
-		if (dir==0)
-		{
-			for (int _pos_x=0; _pos_x<=2; _pos_x++)
-			{
-				if (_pos_x==0)
-				{
-					cells[pos_x+_pos_x][pos_y].ChangeType(20);
-				}
-				else
-				{
-					cells[pos_x+_pos_x][pos_y].ChangeType(20);
-				}
-			}
-		}
-		else if (dir==1)
-		{
-			for (int _pos_y=0; _pos_y<=2; _pos_y++)
-			{
-				if (_pos_y==0)
-				{
-					cells[pos_x][pos_y+_pos_y].ChangeType(20);
-				}
-				else
-				{
-					cells[pos_x][pos_y+_pos_y].ChangeType(20);
-				}
-			}
-		}
-	}
-	public void RemFence(int pos_x, int pos_y, int dir)
-	{
-		if (dir==0)
-		{
-			for (int _pos_x=0; _pos_x<=2; _pos_x++)
-			{
-				if (_pos_x==0)
-				{
-					cells[pos_x+_pos_x][pos_y].ChangeType(0);
-				}
-				else
-				{
-					cells[pos_x+_pos_x][pos_y].ChangeType(0);
-				}
-			}
-		}
-		else if (dir==1)
-		{
-			for (int _pos_y=0; _pos_y<=2; _pos_y++)
-			{
-				if (_pos_y==0)
-				{
-					cells[pos_x][pos_y+_pos_y].ChangeType(0);
-				}
-				else
-				{
-					cells[pos_x][pos_y+_pos_y].ChangeType(0);
 				}
 			}
 		}
@@ -167,7 +64,7 @@ public class QuoridorTray implements Serializable
 		 * 			  La méthode va retourner true si une barrière ou un mur se trouve déjà à cet emplacement
 		 *            et retournera false dans le cas contraire.
          */
-	public boolean VerifAlreadyFenceAndWall(int pos_x, int pos_y, int dir)
+	public boolean verifAlreadyFenceAndWall(int pos_x, int pos_y, int dir)
 	{
 		for (int curs=0; curs<=2; curs++)
 		{

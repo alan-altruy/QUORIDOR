@@ -22,7 +22,6 @@ public class QuoridorGame implements Serializable
 		*  Ajouter le plateau (QuoridorTray au jeu)
 		* 
         */
-    public boolean closeGame=false;
     public boolean newGame=false;
     public boolean loaded=false;
     public QuoridorTray tray;
@@ -37,6 +36,7 @@ public class QuoridorGame implements Serializable
 		* 
 		*/
     public QuoridorPlayers[] players;
+    public QuoridorFence fence;
     /**
          * Permet d'initialiser le jeu:
          * 
@@ -46,6 +46,7 @@ public class QuoridorGame implements Serializable
     public void showStartScreen()
     {
         tray = new QuoridorTray();
+        fence = new QuoridorFence(this);
         gui.StartScreen();
     }
     public void loadSave()
@@ -56,6 +57,7 @@ public class QuoridorGame implements Serializable
             nbPlayers=gamesave.nbPlayers;
             players=gamesave.players;
             tray=gamesave.tray;
+            fence= new QuoridorFence(this);
             nbPlayers=gamesave.nbPlayers;
             playerWhoIsPlaying=gamesave.playerWhoIsPlaying;
             objectIn.close();
@@ -72,7 +74,7 @@ public class QuoridorGame implements Serializable
             objectIn.close();
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("No save found");
         }
         return false;
     }
@@ -123,59 +125,9 @@ public class QuoridorGame implements Serializable
         playerWhoIsPlaying=num;
         gui.Gui2Players(num);
     }
-    public void NewTest()
-    {
-        gui.NewFrame();
-    }
-    /**
-         * Permet d'ajouter une barrière mais avant tout de vérifier si c'est possible d'en ajouter une.
-         * 
-         * @param num
-         *            Le numero associé au joueur.
-         */
-    public void NewFence(int pos_x,int pos_y,int dir)
-    {
-        tray.AddFence(pos_x, pos_y, dir);
-        QuoridorPathFind pathFind = new QuoridorPathFind(this, pos_x, pos_y, dir);
-        boolean verif1=pathFind.verif();
-        boolean verif2=VerifFence(pos_x,pos_y,dir);
-        if(verif1 && verif2)
-        {
-            if (players[playerWhoIsPlaying].GetUsedFences()<10)
-            {
-                players[playerWhoIsPlaying].setUsedFences();
-                
-                wait=false;
-            }
-        }
-        else
-        {
-            tray.RemFence(pos_x, pos_y, dir);
-        }
-    }
-    public boolean VerifFence(int pos_x, int pos_y, int dir)
-    {
-        boolean verif1=(pos_x%2==1 && (dir==1 || pos_y%2==1));
-        boolean verif2=(pos_x%2==0 && (dir==0 || pos_y%2==0));
-        boolean verif3=tray.VerifAlreadyFenceAndWall(pos_x, pos_y, dir);
-        if  (verif1 || verif2 || verif3)
-        {
-            return false;
-        }
-        return true;
-    }
-    public void MovePlayer(int num)
-    {
-        gui.Gui2Players(num);
-    }
     public void showWinner(int num)
     {
         gui.GuiWinner(num);
-        while(wait)
-        {
-            System.out.println("End Of Game");
-        }
-        wait=true;
     }
     public String GetNameOfPlayer(int num)
     {
@@ -197,13 +149,6 @@ public class QuoridorGame implements Serializable
     {
         nbPlayers=newNb;
         wait=false;
-    }
-    public void close()
-    {
-        wait=false;
-        closeGame=true;
-        gui.windows.setVisible(false);
-        gui.windows.dispose();
     }
     public void setWait(boolean _wait)
     {

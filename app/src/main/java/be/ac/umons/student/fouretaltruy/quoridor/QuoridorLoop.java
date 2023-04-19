@@ -2,63 +2,67 @@ package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET 
 import java.io.*;
 public class QuoridorLoop
 {
-	public static void main(String[] args)
+	private boolean loopGame=true, loopPlayer=true;
+	private int winner, nbPlayers=2, nb=0;
+	private QuoridorGame game = new QuoridorGame();
+	public int start()
 	{
-		/**/
-		QuoridorGame game;
-		boolean loop=true, loopPlayer=true;
-		int winner;
-		int nbPlayers=2;
-		game = new QuoridorGame();
-		while (loop)
+		while (loopGame)
 		{
 			game.newGame=false;
 			loopPlayer=true;
 			game.showStartScreen();
-			while(game.wait)
+			if (!waitAction())
 			{
-				System.out.println("Waiting Action");
-			}
-			game.wait=true;
-			if (game.closeGame)
-			{
-				loop=false;
-				loopPlayer=false;
+				return 0;
 			}
 			while (loopPlayer)
 			{
-				for (int nb=0; nb<nbPlayers; nb++)
+				for (nb=0; nb<nbPlayers; nb++)
 				{
-					if (game.newGame)
+					if (game.loaded && game.playerWhoIsPlaying==1)
 					{
-						loopPlayer=false;
-						nb=4;
+						nb=1;
 					}
-					else
+					game.loaded=false;
+					game.PlayerAction(nb);
+					if (!waitAction())
 					{
-						if (game.loaded && game.playerWhoIsPlaying==1)
+						return 0;
+					}
+					winner=game.GameHasWinner();
+					if (winner!=3)
+					{
+						game.showWinner(winner);
+						if (!waitAction())
 						{
-							nb=1;
+							return 0;
 						}
-						if (game.loaded)
-						{
-							game.loaded=false;
-						}
-						game.PlayerAction(nb);
-						while(game.wait)
-        				{
-            				System.out.println("Waiting Action");
-        				}
-        				game.wait=true;
-						winner=game.GameHasWinner();
-						if (winner!=3)
-						{
-							game.showWinner(winner);
-							nb=4;
-						}
+						nb=4;
 					}
 				}
 			}
 		}
+		return 0;
+	}
+	public boolean waitAction()
+	{
+		while(game.wait)
+		{
+			game.gui.showGui();
+			if (game.newGame)
+			{
+				loopPlayer=false;
+				game.wait=false;
+				nb=4;
+			}
+		}
+		game.wait=true;
+		return true;
+	}
+	public static void main(String[] args)
+	{
+		QuoridorLoop loop= new QuoridorLoop();
+		loop.start();
 	}
 }

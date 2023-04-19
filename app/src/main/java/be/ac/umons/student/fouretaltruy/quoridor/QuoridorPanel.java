@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.awt.Font;
 import java.io.*;
 
-public class QuoridorPanel implements Serializable
+public class QuoridorPanel extends JPanel implements Serializable
 {
     private static final long serialVersionUID = 1L;
     private Dimension dimScreen= Toolkit.getDefaultToolkit().getScreenSize();
@@ -15,23 +15,19 @@ public class QuoridorPanel implements Serializable
     private String a="src/main/resources/",b=".png";
     private String[] Theme1={a+"pionrouge"+b,a+"pionnoir"+b,a+"tray"+b,a+"fenceV"+b,a+"fenceH"+b,a+"valid"+b,a+"title"+b, a+"titlevalid"+b};
     private Font police;
-    public JFrame windows;
     public JPanel panel, panelWait;
     public QuoridorGame game;
     private QuoridorButton but;
     private QuoridorPicture pic,pic2, picOfTray, bg;
     private QuoridorGui gui;
     private QuoridorCell[][] cells;
-    private boolean[][][]posAvailable= new boolean[19][19][12];
     private QuoridorMovePlayer movePlayer;
     public QuoridorPanel(QuoridorGui _gui)
     {
         gui=_gui;
-        windows=gui.windows;
         game=gui.game;
         cells=game.tray.cells;
-        panel=new JPanel();
-        panel.setLayout(null);
+        this.setLayout(null);
         dimXScreen=dimScreen.getWidth();
         dimYScreen=dimScreen.getHeight();
         dimXTray=(dimYScreen-0.2*dimYScreen);
@@ -112,7 +108,7 @@ public class QuoridorPanel implements Serializable
         bg=new QuoridorPicture(this, a+"background"+b, 0,0, dimXScreen, dimYScreen);
         picOfTray.set();
         bg.set();
-        windows.setContentPane(panel);
+        gui.refresh();
     }
     public void optionsGame()
     {
@@ -167,12 +163,9 @@ public class QuoridorPanel implements Serializable
     {
         if (choice==0)
         {
-            game.close();
+            System.exit(0);
         }
-        else if (choice==1)
-        {
-            
-        }
+        else if (choice==1){}
         else if (choice==2)
         {
             game.Init2Players();
@@ -194,7 +187,7 @@ public class QuoridorPanel implements Serializable
                 ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
                 objectOut.writeObject(game);
                 objectOut.close();
-                System.out.println("The Object  was succesfully written to a file");
+                System.out.println("The Game has been saved!");
                 game.newGame=true;
                 game.wait=false;
             }
@@ -206,7 +199,6 @@ public class QuoridorPanel implements Serializable
         else if (choice==8)
         {
             game.newGame=true;
-            game.wait=false;
         }
         else if (choice==9)
         {
@@ -221,6 +213,7 @@ public class QuoridorPanel implements Serializable
     public void canMove(int choice)
     {
         double pos_x,pos_y;
+        boolean[][][]posAvailable;
         posAvailable=movePlayer.setPosAvailable();  
         for (int ligne=0; ligne<19;ligne++)
         {
@@ -242,10 +235,6 @@ public class QuoridorPanel implements Serializable
                     
         }
         refresh();
-    }
-    public void addFenceInGame(int pos_x, int pos_y, int dir)
-    {
-        game.NewFence(pos_x,pos_y,dir);
     }
     public void posObjects(int numPlayer)
     {
@@ -325,7 +314,7 @@ public class QuoridorPanel implements Serializable
             }
         }
     }
-    public void movePlayer(int numObj)
+    public void setMovePlayer(int numObj)
     {
         movePlayer.MoveIt(numObj);
         game.setWait(false);
@@ -336,12 +325,12 @@ public class QuoridorPanel implements Serializable
         bg.remove();
         picOfTray.set();
         bg.set();
-        windows.setContentPane(panel);
+        gui.refresh();
     }
     public void refreshBg()
     {
         bg.remove();
         bg.set();
-        windows.setContentPane(panel);
+        gui.refresh();
     }
 }

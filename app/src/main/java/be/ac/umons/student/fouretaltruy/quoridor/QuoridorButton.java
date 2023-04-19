@@ -12,7 +12,7 @@ public class QuoridorButton implements Serializable
     private static final long serialVersionUID = 1L;
     private JButton button;
     private QuoridorPicture pic,pic2;
-    private QuoridorPanel Qpanel;
+    private QuoridorPanel panel;
     public int cols, ligne, dir, numObj;
     private double pos_x,pos_y,width,height;
     public QuoridorButton(QuoridorPanel _panel, String name, Font police, int num, double _pos_x, double _pos_y, double _width, double _height)
@@ -21,7 +21,7 @@ public class QuoridorButton implements Serializable
         pos_y=_pos_y;
         width=_width;
         height=_height;
-        Qpanel=_panel;
+        panel=_panel;
         numObj=num;
         button=new JButton(name);
         button.setBounds((int)pos_x, (int)pos_y, (int)width, (int)height);
@@ -60,17 +60,20 @@ public class QuoridorButton implements Serializable
             {
                 if (numObj<20)
                 {
-                    Qpanel.setAction(numObj);
+                    panel.setAction(numObj);
+                    if (numObj==7)
+                    {
+                        removeButton();
+                    }
                 }
                 else if (numObj==100)
                 {
-                    Qpanel.addFenceInGame(cols,ligne,dir);
+                    panel.game.fence.newFence(cols,ligne,dir);
                 }
                 else
                 {
-                    Qpanel.movePlayer(numObj-20);
+                    panel.setMovePlayer(numObj-20);
                 }
-                removeButton();
             }});
     }
     public void actionButton()
@@ -85,18 +88,20 @@ public class QuoridorButton implements Serializable
                 {
                     pic.set(); 
                     pic2.remove();
-                    Qpanel.refreshBg();
+                    panel.refreshBg();
                 }
                 else if (numObj==100 || numObj==6)
                 {
-                    if (numObj==6 ||(numObj==100 && Qpanel.game.VerifFence(cols,ligne, dir) && Qpanel.game.NbFencesPlayer(Qpanel.PlayerWhoIsPlaying)<10))
+                    boolean verif1=panel.game.fence.canSetFence(cols,ligne, dir);
+                    boolean verif2=panel.game.NbFencesPlayer(panel.PlayerWhoIsPlaying)<10;
+                    if (numObj==6 ||(numObj==100 && verif1 && verif2))
                     {
                         if (numObj==6)
                         {
                             pic2.remove();
                         }
                         pic.set();
-                        Qpanel.refresh();
+                        panel.refresh();
                     }
                 }
             }
@@ -106,7 +111,7 @@ public class QuoridorButton implements Serializable
                 if ((numObj>=0 && numObj<=2) || (numObj>=7 & numObj<=10))
                 {
                     pic2.set();
-                    Qpanel.refreshBg();
+                    panel.refreshBg();
                 }
                 else if (numObj==100 || numObj==6)
                 {
@@ -114,17 +119,17 @@ public class QuoridorButton implements Serializable
                         {
                             pic2.set();
                         }
-                    Qpanel.refresh();
+                    panel.refresh();
                 }
                 
             }});
     }
     public void setButton()
     {
-        Qpanel.panel.add(button);
+        panel.add(button);
     }
     public void removeButton()
     {
-        Qpanel.panel.remove(button);
+        panel.remove(button);
     }
 }

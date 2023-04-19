@@ -206,51 +206,51 @@ public class QuoridorMovePlayer implements Serializable
                     }
                 }
             }
-            if (choix[0])
+            if (choix[0] && pos_x-2<19 && pos_x-2>0 && pos_y<19 && pos_y>0)
             {
                 posAvailable[pos_x-2][pos_y][0]=true;
             }
-            if (choix[1])
+            if (choix[1] && pos_x-2<19 && pos_x-2>0 && pos_y+2<19 && pos_y+2>0)
             {
                 posAvailable[pos_x-2][pos_y+2][1]=true;
             }
-            if (choix[2])
+            if (choix[2] && pos_x<19 && pos_x>0 && pos_y+2<19 && pos_y+2>0)
             {
                 posAvailable[pos_x][pos_y+2][2]=true;
             }
-            if (choix[3])
+            if (choix[3] && pos_x+2<19 && pos_x+2>0 && pos_y+2<19 && pos_y+2>0)
             {
                 posAvailable[pos_x+2][pos_y+2][3]=true;
             }
-            if (choix[4])
+            if (choix[4] && pos_x+2<19 && pos_x+2>0 && pos_y<19 && pos_y>0)
             {
                 posAvailable[pos_x+2][pos_y][4]=true;
             }
-            if (choix[5])
+            if (choix[5] && pos_x+2<19 && pos_x+2>0 && pos_y-2<19 && pos_y-2>0)
             {
                 posAvailable[pos_x+2][pos_y-2][5]=true;
             }
-            if (choix[6])
+            if (choix[6] && pos_x<19 && pos_x>0 && pos_y-2<19 && pos_y-2>0)
             {
                 posAvailable[pos_x][pos_y-2][6]=true;
             }
-            if (choix[7])
+            if (choix[7] && pos_x-2<19 && pos_x-2>0 && pos_y-2<19 && pos_y-2>0)
             {
                 posAvailable[pos_x-2][pos_y-2][7]=true;
             }
-            if (choix[8])
+            if (choix[8] && pos_x-4<19 && pos_x-4>0 && pos_y<19 && pos_y>0)
             {
                 posAvailable[pos_x-4][pos_y][8]=true;
             }
-            if (choix[9])
+            if (choix[9] && pos_x<19 && pos_x>0 && pos_y+4<19 && pos_y+4>0)
             {
                 posAvailable[pos_x][pos_y+4][9]=true;
             }
-            if (choix[10])
+            if (choix[10] && pos_x+4<19 && pos_x+4>0 && pos_y<19 && pos_y>0)
             {
                 posAvailable[pos_x+4][pos_y][10]=true;
             }
-            if (choix[11])
+            if (choix[11] && pos_x<19 && pos_x>0 && pos_y-4<19 && pos_y-4>0)
             {
                 posAvailable[pos_x][pos_y-4][11]=true;
             }
