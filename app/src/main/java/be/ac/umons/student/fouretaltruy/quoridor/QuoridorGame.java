@@ -34,7 +34,7 @@ public class QuoridorGame implements Serializable
     /**
 		*  Contient les joueurs du jeu
 		* 
-		*/
+        */
     private QuoridorPlayers[] players;
     private QuoridorFence fence;
     /**
@@ -209,5 +209,9 @@ public class QuoridorGame implements Serializable
     public QuoridorGui getGui()
     {
         return gui;
+    }
+    public void setSound(String name)
+    {
+        //sound = new QuoridorSound(name);
     }
 }

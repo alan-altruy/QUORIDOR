@@ -21,7 +21,7 @@ public class QuoridorButton extends JButton implements Serializable
         panel=_panel;
         numObj=num;
         setBounds((int)pos_x, (int)pos_y, (int)width, (int)height);
-        actionClick();
+        //actionClick();
     }
     public void setPlayerButton()
     {
@@ -29,6 +29,7 @@ public class QuoridorButton extends JButton implements Serializable
         setBackground(new Color(0,true));
         setBorderPainted(false);
         setContentAreaFilled(false);
+        actionButton();
         set();
     }
     public void setFenceButton(int _pos_x, int _pos_y, int _dir, QuoridorPicture _pic)
@@ -45,37 +46,37 @@ public class QuoridorButton extends JButton implements Serializable
         pic=_pic;
         pic2=_pic2;
         pic2.set();
-        actionButton();
         setPlayerButton();
-    }
-    public void actionClick ()
-    {
-        addActionListener( new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)  
-            {
-                if (numObj<20)
-                {
-                    remove();
-                    panel.setAction(numObj);
-                }
-                else if (numObj==100)
-                {
-                    panel.getGame().getFence().newFence(cols,ligne,dir);
-                }
-                else
-                {
-                    remove();
-                    panel.setMovePlayer(numObj-20);
-                }
-            }
-        });
     }
     public void actionButton()
     {
         addMouseListener(new MouseListener()
         {
-            public void mouseClicked(MouseEvent e){}
+            public void mouseClicked(MouseEvent e)
+            {
+                if (numObj<20)
+                {
+                    remove();
+                    panel.getGame().setSound("button");
+                    panel.setAction(numObj);
+                }
+                else if (numObj==100)
+                {
+                    if (panel.getGame().getFence().newFence(cols,ligne,dir))
+                    {
+                        panel.getGame().setSound("fence");
+                        remove();
+                        panel.getGame().setWait(false);
+                    } 
+                }
+                else
+                {
+                    remove();
+                    panel.getGame().setSound(panel.getGame().getNameOfPlayer(panel.getGame().getPlayerWhoIsPlaying()));
+                    panel.setMovePlayer(numObj-20);
+                }
+                
+            }
             public void mousePressed(MouseEvent e){}
             public void mouseReleased(MouseEvent e){}
             public void mouseEntered(MouseEvent e)
@@ -103,14 +104,15 @@ public class QuoridorButton extends JButton implements Serializable
             }
             public void mouseExited(MouseEvent e)
             {
-                pic.remove();
                 if ((numObj>=0 && numObj<=2) || (numObj>=7 & numObj<=10))
                 {
+                    pic.remove();
                     pic2.set();
                     panel.refreshBg();
                 }
                 else if (numObj==100 || numObj==6)
                 {
+                    pic.remove();
                     if (numObj==6)
                         {
                             pic2.set();

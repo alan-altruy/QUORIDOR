@@ -315,4 +315,8 @@ public class QuoridorPanel extends JPanel implements Serializable
     {
         return game;
     }
+    public QuoridorGui getGui()
+    {
+        return gui;
+    }
 }

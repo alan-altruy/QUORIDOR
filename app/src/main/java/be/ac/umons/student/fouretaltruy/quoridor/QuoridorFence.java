@@ -11,7 +11,7 @@ public class QuoridorFence implements Serializable
         game=_game;
         tray=game.getTray();
     }
-    public void newFence(int pos_x,int pos_y,int dir)
+    public boolean newFence(int pos_x,int pos_y,int dir)
     {
         if(canSetFence(pos_x,pos_y,dir))
         {
@@ -24,9 +24,10 @@ public class QuoridorFence implements Serializable
             {
                 game.setUsedFencesPlayer();
                 add(pos_x, pos_y, dir);
-                game.setWait(false);
+                return true;
             }
         }
+        return false;
     }
     public boolean canSetFence(int pos_x, int pos_y, int dir)
     {
