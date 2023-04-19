@@ -3,8 +3,8 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 // ALTRUY ALAN - JASON FOURET //
 class QuoridorException extends Exception
 {
-    public void Exception(String message)
+    public void QuoridorException()
     {
-        System.out.println(message);
+        System.out.println("QuoridorException");
     }
 }

@@ -1,4 +1,5 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
+
 // ALTRUY ALAN - JASON FOURET //
 public class QuoridorVerifFence
 {

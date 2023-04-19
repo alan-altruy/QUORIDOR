@@ -61,6 +61,10 @@ public class QuoridorPlayers
     {
         return name;
     }
+    public int GetNum()
+    {
+        return num;
+    }
     /**
          * Permet de retourner le nombre de barrières utilisées par le joueur.
          * 

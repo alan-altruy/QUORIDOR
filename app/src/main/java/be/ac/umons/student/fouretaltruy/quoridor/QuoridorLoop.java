@@ -12,11 +12,11 @@ public class QuoridorLoop
 		int nbPlayers=game.getNbPlayers();
 		while (loop)
 		{
-			game.showDisplay();
 			for (int nb=0; nb<nbPlayers; nb++)
 			{
+				game.showUI();
+				System.out.println("here");
 				game.PlayerAction(nb);
-				game.showDisplay();
 				winner=game.GameHasWinner();
 				if (winner!=3)
 				{

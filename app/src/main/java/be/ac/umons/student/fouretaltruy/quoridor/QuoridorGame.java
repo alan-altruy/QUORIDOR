@@ -2,10 +2,11 @@ package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET 
 import java.util.Scanner;
 public class QuoridorGame
 {
-    private int nbPlayers, nbFences;
-    private QuoridorTray tray;
-    private QuoridorDisplay display;
+    private int nbPlayers=0, nbFences=0;
+    private int boucle;
+    public QuoridorTray tray;
     private QuoridorPlayers[] players;
+    private QuoridorGui gui;
     /**
          * Permet d'initialiser le jeu:
          * 
@@ -16,11 +17,15 @@ public class QuoridorGame
     public QuoridorGame()
     {
         tray = new QuoridorTray();
-        display = new QuoridorDisplay(tray);
+        gui = new QuoridorGui(this);
         nbFences=0;
-        System.out.println("Nb de joueurs: ");
-        Scanner scanNbPlayers = new Scanner(System.in);
-        nbPlayers=scanNbPlayers.nextInt();
+        gui.MainMenu(this);
+        while (nbPlayers<=0)
+        {
+            nbPlayers=gui.getNbPlayers();
+            System.out.println("");
+        }
+        System.out.println(nbPlayers);
         Init2Players();
     }
     /**
@@ -45,7 +50,7 @@ public class QuoridorGame
                 pos_x=17;
             }
             players[num]= new QuoridorPlayers(num, name, pos_x, pos_y);
-            tray.ChangeType_inCell(pos_x,pos_y, 1);
+            tray.ChangeType_inCell(pos_x,pos_y, num+1);
         }
     }
     public String GetNameOfPlayer(int num)
@@ -133,10 +138,6 @@ public class QuoridorGame
         int choix1= scan.nextInt();
         move.MoveIt(choix1);
     }
-    public void showDisplay()
-    {
-        display.showDisplay(tray);
-    }
     public int getNbPlayers()
     {
 		return nbPlayers;
@@ -144,5 +145,9 @@ public class QuoridorGame
     public int getNbFences()
     {
 		return nbFences;
-	}
+    }
+    public void showUI()
+    {
+        gui.Gui2Players();
+    }
 }

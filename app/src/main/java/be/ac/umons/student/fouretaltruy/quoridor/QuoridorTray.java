@@ -4,7 +4,7 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 public class QuoridorTray
 {
 	private final String[]chars = {"●","|","─","■"};
-	private QuoridorCell[][] cells;
+	public QuoridorCell[][] cells;
 	/**
          * Permet d'initialiser le plateau du jeu.
          * 
@@ -27,7 +27,7 @@ public class QuoridorTray
 			{
 				if (x==0 || x==18 || y==0 || y==18)
 				{
-					cells[x][y]= new QuoridorCell(4);
+					cells[x][y]= new QuoridorCell(5);
 				}
 				else
 				{
@@ -52,14 +52,14 @@ public class QuoridorTray
 		{
 			for (int _pos_x=pos_x; _pos_x<=pos_x+2; _pos_x++)
 			{
-				cells[_pos_x][pos_y].ChangeType(2);
+				cells[_pos_x][pos_y].ChangeType(3);
 			}
 		}
 		else if (dir==1)
 		{
 			for (int _pos_y=pos_y; _pos_y<=pos_y+2; _pos_y++)
 			{
-				cells[pos_x][_pos_y].ChangeType(3);
+				cells[pos_x][_pos_y].ChangeType(4);
 			}
 		}
 	}
@@ -98,11 +98,11 @@ public class QuoridorTray
 		{
 			int verif0=cells[pos_x+curs][pos_y].GetType();
 			int verif1=cells[pos_x][pos_y+curs].GetType();
-			if (dir==0 && (verif0==2 || verif0==3 || verif0==4))
+			if (dir==0 && (verif0==3 || verif0==4 || verif0==5))
 			{
 				return true;
 			}
-			else if (dir==1 && (verif1==2 || verif1==3 || verif1==4))
+			else if (dir==1 && (verif1==3 || verif1==4 || verif1==5))
 			{
 				return true;
 			}
@@ -119,20 +119,11 @@ public class QuoridorTray
          */
 	public void show()
 	{
-		String TrayBoard="\n\n\n                     1 1 1 1 1 1 1 1 1 1\n   1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9\n";
+		String TrayBoard="";
 		for (int ligne=0; ligne<19;ligne++)
 		{
-			if (ligne+1>=10)
-			{
-				TrayBoard+=(ligne+1)+" ";
-			}
-			else
-			{
-				TrayBoard+=" "+(ligne+1)+" ";
-			}
 			for (int cols=0; cols<19; cols++)
 			{
-
 				int typeOfCell=cells[ligne][cols].GetType();
 				if (typeOfCell!=0)
 				{

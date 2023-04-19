@@ -60,7 +60,7 @@ public class QuoridorMovePlayer
         }
         player.NewPos(x,y);
         tray.ChangeType_inCell(pos_x, pos_y, 0);
-        tray.ChangeType_inCell(pos_x+x, pos_y+y, 1);
+        tray.ChangeType_inCell(pos_x+x, pos_y+y, player.GetNum()+1);
     }
     public void YourChoice()
     {

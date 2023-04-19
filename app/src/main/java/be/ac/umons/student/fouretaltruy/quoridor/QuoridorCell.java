@@ -9,11 +9,11 @@ public class QuoridorCell
          * 
          * @param _type
          *            Le type d'objet se trouvant dans la cellule:
-         *              si <type>=0 --> rien ne se trouve dans cette cellule
-         *              si <type>=1 --> un joueur(<player>) se trouve dans cette cellule
-         *              si <type>=2 --> une barrière verticale(fence) se trouve dans cette cellule
-         *              si <type>=3 --> une barrière horizontale(fence) se trouve dans cette cellule
-         *              si <type>=4 --> un mur(wall) se trouve dans cette cellule
+         *              si <type>=0   --> rien ne se trouve dans cette cellule
+         *              si <type>=1-2 --> un joueur(<player>) se trouve dans cette cellule
+         *              si <type>=3   --> une barrière verticale(fence) se trouve dans cette cellule
+         *              si <type>=4   --> une barrière horizontale(fence) se trouve dans cette cellule
+         *              si <type>=5   --> un mur(wall) se trouve dans cette cellule
          */
     public QuoridorCell(int _type)
     {
