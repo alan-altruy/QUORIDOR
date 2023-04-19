@@ -1,0 +1,32 @@
+plugins {
+    id 'java' // Utilise le plugin Java
+    id 'application' // On développe une application
+}
+
+compileJava.options.encoding = "utf-8"
+compileTestJava.options.encoding = "utf-8"
+repositories {
+    // (serveur jcenter.bintray.com)
+    mavenCentral()
+}
+
+run {
+    standardInput = System.in
+}
+
+test {
+    // Il faut utiliser JUnit pour les tests
+    useJUnitPlatform()
+}
+
+dependencies {
+    // Use JUnit Jupiter API for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+}
+
+application {
+    // Classe principale à exécuter
+    mainClass = 'be.ac.umons.student.fouretaltruy.quoridor.QuoridorLoop'
+}
