@@ -1,5 +1,6 @@
-package be.ac.umons.student.fouretaltruy.quoridor;// ALTRUY ALAN - JASON FOURET //  Execution du programme principal, fichier exec, racine.
-import java.io.*;
+package be.ac.umons.student.fouretaltruy.quoridor;
+
+// ALTRUY ALAN - JASON FOURET //  Execution du programme principal, fichier exec, racine.
 public class QuoridorLoop
 {
 	private boolean loopGame=true, loopPlayer=true;
@@ -49,12 +50,16 @@ public class QuoridorLoop
 	{
 		while(game.getWait())
 		{
-			game.getGui().showGui();
+			
 			if (game.getNewGame())
 			{
 				loopPlayer=false;
 				game.setWait(false);
 				nb=4;
+			}
+			else
+			{
+				game.getGui().showGui2();
 			}
 		}
 		game.setWait(true);

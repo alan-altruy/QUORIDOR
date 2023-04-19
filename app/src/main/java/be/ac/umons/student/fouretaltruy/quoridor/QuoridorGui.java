@@ -1,11 +1,7 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.imageio.ImageIO;
-public class QuoridorGui extends JFrame implements Serializable
+public class QuoridorGui extends JFrame
 {
     private static final long serialVersionUID = 1L;
     private QuoridorGame game;
@@ -47,6 +43,10 @@ public class QuoridorGui extends JFrame implements Serializable
     public void showGui()
     {
         this.setVisible(true);
+        this.setAlwaysOnTop(true);
+    }
+    public void showGui2()
+    {
         this.setAlwaysOnTop(true);
     }
     public void refresh()

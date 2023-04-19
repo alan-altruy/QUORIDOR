@@ -3,9 +3,8 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 
-public class QuoridorButton extends JButton implements Serializable
+public class QuoridorButton extends JButton
 {
     private static final long serialVersionUID = 1L;
     private QuoridorPicture pic,pic2;

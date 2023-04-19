@@ -2,10 +2,8 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
 
-public class QuoridorPanel extends JPanel implements Serializable
+public class QuoridorPanel extends JPanel
 {
     private static final long serialVersionUID = 1L;
     private Dimension dimScreen= Toolkit.getDefaultToolkit().getScreenSize();

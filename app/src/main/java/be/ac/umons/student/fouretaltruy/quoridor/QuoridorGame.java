@@ -212,6 +212,6 @@ public class QuoridorGame implements Serializable
     }
     public void setSound(String name)
     {
-        //sound = new QuoridorSound(name);
+        new QuoridorSound(name);
     }
 }
