@@ -3,19 +3,16 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.awt.Font;
 import java.io.*;
 
-public class QuoridorButton implements Serializable
+public class QuoridorButton extends JButton implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    private JButton button;
     private QuoridorPicture pic,pic2;
     private QuoridorPanel panel;
-    public int cols, ligne, dir, numObj;
+    private int cols, ligne, dir, numObj;
     private double pos_x,pos_y,width,height;
-    public QuoridorButton(QuoridorPanel _panel, String name, Font police, int num, double _pos_x, double _pos_y, double _width, double _height)
+    public QuoridorButton(QuoridorPanel _panel, int num, double _pos_x, double _pos_y, double _width, double _height)
     {
         pos_x=_pos_x;
         pos_y=_pos_y;
@@ -23,18 +20,16 @@ public class QuoridorButton implements Serializable
         height=_height;
         panel=_panel;
         numObj=num;
-        button=new JButton(name);
-        button.setBounds((int)pos_x, (int)pos_y, (int)width, (int)height);
-        button.setFont(police);
+        setBounds((int)pos_x, (int)pos_y, (int)width, (int)height);
         actionClick();
     }
     public void setPlayerButton()
     {
-        button.setOpaque(false);
-        button.setBackground(new Color(0,true));
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
-        setButton();
+        setOpaque(false);
+        setBackground(new Color(0,true));
+        setBorderPainted(false);
+        setContentAreaFilled(false);
+        set();
     }
     public void setFenceButton(int _pos_x, int _pos_y, int _dir, QuoridorPicture _pic)
     {
@@ -55,30 +50,31 @@ public class QuoridorButton implements Serializable
     }
     public void actionClick ()
     {
-        button.addActionListener( new ActionListener() {
+        addActionListener( new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)  
             {
                 if (numObj<20)
                 {
+                    remove();
                     panel.setAction(numObj);
-                    if (numObj==7)
-                    {
-                        removeButton();
-                    }
                 }
                 else if (numObj==100)
                 {
-                    panel.game.fence.newFence(cols,ligne,dir);
+                    panel.getGame().getFence().newFence(cols,ligne,dir);
                 }
                 else
                 {
+                    remove();
                     panel.setMovePlayer(numObj-20);
                 }
-            }});
+            }
+        });
     }
     public void actionButton()
     {
-        button.addMouseListener(new MouseListener() {
+        addMouseListener(new MouseListener()
+        {
             public void mouseClicked(MouseEvent e){}
             public void mousePressed(MouseEvent e){}
             public void mouseReleased(MouseEvent e){}
@@ -92,8 +88,8 @@ public class QuoridorButton implements Serializable
                 }
                 else if (numObj==100 || numObj==6)
                 {
-                    boolean verif1=panel.game.fence.canSetFence(cols,ligne, dir);
-                    boolean verif2=panel.game.NbFencesPlayer(panel.PlayerWhoIsPlaying)<10;
+                    boolean verif1=panel.getGame().getFence().canSetFence(cols,ligne, dir);
+                    boolean verif2=panel.getGame().getUsedFencesPlayer(panel.getGame().getPlayerWhoIsPlaying())<10;
                     if (numObj==6 ||(numObj==100 && verif1 && verif2))
                     {
                         if (numObj==6)
@@ -122,14 +118,15 @@ public class QuoridorButton implements Serializable
                     panel.refresh();
                 }
                 
-            }});
+            }
+        });
     }
-    public void setButton()
+    public void set()
     {
-        panel.add(button);
+        panel.add(this);
     }
-    public void removeButton()
+    public void remove()
     {
-        panel.remove(button);
+        panel.remove(this);
     }
 }

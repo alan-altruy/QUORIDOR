@@ -9,21 +9,22 @@ public class QuoridorFence implements Serializable
     public QuoridorFence(QuoridorGame _game)
     {
         game=_game;
-        tray=game.tray;
+        tray=game.getTray();
     }
     public void newFence(int pos_x,int pos_y,int dir)
     {
         if(canSetFence(pos_x,pos_y,dir))
         {
-            addFence(pos_x, pos_y, dir);
-            QuoridorPathFind pathFind = new QuoridorPathFind(game);
-            boolean verif1=pathFind.verif();
-            remFence(pos_x, pos_y, dir);
-            if (game.players[game.playerWhoIsPlaying].GetUsedFences()<10 && verif1)
+            add(pos_x, pos_y, dir);
+			QuoridorPathFind pathFind = new QuoridorPathFind(game);
+			boolean verif1=game.getUsedFencesPlayer(game.getPlayerWhoIsPlaying())<10;
+            boolean verif2=pathFind.verif();
+            remove(pos_x, pos_y, dir);
+            if (verif1 && verif2)
             {
-                game.players[game.playerWhoIsPlaying].setUsedFences();
-                addFence(pos_x, pos_y, dir);
-                game.wait=false;
+                game.setUsedFencesPlayer();
+                add(pos_x, pos_y, dir);
+                game.setWait(false);
             }
         }
     }
@@ -48,65 +49,51 @@ public class QuoridorFence implements Serializable
          * @param dir
          *            La direction de la barrière désirée (0= vertical , 1= horizontal).
          */
-	public void addFence(int pos_x, int pos_y, int dir)
+	public void add(int pos_x, int pos_y, int dir)
 	{
 		if (dir==0)
 		{
 			for (int _pos_x=0; _pos_x<=2; _pos_x++)
 			{
-				if (_pos_x==0)
-				{
-					tray.cells[pos_x+_pos_x][pos_y].ChangeType(3);
-				}
-				else
-				{
-					tray.cells[pos_x+_pos_x][pos_y].ChangeType(10);
-				}
+                if (_pos_x==0)
+                {
+                    tray.setTypeOfCell(pos_x+_pos_x, pos_y, 3);
+                }
+                else
+                {
+                    tray.setTypeOfCell(pos_x+_pos_x, pos_y, 10);
+                }
 			}
 		}
 		else if (dir==1)
 		{
 			for (int _pos_y=0; _pos_y<=2; _pos_y++)
 			{
-				if (_pos_y==0)
-				{
-					tray.cells[pos_x][pos_y+_pos_y].ChangeType(4);
-				}
-				else
-				{
-					tray.cells[pos_x][pos_y+_pos_y].ChangeType(10);
-				}
+                if (_pos_y==0)
+                {
+                    tray.setTypeOfCell(pos_x, pos_y+_pos_y, 4);
+                }
+                else
+                {
+                    tray.setTypeOfCell(pos_x, pos_y+_pos_y, 10);
+                }
 			}
 		}
 	}
-	public void remFence(int pos_x, int pos_y, int dir)
+	public void remove(int pos_x, int pos_y, int dir)
 	{
 		if (dir==0)
 		{
 			for (int _pos_x=0; _pos_x<=2; _pos_x++)
 			{
-				if (_pos_x==0)
-				{
-					tray.cells[pos_x+_pos_x][pos_y].ChangeType(0);
-				}
-				else
-				{
-					tray.cells[pos_x+_pos_x][pos_y].ChangeType(0);
-				}
+				tray.setTypeOfCell(pos_x+_pos_x, pos_y, 0);
 			}
 		}
 		else if (dir==1)
 		{
 			for (int _pos_y=0; _pos_y<=2; _pos_y++)
 			{
-				if (_pos_y==0)
-				{
-					tray.cells[pos_x][pos_y+_pos_y].ChangeType(0);
-				}
-				else
-				{
-					tray.cells[pos_x][pos_y+_pos_y].ChangeType(0);
-				}
+				tray.setTypeOfCell(pos_x, pos_y+_pos_y, 0);
 			}
 		}
 	}

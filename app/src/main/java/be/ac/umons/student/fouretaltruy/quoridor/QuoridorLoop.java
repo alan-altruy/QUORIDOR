@@ -9,7 +9,7 @@ public class QuoridorLoop
 	{
 		while (loopGame)
 		{
-			game.newGame=false;
+			game.setNewGame(false);
 			loopPlayer=true;
 			game.showStartScreen();
 			if (!waitAction())
@@ -20,17 +20,17 @@ public class QuoridorLoop
 			{
 				for (nb=0; nb<nbPlayers; nb++)
 				{
-					if (game.loaded && game.playerWhoIsPlaying==1)
+					if (game.getLoaded() && game.getPlayerWhoIsPlaying()==1)
 					{
 						nb=1;
 					}
-					game.loaded=false;
-					game.PlayerAction(nb);
+					game.setLoaded(false);
+					game.playerAction(nb);
 					if (!waitAction())
 					{
 						return 0;
 					}
-					winner=game.GameHasWinner();
+					winner=game.hasWinner();
 					if (winner!=3)
 					{
 						game.showWinner(winner);
@@ -47,17 +47,17 @@ public class QuoridorLoop
 	}
 	public boolean waitAction()
 	{
-		while(game.wait)
+		while(game.getWait())
 		{
-			game.gui.showGui();
-			if (game.newGame)
+			game.getGui().showGui();
+			if (game.getNewGame())
 			{
 				loopPlayer=false;
-				game.wait=false;
+				game.setWait(false);
 				nb=4;
 			}
 		}
-		game.wait=true;
+		game.setWait(true);
 		return true;
 	}
 	public static void main(String[] args)

@@ -1,7 +1,6 @@
 package be.ac.umons.student.fouretaltruy.quoridor;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.io.*;
 
 public class QuoridorPathFind implements Serializable
@@ -16,8 +15,8 @@ public class QuoridorPathFind implements Serializable
     public QuoridorPathFind(QuoridorGame _game)
     {
         game=_game;
-        players=game.players;
-        tray=game.tray;
+        players=game.getAllPlayers();
+        tray=game.getTray();
         win=17;
     }
     public boolean verif()
@@ -29,18 +28,18 @@ public class QuoridorPathFind implements Serializable
         {
             if (a==0)
             {
-                tray.cells[players[1].GetPos_x()][players[1].GetPos_y()].ChangeType(0);
+                tray.setTypeOfCell(players[1].getPos_x(), players[1].getPos_y(), 0);
             }
             else if (a==1)
             {
-                tray.cells[players[0].GetPos_x()][players[0].GetPos_y()].ChangeType(0);
+                tray.setTypeOfCell(players[0].getPos_x(), players[0].getPos_y(), 0);
             }
             alreadyFind= new QuoridorTray();
             verification=false;
             player = new ArrayList<QuoridorPlayers>();
-            player.add(new QuoridorPlayers(1, "", players[a].GetPos_x(), players[a].GetPos_y()));
+            player.add(new QuoridorPlayers(1, "", players[a].getPos_x(), players[a].getPos_y()));
             nbVerifPlayer=player.size();
-            alreadyFind.cells[player.get(0).GetPos_x()][player.get(0).GetPos_y()].ChangeType(1);
+            alreadyFind.setTypeOfCell(player.get(0).getPos_x(), player.get(0).getPos_y(), 1);
             while (nbVerifPlayer>0)
             {
                 nbVerifPlayer=player.size();
@@ -54,10 +53,10 @@ public class QuoridorPathFind implements Serializable
                         {
                             for (int z=0; z<7; z+=2)
                             {
-                                if (choix[x][y][z] && alreadyFind.cells[x][y].GetType()==0)
+                                if (choix[x][y][z] && alreadyFind.getTypeOfCell(x, y)==0)
                                 {
                                     player.add(new QuoridorPlayers(1, "", x, y));
-                                    alreadyFind.cells[x][y].ChangeType(1);
+                                    alreadyFind.setTypeOfCell(x, y, 1);
                                     if (x==win)
                                     {
                                         verification=true;
@@ -74,11 +73,11 @@ public class QuoridorPathFind implements Serializable
             }
             if (a==0)
             {
-                tray.cells[players[1].GetPos_x()][players[1].GetPos_y()].ChangeType(2);
+                tray.setTypeOfCell(players[1].getPos_x(), players[1].getPos_y(), 2);
             }
             else if (a==1)
             {
-                tray.cells[players[0].GetPos_x()][players[0].GetPos_y()].ChangeType(1);
+                tray.setTypeOfCell(players[0].getPos_x(), players[0].getPos_y(), 1);
             }
             win=1;
             if (!verification)

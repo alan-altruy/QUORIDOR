@@ -4,7 +4,7 @@ public class QuoridorPlayers implements Serializable
 {
     private static final long serialVersionUID = 1L;
     private String name;
-    private int NbUsedFences;
+    private int nbUsedFences;
     private int num, pos_x, pos_y;
     /**
          * Permet d'initialiser un joueur.
@@ -24,9 +24,9 @@ public class QuoridorPlayers implements Serializable
         pos_x=_x;
         pos_y=_y;
         num=_num;
-        NbUsedFences=0;
+        nbUsedFences=0;
     }
-    public boolean AreYouTheWinner()
+    public boolean areYouTheWinner()
     {
         if (num==0 && pos_x==17)
         {
@@ -46,15 +46,10 @@ public class QuoridorPlayers implements Serializable
          * @param _y
          *            La nouvelle position y associée au joueur sur le plateau (nombre pair).
          */
-    public void NewPos (int _x, int _y)
+    public void newPos (int _x, int _y)
     {
         pos_x += _x;
         pos_y += _y;
-    }
-    public void NewPoss (int _x, int _y)
-    {
-        pos_x = _x;
-        pos_y = _y;
     }
     /**
          * Permet de retourner le nom du joueur.
@@ -62,11 +57,11 @@ public class QuoridorPlayers implements Serializable
          * @return
          *            La fonction va retourner le nom associé au joueur sous forme de String.
          */
-    public String GetName()
+    public String getName()
     {
         return name;
     }
-    public int GetNum()
+    public int getNum()
     {
         return num;
     }
@@ -76,24 +71,28 @@ public class QuoridorPlayers implements Serializable
          * @return 
          *            Nombre de barrières utiliséés sous forme de int.
          */
-    public int GetUsedFences()
+    public int getUsedFences()
     {
-        return NbUsedFences;
+        return nbUsedFences;
     }
     public void setUsedFences()
     {
-        NbUsedFences++;
+        nbUsedFences++;
     }
-    public int GetPos_x()
+    public int getPos_x()
     {
         return pos_x;
     }
-    public int GetPos_y()
+    public int getPos_y()
     {
         return pos_y;
     }
-    public QuoridorPlayers getPlayer()
+    public void setPos_x(int x)
     {
-        return this;
+        pos_x=x;
+    }
+    public void setPos_y(int y)
+    {
+        pos_y=y;
     }
 }

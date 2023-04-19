@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.awt.Font;
 import javax.imageio.ImageIO;
 
 public class QuoridorPicture implements Serializable
@@ -28,13 +27,5 @@ public class QuoridorPicture implements Serializable
     public void set()
     {
         panel.add(image);
-    }
-    public JLabel getImage()
-    {
-        return image;
-    }
-    public ImageIcon getIcon()
-    {
-        return icone;
     }
 }

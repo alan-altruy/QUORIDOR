@@ -12,31 +12,31 @@ public class QuoridorGame implements Serializable
 		*  Le numéro du joueur qui est en train de jouer
 		* 
 		*/
-    public int playerWhoIsPlaying;
+    private int playerWhoIsPlaying;
     /**
 		*  Permet de savoir si le joueur a fait une action
 		* 
 		*/ 
-    public boolean wait=true;
+    private boolean wait=true;
     /**
 		*  Ajouter le plateau (QuoridorTray au jeu)
 		* 
         */
-    public boolean newGame=false;
-    public boolean loaded=false;
-    public QuoridorTray tray;
+    private boolean newGame=false;
+    private boolean loaded=false;
+    private QuoridorTray tray;
 
     /**
 		*  Ajouter l'interface (QuoridorGui) au jeu
 		* 
 		*/
-    public QuoridorGui gui = new QuoridorGui(this);
+    private QuoridorGui gui = new QuoridorGui(this);
     /**
 		*  Contient les joueurs du jeu
 		* 
 		*/
-    public QuoridorPlayers[] players;
-    public QuoridorFence fence;
+    private QuoridorPlayers[] players;
+    private QuoridorFence fence;
     /**
          * Permet d'initialiser le jeu:
          * 
@@ -47,24 +47,40 @@ public class QuoridorGame implements Serializable
     {
         tray = new QuoridorTray();
         fence = new QuoridorFence(this);
-        gui.StartScreen();
+        gui.startScreen();
+    }
+    public void save()
+    {
+        try
+        {
+            FileOutputStream fileOut = new FileOutputStream("src/main/resources/save.ser");
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(this);
+            objectOut.close();
+            System.out.println("Game has been saved!");
+            newGame=true;
+            wait=false;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
     public void loadSave()
     {
         try {
             ObjectInputStream objectIn = new ObjectInputStream( new FileInputStream("src/main/resources/save.ser"));
             QuoridorGame gamesave = (QuoridorGame)objectIn.readObject();
-            nbPlayers=gamesave.nbPlayers;
-            players=gamesave.players;
-            tray=gamesave.tray;
+            players=gamesave.getAllPlayers();
+            tray=gamesave.getTray();
             fence= new QuoridorFence(this);
-            nbPlayers=gamesave.nbPlayers;
-            playerWhoIsPlaying=gamesave.playerWhoIsPlaying;
+            playerWhoIsPlaying=gamesave.getPlayerWhoIsPlaying();
             objectIn.close();
             loaded=true;
             wait=false;
         } catch (Exception ex) {
             ex.printStackTrace();
+            System.out.println(" /!\\ Save Error /!\\");
         }
     }
     public boolean  canLoadSave()
@@ -72,6 +88,7 @@ public class QuoridorGame implements Serializable
         try {
             ObjectInputStream objectIn = new ObjectInputStream( new FileInputStream("src/main/resources/save.ser"));
             objectIn.close();
+            System.out.println("Save correctly loaded");
             return true;
         } catch (Exception ex) {
             System.out.println("No save found");
@@ -83,7 +100,7 @@ public class QuoridorGame implements Serializable
          * et modifier le type de la cellule qui contient à préent un joueur
          * 
          */
-    public void Init2Players()
+    public void init2Players()
     {
         String name;
         int pos_x=1;
@@ -98,15 +115,15 @@ public class QuoridorGame implements Serializable
                 name="creeper";
             }
             players[num]= new QuoridorPlayers(num, name, pos_x, pos_y);
-            tray.ChangeType_inCell(pos_x,pos_y, num+1);
+            tray.setTypeOfCell(pos_x,pos_y, num+1);
         }
         wait=false;
     }
-    public int GameHasWinner()
+    public int hasWinner()
     {
         for (int nb=0; nb<nbPlayers; nb++)
         {
-            if (players[nb].AreYouTheWinner())
+            if (players[nb].areYouTheWinner())
             {
                 return nb;
             }
@@ -120,38 +137,77 @@ public class QuoridorGame implements Serializable
          * @param num
          *            Le numero associé au joueur.
          */
-    public void PlayerAction(int num)
+    public void playerAction(int num)
     {
         playerWhoIsPlaying=num;
-        gui.Gui2Players(num);
+        gui.gui2Players();
     }
     public void showWinner(int num)
     {
-        gui.GuiWinner(num);
+        gui.guiWinner(num);
     }
-    public String GetNameOfPlayer(int num)
+    public String getNameOfPlayer(int num)
     {
-        return players[num].GetName();
+        return players[num].getName();
     }
     public int getNbPlayers()
     {
 		return nbPlayers;
     }
-    public QuoridorPlayers getPlayers (int numPlayer)
+    public int getUsedFencesPlayer(int num)
     {
-        return players[numPlayer];
+        return players[num].getUsedFences();
     }
-    public int NbFencesPlayer(int num)
+    public void setUsedFencesPlayer()
     {
-        return players[num].GetUsedFences();
-    }
-    public void setNbPlayers(int newNb)
-    {
-        nbPlayers=newNb;
-        wait=false;
+        players[playerWhoIsPlaying].setUsedFences();
     }
     public void setWait(boolean _wait)
     {
         wait=_wait;
+    }
+    public boolean getWait()
+    {
+        return wait;
+    }
+    public boolean getNewGame()
+    {
+        return newGame;
+    }
+    public int getPlayerWhoIsPlaying()
+    {
+        return playerWhoIsPlaying;
+    }
+    public void setNewGame(boolean _newGame)
+    {
+        newGame=_newGame;
+    }
+    public void setLoaded(boolean _loaded)
+    {
+        loaded=_loaded;
+    }
+    public boolean getLoaded()
+    {
+        return loaded;
+    }
+    public QuoridorTray getTray()
+    {
+        return tray;
+    }
+    public QuoridorPlayers getPlayer(int num)
+    {
+        return players[num];
+    }
+    public QuoridorPlayers[] getAllPlayers()
+    {
+        return players;
+    }
+    public QuoridorFence getFence()
+    {
+        return fence;
+    }
+    public QuoridorGui getGui()
+    {
+        return gui;
     }
 }

@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 public class QuoridorGui extends JFrame implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    public QuoridorGame game;
+    private QuoridorGame game;
     private QuoridorPanel panel;
     public QuoridorGui(QuoridorGame _game)
     {
@@ -20,28 +20,28 @@ public class QuoridorGui extends JFrame implements Serializable
         this.setAlwaysOnTop(true);
         this.setUndecorated(true);
     }
-    public void StartScreen()
+    public void startScreen()
     {
-        panel = new QuoridorPanel(this);
-        panel.MainMenu();
+        panel = new QuoridorPanel(this, game);
+        panel.mainMenu();
         showGui();
     }
-    public void Gui2Players(int num)
+    public void gui2Players()
     {
-        panel = new QuoridorPanel(this);  
-        panel.TwoPlayers(num);
+        panel = new QuoridorPanel(this, game);  
+        panel.twoPlayers(game.getPlayerWhoIsPlaying());
         showGui();
     }
     public void addMenu()
     {
-        panel = new QuoridorPanel(this);
+        panel = new QuoridorPanel(this, game);
         panel.optionsGame();
         showGui();
     }
-    public void GuiWinner(int num)
+    public void guiWinner(int num)
     {
-        panel = new QuoridorPanel(this);
-        panel.Winner(num);
+        panel = new QuoridorPanel(this, game);
+        panel.winner(num);
         showGui();
     }
     public void showGui()
@@ -51,10 +51,6 @@ public class QuoridorGui extends JFrame implements Serializable
     }
     public void refresh()
     {
-        this.setContentPane((JPanel)panel);
-    }
-    public void setNbPlayers (int newNb)
-    {
-        game.setNbPlayers(newNb);
+        this.setContentPane(panel);
     }
 }

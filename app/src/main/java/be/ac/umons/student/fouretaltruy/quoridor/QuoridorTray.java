@@ -4,14 +4,14 @@ public class QuoridorTray implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private final String[]chars = {"●","|","─","■"};
-	public QuoridorCell[][] cells;
+	public int[][] cells;
 	/**
          * Permet d'initialiser le plateau du jeu.
          * 
          */
 	public QuoridorTray()
 	{
-		cells= new QuoridorCell[19][19];
+		cells= new int[19][19];
 		initCellsAndWalls();
 	}
 	/**
@@ -26,28 +26,14 @@ public class QuoridorTray implements Serializable
 			{
 				if (x==0 || x==18 || y==0 || y==18)
 				{
-					cells[x][y]= new QuoridorCell(5);
+					cells[x][y]=5;
 				}
 				else
 				{
-					cells[x][y]= new QuoridorCell(0);
+					cells[x][y]=0;
 				}
 			}
 		}
-	}
-	/**
-         * Permet de changer le type d'une cellule d'instance QuoridorCell
-         * 
-         * @param x
-         *            La position x de la cellule.
-         * @param y
-         *            La position y de la cellule.
-         * @param type
-         *            La nouveau type que l'on veut attribuer à la cellule
-         */
-	public void ChangeType_inCell(int x, int y, int type)
-	{
-		cells[x][y].ChangeType(type);
 	}
 	/**
          * Permet de retourner une verifiation permettant de dire si un mur ou une barrière
@@ -68,8 +54,8 @@ public class QuoridorTray implements Serializable
 	{
 		for (int curs=0; curs<=2; curs++)
 		{
-			int verif0=cells[pos_x+curs][pos_y].GetType();
-			int verif1=cells[pos_x][pos_y+curs].GetType();
+			int verif0=cells[pos_x+curs][pos_y];
+			int verif1=cells[pos_x][pos_y+curs];
 			if (dir==0 && (verif0!=0))
 			{
 				return true;
@@ -81,13 +67,13 @@ public class QuoridorTray implements Serializable
 		}
 		return false;
 	}
-	public int GetTypeIn_Cell(int pos_x, int pos_y)
+	public void setTypeOfCell(int pos_x, int pos_y, int type)
 	{
-		return cells[pos_x][pos_y].GetType();
+		cells[pos_x][pos_y]=type;
 	}
-	public QuoridorTray getTray()
+	public int getTypeOfCell(int pos_x, int pos_y)
 	{
-		return this;
+		return cells[pos_x][pos_y];
 	}
 	/*	*
          * Permet d'afficher le plateau
@@ -100,7 +86,7 @@ public class QuoridorTray implements Serializable
 		{
 			for (int cols=0; cols<19; cols++)
 			{
-				int typeOfCell=cells[ligne][cols].GetType();
+				int typeOfCell=cells[ligne][cols];
 				if (typeOfCell!=0)
 				{
 					TrayBoard+= chars[typeOfCell-1];

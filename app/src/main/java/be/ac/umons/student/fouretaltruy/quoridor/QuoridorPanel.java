@@ -3,7 +3,6 @@ package be.ac.umons.student.fouretaltruy.quoridor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.Font;
 import java.io.*;
 
 public class QuoridorPanel extends JPanel implements Serializable
@@ -11,22 +10,17 @@ public class QuoridorPanel extends JPanel implements Serializable
     private static final long serialVersionUID = 1L;
     private Dimension dimScreen= Toolkit.getDefaultToolkit().getScreenSize();
     private double poseInitX, poseInitY, dimXTray, dimYTray, dimXScreen, dimYScreen, dimPion, dimXFence,dimYFence;
-    public int PlayerWhoIsPlaying;
     private String a="src/main/resources/",b=".png";
     private String[] Theme1={a+"pionrouge"+b,a+"pionnoir"+b,a+"tray"+b,a+"fenceV"+b,a+"fenceH"+b,a+"valid"+b,a+"title"+b, a+"titlevalid"+b};
-    private Font police;
-    public JPanel panel, panelWait;
-    public QuoridorGame game;
+    private QuoridorGame game;
     private QuoridorButton but;
     private QuoridorPicture pic,pic2, picOfTray, bg;
     private QuoridorGui gui;
-    private QuoridorCell[][] cells;
     private QuoridorMovePlayer movePlayer;
-    public QuoridorPanel(QuoridorGui _gui)
+    public QuoridorPanel(QuoridorGui _gui, QuoridorGame _game)
     {
         gui=_gui;
-        game=gui.game;
-        cells=game.tray.cells;
+        game=_game;
         this.setLayout(null);
         dimXScreen=dimScreen.getWidth();
         dimYScreen=dimScreen.getHeight();
@@ -37,21 +31,20 @@ public class QuoridorPanel extends JPanel implements Serializable
         dimYFence=(dimYTray/37);
         poseInitX=(dimXScreen/2-dimXTray/2);
         poseInitY=(dimYScreen/2-dimYTray/2);
-        police = new Font("FreeSans", Font.BOLD, 30);
     }
-    public void MainMenu()
+    public void mainMenu()
     {
         double height,width, pos_x,pos_y;
         // Creation du bouton solo
         width=dimXScreen/2;height=dimYScreen/10;
         pos_x=width-(dimXScreen/4); pos_y=(dimYScreen/2)-height/2;
-        but = new QuoridorButton(this,"",police, 1, pos_x, pos_y,width,height);
+        but = new QuoridorButton(this, 1, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"solo"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"solovalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
         // Creation du bouton multiplayer
         pos_y=(dimYScreen/2)+height;
-        but = new QuoridorButton(this,"",police, 2, pos_x, pos_y,width,height);
+        but = new QuoridorButton(this, 2, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"multiplayer"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"multiplayervalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
@@ -59,7 +52,7 @@ public class QuoridorPanel extends JPanel implements Serializable
         pos_y+=height*2;
         if (game.canLoadSave())
         {
-            but = new QuoridorButton(this,"",police, 10, pos_x, pos_y,height*13/3,height);
+            but = new QuoridorButton(this, 10, pos_x, pos_y,height*13/3,height);
             pic = new QuoridorPicture(this, a+"load"+b, pos_x, pos_y,height*13/3,height);
             pic2 = new QuoridorPicture(this, a+"loadvalid"+b, pos_x, pos_y,height*13/3,height);
             but.setMainButton(pic, pic2);
@@ -72,7 +65,7 @@ public class QuoridorPanel extends JPanel implements Serializable
         pos_x+=width;
         width=height*13/3;
         pos_x-=width;
-        but = new QuoridorButton(this,"",police, 0, pos_x, pos_y,width,height);
+        but = new QuoridorButton(this, 0, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"exit"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"exitvalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
@@ -82,9 +75,8 @@ public class QuoridorPanel extends JPanel implements Serializable
         //Affiche les éléments à l'écran
         refreshBg();
     }
-    public void TwoPlayers(int num)
+    public void twoPlayers(int num)
     {
-        PlayerWhoIsPlaying=num;
         if (num==0)
         {
             pic = new QuoridorPicture(this, a+"steve"+b, ((dimXScreen-dimXTray)/4)-((dimXScreen-dimXTray)/8*0.75), dimYScreen/8,((dimXScreen-dimXTray)/4*0.75), ((dimXScreen-dimXTray)/8*0.75));
@@ -99,7 +91,7 @@ public class QuoridorPanel extends JPanel implements Serializable
             pic = new QuoridorPicture(this, a+"steveno"+b, ((dimXScreen-dimXTray)/4)-((dimXScreen-dimXTray)/8*0.75), dimYScreen/8,((dimXScreen-dimXTray)/4*0.75), ((dimXScreen-dimXTray)/8*0.75));
             pic.set();
         }
-        but = new QuoridorButton(this,"",police, 6, dimXScreen/2-(poseInitY*0.75*3), poseInitY/8,poseInitY*0.75*6, poseInitY*0.75);
+        but = new QuoridorButton(this, 6, dimXScreen/2-(poseInitY*0.75*3), poseInitY/8,poseInitY*0.75*6, poseInitY*0.75);
         pic = new QuoridorPicture(this, Theme1[6], dimXScreen/2-(poseInitY*0.75*3), poseInitY/8,poseInitY*0.75*6, poseInitY*0.75);
         pic2 = new QuoridorPicture(this, Theme1[7], dimXScreen/2-(poseInitY*0.75*3), poseInitY/8,poseInitY*0.75*6, poseInitY*0.75);
         but.setMainButton(pic, pic2);
@@ -108,7 +100,7 @@ public class QuoridorPanel extends JPanel implements Serializable
         bg=new QuoridorPicture(this, a+"background"+b, 0,0, dimXScreen, dimYScreen);
         picOfTray.set();
         bg.set();
-        gui.refresh();
+        refresh();
     }
     public void optionsGame()
     {
@@ -116,13 +108,13 @@ public class QuoridorPanel extends JPanel implements Serializable
         // Creation du bouton solo
         width=dimXScreen/2;height=dimYScreen/10;
         pos_x=width-(dimXScreen/4); pos_y=(dimYScreen/3)-height/2;
-        but = new QuoridorButton(this,"",police, 8, pos_x, pos_y,width,height);
+        but = new QuoridorButton(this, 8, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"home"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"homevalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
         // Creation du bouton multiplayer
         pos_y=(dimYScreen/3)+height;
-        but = new QuoridorButton(this,"",police, 7, pos_x, pos_y,width,height);
+        but = new QuoridorButton(this, 7, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"save"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"savevalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
@@ -131,7 +123,7 @@ public class QuoridorPanel extends JPanel implements Serializable
         width=height*13/3;
         pos_x-=width;
         pos_y+=height*2;
-        but = new QuoridorButton(this,"",police, 9, pos_x, pos_y,width,height);
+        but = new QuoridorButton(this, 9, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"back"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"backvalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
@@ -141,17 +133,17 @@ public class QuoridorPanel extends JPanel implements Serializable
         //Affiche les éléments à l'écran
         refreshBg();
     }
-    public void Winner(int num)
+    public void winner(int num)
     {
         double height,width, pos_x,pos_y;
-        String name= game.GetNameOfPlayer(num);
+        String name= game.getNameOfPlayer(num);
         width=dimXScreen*0.75; height=width/6;
         pos_x=dimXScreen/2-width/2; pos_y=dimYScreen/3-height/2;
         pic = new QuoridorPicture(this, a+name+"win"+b, pos_x, pos_y,width,height);
         pic.set();
         height=dimYScreen/10; width=dimXScreen/2;
         pos_x=dimXScreen/2-width/2; pos_y+=3*height;
-        but = new QuoridorButton(this,"",police, 8, pos_x, pos_y,width,height);
+        but = new QuoridorButton(this, 8, pos_x, pos_y,width,height);
         pic = new QuoridorPicture(this, a+"home"+b, pos_x, pos_y,width,height);
         pic2 = new QuoridorPicture(this, a+"homevalid"+b, pos_x, pos_y,width,height);
         but.setMainButton(pic, pic2);
@@ -168,11 +160,10 @@ public class QuoridorPanel extends JPanel implements Serializable
         else if (choice==1){}
         else if (choice==2)
         {
-            game.Init2Players();
+            game.init2Players();
         }
         else if (choice==3 || choice==4)
         {
-            movePlayer = new QuoridorMovePlayer(game.getPlayers(PlayerWhoIsPlaying), game.tray);
             canMove(choice);
         }
         else if (choice==6)
@@ -181,40 +172,27 @@ public class QuoridorPanel extends JPanel implements Serializable
         }
         else if (choice==7)
         {
-            try
-            {
-                FileOutputStream fileOut = new FileOutputStream(a+"/save.ser");
-                ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-                objectOut.writeObject(game);
-                objectOut.close();
-                System.out.println("The Game has been saved!");
-                game.newGame=true;
-                game.wait=false;
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
+            game.save();
         }
         else if (choice==8)
         {
-            game.newGame=true;
+            game.setNewGame(true);
         }
         else if (choice==9)
         {
-            gui.Gui2Players(game.playerWhoIsPlaying);
+            gui.gui2Players();
         }
         else if (choice==10)
         {
             game.loadSave();
-            gui.Gui2Players(game.playerWhoIsPlaying);
+            gui.gui2Players();
         }
     }
     public void canMove(int choice)
     {
+        movePlayer = new QuoridorMovePlayer(game.getPlayer(game.getPlayerWhoIsPlaying()), game.getTray());
         double pos_x,pos_y;
-        boolean[][][]posAvailable;
-        posAvailable=movePlayer.setPosAvailable();  
+        boolean[][][] posAvailable =movePlayer.setPosAvailable();  
         for (int ligne=0; ligne<19;ligne++)
         {
             for (int cols=0; cols<19; cols++)
@@ -225,7 +203,7 @@ public class QuoridorPanel extends JPanel implements Serializable
                     pos_y=poseInitY+(dimYTray/37*4)*((ligne-1)/2)+(dimXTray/37);
                     if (posAvailable[ligne][cols][z] && (choice==3 || choice==4))
                     {
-                        but= new QuoridorButton(this, "", police, z+20 , pos_x, pos_y, dimPion, dimPion);
+                        but= new QuoridorButton(this,   z+20 , pos_x, pos_y, dimPion, dimPion);
                         pic=new QuoridorPicture(this, Theme1[5], pos_x, pos_y, dimPion, dimPion);
                         pic.set();
                         but.setPlayerButton();
@@ -247,7 +225,7 @@ public class QuoridorPanel extends JPanel implements Serializable
             {
                 pos_x=((dimXScreen-dimXTray)/4)-dimXFence/2;
             }
-            for (int y=0; y<10-game.NbFencesPlayer(x);y++)
+            for (int y=0; y<10-game.getUsedFencesPlayer(x);y++)
             {
                 pos_y= dimYScreen/4+y*(dimYFence*3);
                 pic=new QuoridorPicture(this, a+"fenceH"+b, pos_x, pos_y, dimXFence, dimYFence);
@@ -264,30 +242,30 @@ public class QuoridorPanel extends JPanel implements Serializable
                     pos_y=poseInitY+(dimYTray/37*4)*((ligne)/2);
                     if (cols%2==0 && ligne%2==1 && ligne<17)
                     {
-                        but= new QuoridorButton(this, "", police, 100 , pos_x, pos_y+dimPion/3, (dimPion/3), dimPion);
+                        but= new QuoridorButton(this,   100 , pos_x, pos_y+dimPion/3, (dimPion/3), dimPion);
                         pic=new QuoridorPicture(this, a+"fenceVvalid"+b, pos_x, pos_y+dimYFence, dimYFence, dimXFence);
                         but.setFenceButton(ligne,cols, 0, pic);
                     }
                     else if (cols%2==1 && ligne%2==0 && cols<17)
                     {
-                        but= new QuoridorButton(this, "", police, 100 , pos_x+dimPion/3, pos_y, dimPion, (dimPion/3));
+                        but= new QuoridorButton(this, 100, pos_x+dimPion/3, pos_y, dimPion, (dimPion/3));
                         pic=new QuoridorPicture(this, a+"fenceHvalid"+b, pos_x+dimYFence, pos_y, dimXFence, dimYFence);
                         but.setFenceButton(ligne,cols, 1, pic);
                     }
                 }
-                typeOfCell=cells[ligne][cols].GetType();
+                typeOfCell=game.getTray().getTypeOfCell(ligne, cols);
                 if (typeOfCell==1 || typeOfCell==2)
                 {
                     pos_x=poseInitX+(dimXTray/37*4)*((cols-1)/2)+(dimXTray/37);
                     pos_y=poseInitY+(dimYTray/37*4)*((ligne-1)/2)+(dimXTray/37);
                     if (numPlayer==1 && typeOfCell==2)
                     {
-                        but= new QuoridorButton(this, "", police, numPlayer+3, pos_x, pos_y, dimPion, dimPion);
+                        but= new QuoridorButton(this, numPlayer+3, pos_x, pos_y, dimPion, dimPion);
                         but.setPlayerButton();
                     }
                     else if (numPlayer==0 && typeOfCell==1)
                     {
-                        but= new QuoridorButton(this, "", police, numPlayer+3, pos_x, pos_y, dimPion, dimPion);
+                        but= new QuoridorButton(this, numPlayer+3, pos_x, pos_y, dimPion, dimPion);
                         but.setPlayerButton();
                     }
                     pic=new QuoridorPicture(this, Theme1[typeOfCell-1], pos_x, pos_y, dimPion, dimPion);
@@ -316,7 +294,7 @@ public class QuoridorPanel extends JPanel implements Serializable
     }
     public void setMovePlayer(int numObj)
     {
-        movePlayer.MoveIt(numObj);
+        movePlayer.move(numObj);
         game.setWait(false);
     }
     public void refresh()
@@ -332,5 +310,9 @@ public class QuoridorPanel extends JPanel implements Serializable
         bg.remove();
         bg.set();
         gui.refresh();
+    }
+    public QuoridorGame getGame()
+    {
+        return game;
     }
 }

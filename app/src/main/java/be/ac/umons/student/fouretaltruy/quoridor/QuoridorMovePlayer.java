@@ -13,10 +13,10 @@ public class QuoridorMovePlayer implements Serializable
     {
         player=_player;
         tray=_tray;
-        pos_x=player.GetPos_x();
-        pos_y=player.GetPos_y();
+        pos_x=player.getPos_x();
+        pos_y=player.getPos_y();
     }
-    public void MoveIt(int choix)
+    public void move(int choix)
     {
         int x=0,y=0;
         switch (choix)
@@ -58,11 +58,11 @@ public class QuoridorMovePlayer implements Serializable
             y=-4;
             break;
         }
-        player.NewPos(x,y);
-        tray.ChangeType_inCell(pos_x, pos_y, 0);
-        tray.ChangeType_inCell(pos_x+x, pos_y+y, player.GetNum()+1);
+        player.newPos(x,y);
+        tray.setTypeOfCell(pos_x, pos_y, 0);
+        tray.setTypeOfCell(pos_x+x, pos_y+y, player.getNum()+1);
     }
-    public void YourChoice()
+    public void yourChoice()
     {
         //utilisée initialement pour jouer depuis le terminal avec une interface rudimentaire
         for (int x=0; x<12; x++)
@@ -73,187 +73,187 @@ public class QuoridorMovePlayer implements Serializable
             }
         }
     }
-    public void WhereCanMove()
+    public void whereCanMove()
     {
         //Se deplacer vers le haut, donc qu'il n'y ait pas de Barrière au dessus
-            if (tray.GetTypeIn_Cell(pos_x-1, pos_y)==0)
+        if (tray.getTypeOfCell(pos_x-1, pos_y)==0)
+        {
+            //Y a-t-il un joueur
+            if (tray.getTypeOfCell(pos_x-2, pos_y)!=0)
             {
-             //Y a-t-il un joueur
-                if (tray.GetTypeIn_Cell(pos_x-2, pos_y)!=0)
+                // Si oui, regarder si barrière au dessus de l'autre joueur
+                if (tray.getTypeOfCell(pos_x-3, pos_y)!=0)
                 {
-                    // Si oui, regarder si barrière au dessus de l'autre joueur
-                    if (tray.GetTypeIn_Cell(pos_x-3, pos_y)!=0)
+                    if (tray.getTypeOfCell(pos_x-2, pos_y-1)==0)
                     {
-                        if (tray.GetTypeIn_Cell(pos_x-2, pos_y-1)==0)
-                        {
-                            choix[7]=true;
-                        }
-                        if (tray.GetTypeIn_Cell(pos_x-2, pos_y+1)==0)
-                        {
-                            choix[1]=true;
-                        }
+                        choix[7]=true;
                     }
-                    else
+                    if (tray.getTypeOfCell(pos_x-2, pos_y+1)==0)
                     {
-                        choix[8]=true;
+                        choix[1]=true;
                     }
                 }
                 else
                 {
+                    choix[8]=true;
+                }
+            }
+            else
+            {
                     choix[0]=true;
-                }
             }
+        }
         //Se deplacer vers la droite, donc qu'il n'y ait pas de Barrière à droite
-            if (tray.GetTypeIn_Cell(pos_x, pos_y+1)==0)
+        if (tray.getTypeOfCell(pos_x, pos_y+1)==0)
+        {
+            //Y a-t-il un joueur
+            if (tray.getTypeOfCell(pos_x, pos_y+2)!=0)
             {
-             //Y a-t-il un joueur
-                if (tray.GetTypeIn_Cell(pos_x, pos_y+2)!=0)
+                // Si oui, regarder si barrière à droite de l'autre joueur
+                if (tray.getTypeOfCell(pos_x, pos_y+3)!=0)
                 {
-                    // Si oui, regarder si barrière à droite de l'autre joueur
-                    if (tray.GetTypeIn_Cell(pos_x, pos_y+3)!=0)
+                    if (tray.getTypeOfCell(pos_x-1, pos_y+2)==0)
                     {
-                        if (tray.GetTypeIn_Cell(pos_x-1, pos_y+2)==0)
-                        {
-                            choix[1]=true;
-                        }
-                        if (tray.GetTypeIn_Cell(pos_x+1, pos_y+2)==0)
-                        {
-                            choix[3]=true;
-                        }
+                        choix[1]=true;
                     }
-                    else
+                    if (tray.getTypeOfCell(pos_x+1, pos_y+2)==0)
                     {
-                        choix[9]=true;
+                        choix[3]=true;
                     }
                 }
                 else
                 {
-                    choix[2]=true;
+                    choix[9]=true;
                 }
             }
-        //Se deplacer vers le bas, donc qu'il n'y ait pas de Barrière en bas
-            if (tray.GetTypeIn_Cell(pos_x+1, pos_y)==0)
+            else
             {
-             //Y a-t-il un joueur
-                if (tray.GetTypeIn_Cell(pos_x+2, pos_y)!=0)
-                {
-                    // Si oui, regarder si barrière en dessous de l'autre joueur
-                    if (tray.GetTypeIn_Cell(pos_x+3, pos_y)!=0)
-                    {
-                        if (tray.GetTypeIn_Cell(pos_x+2, pos_y-1)==0)
-                        {
-                            choix[3]=true;
-                        }
-                        if (tray.GetTypeIn_Cell(pos_x+2, pos_y+1)==0)
-                        {
-                            choix[5]=true;
-                        }
-                    }
-                    else
-                    {
-                        choix[10]=true;
-                    }
-                }
-                else
-                {
-                    choix[4]=true;
-                }
-            }
-        //Se deplacer vers la gauche, donc qu'il n'y ait pas de Barrière à gauche
-            if (tray.GetTypeIn_Cell(pos_x, pos_y-1)==0)
-            {
-             //Y a-t-il un joueur
-                if (tray.GetTypeIn_Cell(pos_x, pos_y-2)!=0)
-                {
-                    // Si oui, regarder si barrière à gauche de l'autre joueur
-                    if (tray.GetTypeIn_Cell(pos_x, pos_y-3)!=0)
-                    {
-                        if (tray.GetTypeIn_Cell(pos_x-1, pos_y-2)==0)
-                        {
-                            choix[5]=true;
-                        }
-                        if (tray.GetTypeIn_Cell(pos_x+1, pos_y-2)==0)
-                        {
-                            choix[7]=true;
-                        }
-                    }
-                    else
-                    {
-                        choix[11]=true;
-                    }
-                }
-                else
-                {
-                    choix[6]=true;
-                }
+                choix[2]=true;
             }
         }
-        public boolean[] getChoix()
+    //Se deplacer vers le bas, donc qu'il n'y ait pas de Barrière en bas
+        if (tray.getTypeOfCell(pos_x+1, pos_y)==0)
         {
-            return choix;
-        }
-        public boolean[][][] setPosAvailable()
-        {
-            boolean[][][] posAvailable= new boolean[19][19][12];
-            WhereCanMove();
-            for (int x=0; x<19; x++)
+            //Y a-t-il un joueur
+            if (tray.getTypeOfCell(pos_x+2, pos_y)!=0)
             {
-                for (int y=0; y<19; y++)
+                // Si oui, regarder si barrière en dessous de l'autre joueur
+                if (tray.getTypeOfCell(pos_x+3, pos_y)!=0)
                 {
-                    for (int z=0; z<12; z++)
+                    if (tray.getTypeOfCell(pos_x+2, pos_y-1)==0)
                     {
-                        posAvailable[x][y][z]=false;
+                        choix[3]=true;
+                    }
+                    if (tray.getTypeOfCell(pos_x+2, pos_y+1)==0)
+                    {
+                        choix[5]=true;
                     }
                 }
+                else
+                {
+                    choix[10]=true;
+                }
             }
-            if (choix[0] && pos_x-2<19 && pos_x-2>0 && pos_y<19 && pos_y>0)
+            else
             {
-                posAvailable[pos_x-2][pos_y][0]=true;
+                choix[4]=true;
             }
-            if (choix[1] && pos_x-2<19 && pos_x-2>0 && pos_y+2<19 && pos_y+2>0)
+        }
+    //Se deplacer vers la gauche, donc qu'il n'y ait pas de Barrière à gauche
+        if (tray.getTypeOfCell(pos_x, pos_y-1)==0)
+        {
+            //Y a-t-il un joueur
+            if (tray.getTypeOfCell(pos_x, pos_y-2)!=0)
             {
-                posAvailable[pos_x-2][pos_y+2][1]=true;
+                // Si oui, regarder si barrière à gauche de l'autre joueur
+                if (tray.getTypeOfCell(pos_x, pos_y-3)!=0)
+                {
+                    if (tray.getTypeOfCell(pos_x-1, pos_y-2)==0)
+                    {
+                        choix[5]=true;
+                    }
+                    if (tray.getTypeOfCell(pos_x+1, pos_y-2)==0)
+                    {
+                        choix[7]=true;
+                    }
+                }
+                else
+                {
+                    choix[11]=true;
+                }
             }
-            if (choix[2] && pos_x<19 && pos_x>0 && pos_y+2<19 && pos_y+2>0)
+            else
             {
-                posAvailable[pos_x][pos_y+2][2]=true;
+                choix[6]=true;
             }
-            if (choix[3] && pos_x+2<19 && pos_x+2>0 && pos_y+2<19 && pos_y+2>0)
-            {
-                posAvailable[pos_x+2][pos_y+2][3]=true;
-            }
-            if (choix[4] && pos_x+2<19 && pos_x+2>0 && pos_y<19 && pos_y>0)
-            {
-                posAvailable[pos_x+2][pos_y][4]=true;
-            }
-            if (choix[5] && pos_x+2<19 && pos_x+2>0 && pos_y-2<19 && pos_y-2>0)
-            {
-                posAvailable[pos_x+2][pos_y-2][5]=true;
-            }
-            if (choix[6] && pos_x<19 && pos_x>0 && pos_y-2<19 && pos_y-2>0)
-            {
-                posAvailable[pos_x][pos_y-2][6]=true;
-            }
-            if (choix[7] && pos_x-2<19 && pos_x-2>0 && pos_y-2<19 && pos_y-2>0)
-            {
-                posAvailable[pos_x-2][pos_y-2][7]=true;
-            }
-            if (choix[8] && pos_x-4<19 && pos_x-4>0 && pos_y<19 && pos_y>0)
-            {
-                posAvailable[pos_x-4][pos_y][8]=true;
-            }
-            if (choix[9] && pos_x<19 && pos_x>0 && pos_y+4<19 && pos_y+4>0)
-            {
-                posAvailable[pos_x][pos_y+4][9]=true;
-            }
-            if (choix[10] && pos_x+4<19 && pos_x+4>0 && pos_y<19 && pos_y>0)
-            {
-                posAvailable[pos_x+4][pos_y][10]=true;
-            }
-            if (choix[11] && pos_x<19 && pos_x>0 && pos_y-4<19 && pos_y-4>0)
-            {
-                posAvailable[pos_x][pos_y-4][11]=true;
-            }
-            return posAvailable;
         }
     }
+    public boolean[] getChoix()
+    {
+        return choix;
+    }
+    public boolean[][][] setPosAvailable()
+    {
+        boolean[][][] posAvailable= new boolean[19][19][12];
+        whereCanMove();
+        for (int x=0; x<19; x++)
+        {
+            for (int y=0; y<19; y++)
+            {
+                for (int z=0; z<12; z++)
+                {
+                    posAvailable[x][y][z]=false;
+                }
+            }
+        }
+        if (choix[0] && pos_x-2<19 && pos_x-2>0 && pos_y<19 && pos_y>0)
+        {
+            posAvailable[pos_x-2][pos_y][0]=true;
+        }
+        if (choix[1] && pos_x-2<19 && pos_x-2>0 && pos_y+2<19 && pos_y+2>0)
+        {
+            posAvailable[pos_x-2][pos_y+2][1]=true;
+        }
+        if (choix[2] && pos_x<19 && pos_x>0 && pos_y+2<19 && pos_y+2>0)
+        {
+            posAvailable[pos_x][pos_y+2][2]=true;
+        }
+        if (choix[3] && pos_x+2<19 && pos_x+2>0 && pos_y+2<19 && pos_y+2>0)
+        {
+            posAvailable[pos_x+2][pos_y+2][3]=true;
+        }
+        if (choix[4] && pos_x+2<19 && pos_x+2>0 && pos_y<19 && pos_y>0)
+        {
+            posAvailable[pos_x+2][pos_y][4]=true;
+        }
+        if (choix[5] && pos_x+2<19 && pos_x+2>0 && pos_y-2<19 && pos_y-2>0)
+        {
+            posAvailable[pos_x+2][pos_y-2][5]=true;
+        }
+        if (choix[6] && pos_x<19 && pos_x>0 && pos_y-2<19 && pos_y-2>0)
+        {
+            posAvailable[pos_x][pos_y-2][6]=true;
+        }
+        if (choix[7] && pos_x-2<19 && pos_x-2>0 && pos_y-2<19 && pos_y-2>0)
+        {
+            posAvailable[pos_x-2][pos_y-2][7]=true;
+        }
+        if (choix[8] && pos_x-4<19 && pos_x-4>0 && pos_y<19 && pos_y>0)
+        {
+            posAvailable[pos_x-4][pos_y][8]=true;
+        }
+        if (choix[9] && pos_x<19 && pos_x>0 && pos_y+4<19 && pos_y+4>0)
+        {
+            posAvailable[pos_x][pos_y+4][9]=true;
+        }
+        if (choix[10] && pos_x+4<19 && pos_x+4>0 && pos_y<19 && pos_y>0)
+        {
+            posAvailable[pos_x+4][pos_y][10]=true;
+        }
+        if (choix[11] && pos_x<19 && pos_x>0 && pos_y-4<19 && pos_y-4>0)
+        {
+            posAvailable[pos_x][pos_y-4][11]=true;
+        }
+        return posAvailable;
+    }
+}
